@@ -229,7 +229,7 @@ fetch('dashboard-data.json')
       currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
   }
   updateNowPlaying();
-  setInterval(updateNowPlaying,1800000); // refresh every 30 mins
+  setInterval(updateNowPlaying,900000); // refresh every 30 mins
 
   const quotes = data.quotes || [];
   const slider = document.getElementById('quote-slider');
@@ -276,3 +276,4 @@ fetch('dashboard-data.json')
 
 </body>
 </html>
+
