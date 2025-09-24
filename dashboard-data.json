@@ -4,7 +4,8 @@
   "condition": "Partly Cloudy",
   "wind": "15 km/h",
   "quotes": [
-    "Welcome to the YMCA of Saskatoon join today",
+    "Welcome to the YMCA of Saskatoon",
+    "join today",
     "Fall programs start next week",
     "Register online today!",
     "Check out our swimming schedule",
@@ -16,6 +17,7 @@
     {"time": "11:00 AM", "event": "Swimming"}
   ]
 }
+
 
 
 
