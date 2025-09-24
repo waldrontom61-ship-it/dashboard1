@@ -12,14 +12,12 @@
     background: #000;
   }
 
-  /* Container */
   .container {
     display: flex;
     height: 100vh;
     width: 100vw;
   }
 
-  /* Main area for video */
   .main {
     width: 70%;
     height: 100vh;
@@ -35,7 +33,6 @@
     border: none;
   }
 
-  /* Sidebar */
   .sidebar {
     width: 30%;
     height: 100vh;
@@ -54,13 +51,32 @@
     margin-bottom: 20px;
   }
 
-  /* Weather section */
-  .weather {
+  /* Weather + Now Playing Row */
+  .weather-nowplaying {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+    font-size: 14px;
   }
 
   .weather p {
-    margin: 5px 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  #weather-emoji {
+    font-size: 1.4em;
+  }
+
+  .now-playing {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    white-space: nowrap;
   }
 
   /* Schedule Section */
@@ -99,7 +115,6 @@
     line-height: 1.5;
   }
 
-  /* Logo at bottom */
   #logo-container {
     text-align: center;
     margin-top: auto;
@@ -115,21 +130,26 @@
 <body>
 
 <div class="container">
-  <!-- Main video area -->
   <div class="main">
     <iframe id="video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
-  <!-- Sidebar -->
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
-    <!-- Weather section -->
-    <div class="weather">
-      <h3>Saskatoon Weather</h3>
-      <p>Temp: <span id="temperature">--</span></p>
-      <p>Condition: <span id="condition">--</span></p>
-      <p>Wind: <span id="wind">--</span></p>
+    <!-- Weather + Now Playing -->
+    <div class="weather-nowplaying">
+      <div class="weather">
+        <p>
+          <span id="weather-emoji">⛅</span>
+          <span id="temperature">--</span> |
+          <span id="condition">--</span> |
+          <span id="wind">--</span>
+        </p>
+      </div>
+      <div class="now-playing" id="now-playing">
+        Now: <span id="now-playing-class">Checking...</span>
+      </div>
     </div>
 
     <!-- Schedule -->
@@ -138,10 +158,8 @@
       <ul id="schedule"></ul>
     </div>
 
-    <!-- Quote slider -->
     <div id="quote-slider"></div>
 
-    <!-- Logo -->
     <div id="logo-container">
       <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
     </div>
@@ -149,19 +167,35 @@
 </div>
 
 <script>
-  // Fetch JSON for video, schedule, quotes
+  function getCurrentClass(schedule) {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    let currentClass = "No class right now";
+
+    schedule.forEach(item => {
+      const [time, ampm] = item.time.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+      if (ampm === "PM" && hours !== 12) hours += 12;
+      if (ampm === "AM" && hours === 12) hours = 0;
+
+      const classStart = hours * 60 + minutes;
+      if (currentMinutes >= classStart && currentMinutes < classStart + 60) {
+        currentClass = item.event;
+      }
+    });
+
+    return currentClass;
+  }
+
   fetch('dashboard-data.json')
     .then(res => res.json())
     .then(data => {
-      // Set YouTube embed URL
       document.getElementById('video').src = data.videoUrl;
 
-      // Set schedule date header dynamically
       const now = new Date();
       document.getElementById('schedule-header').textContent =
         now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
 
-      // Populate schedule
       const scheduleList = document.getElementById('schedule');
       scheduleList.innerHTML = '';
       data.schedule.forEach(item => {
@@ -170,7 +204,15 @@
         scheduleList.appendChild(li);
       });
 
-      // Quote slider
+      function updateNowPlaying() {
+        const currentClass = getCurrentClass(data.schedule);
+        document.getElementById('now-playing-class').textContent = currentClass;
+        document.getElementById('now-playing').style.background =
+          currentClass === "No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
+      }
+      updateNowPlaying();
+      setInterval(updateNowPlaying, 60000);
+
       const quotes = data.quotes || [];
       const slider = document.getElementById('quote-slider');
       let current = 0;
@@ -181,7 +223,6 @@
       showQuote();
       setInterval(showQuote, 5000);
 
-      // Fetch live weather from Open-Meteo
       fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
         .then(res => res.json())
         .then(weather => {
@@ -190,15 +231,25 @@
           const code = weather.current_weather.weathercode;
 
           const conditionMap = {
-            0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
-            45: 'Fog', 48: 'Rime fog', 51: 'Drizzle', 53: 'Drizzle', 55: 'Drizzle',
-            61: 'Rain', 63: 'Rain', 65: 'Rain', 71: 'Snow', 73: 'Snow', 75: 'Snow',
-            80: 'Rain showers', 81: 'Rain showers', 82: 'Rain showers', 95: 'Thunderstorm'
+            0: { text: 'Clear sky', emoji: '☀️' },
+            1: { text: 'Mainly clear', emoji: '🌤️' },
+            2: { text: 'Partly cloudy', emoji: '⛅' },
+            3: { text: 'Overcast', emoji: '☁️' },
+            45: { text: 'Fog', emoji: '🌫️' },
+            48: { text: 'Fog', emoji: '🌫️' },
+            51: { text: 'Drizzle', emoji: '🌦️' },
+            61: { text: 'Rain', emoji: '🌧️' },
+            71: { text: 'Snow', emoji: '❄️' },
+            80: { text: 'Showers', emoji: '🌦️' },
+            95: { text: 'Thunderstorm', emoji: '⛈️' }
           };
+
+          const condition = conditionMap[code] || { text: 'N/A', emoji: '❔' };
 
           document.getElementById('temperature').innerText = `${tempC}°C`;
           document.getElementById('wind').innerText = `${wind} km/h`;
-          document.getElementById('condition').innerText = conditionMap[code] || 'N/A';
+          document.getElementById('condition').innerText = condition.text;
+          document.getElementById('weather-emoji').innerText = condition.emoji;
         })
         .catch(err => console.error('Weather fetch error:', err));
     })
