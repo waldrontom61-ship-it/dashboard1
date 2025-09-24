@@ -12,11 +12,12 @@
     "New fitness classes available"
   ],
   "schedule": [
-    {"time": "10:00 AM", "event": "Morning Stretch"},
+    {"time": "10:00 AM", "event": "active aging"},
     {"time": "10:00 AM", "event": "Art Class"},
     {"time": "11:00 AM", "event": "Swimming"}
   ]
 }
+
 
 
 
