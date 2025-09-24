@@ -14,38 +14,33 @@
     background: #000;
   }
 
-  /* Container with 70/30 split */
   .container {
     display: flex;
     height: 100vh;
     width: 100vw;
   }
 
-  /* Main video area */
+  /* Video takes 70% width */
   .main {
     width: 70%;
-    height: 100vh;
-    position: relative; /* for absolute iframe */
-    overflow: hidden;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: #000;
   }
 
   .main iframe {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;   /* cover video area */
-    height: 100vh;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
     border: none;
-    object-fit: cover;
   }
 
-  /* Sidebar */
+  /* Sidebar takes 30% width */
   .sidebar {
     width: 30%;
-    height: 100vh;
-    background-color: rgba(224,0,52,0.95);
+    height: 100%;
+    background-color: #e00034;
     color: white;
     display: flex;
     flex-direction: column;
@@ -61,7 +56,6 @@
     margin-bottom: 20px;
   }
 
-  /* Weather + Now Playing */
   .weather-nowplaying {
     display: flex;
     justify-content: space-between;
@@ -89,7 +83,6 @@
     white-space: nowrap;
   }
 
-  /* Schedule */
   .schedule {
     flex-grow: 1;
   }
@@ -115,7 +108,6 @@
     text-align: center;
   }
 
-  /* Quote slider */
   #quote-slider {
     text-align: center;
     font-size: 32px;
@@ -125,7 +117,6 @@
     line-height: 1.5;
   }
 
-  /* Logo */
   #logo-container {
     text-align: center;
     margin-top: auto;
@@ -148,7 +139,6 @@
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
-    <!-- Weather + Now Playing -->
     <div class="weather-nowplaying">
       <div class="weather">
         <p>
@@ -163,16 +153,13 @@
       </div>
     </div>
 
-    <!-- Schedule -->
     <div class="schedule">
       <div id="schedule-header"></div>
       <ul id="schedule"></ul>
     </div>
 
-    <!-- Quote slider -->
     <div id="quote-slider"></div>
 
-    <!-- Logo -->
     <div id="logo-container">
       <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
     </div>
@@ -190,7 +177,6 @@ function getCurrentClass(schedule) {
     let [hours, minutes] = time.split(":").map(Number);
     if(ampm==="PM" && hours!==12) hours+=12;
     if(ampm==="AM" && hours===12) hours=0;
-
     const classStart = hours*60 + minutes;
     if(currentMinutes >= classStart && currentMinutes < classStart+60){
       currentClass = item.event;
@@ -271,3 +257,5 @@ fetch('dashboard-data.json')
 
 </body>
 </html>
+
+
