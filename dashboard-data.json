@@ -3,13 +3,14 @@
   "temperature": "17",
   "condition": "Partly Cloudy",
   "wind": "15 km/h",
-  "ticker": "Welcome to the YMCA of Saskatoon | Fall programs start next week | Register online today!",
+  "ticker": "Welcome to the YMCA of Saskatoon | Bronze Medallion Class Soon | Register online today!",
   "schedule": [
     {"time": "9:00 AM", "event": "Morning Stretch"},
     {"time": "10:00 AM", "event": "Art Class"},
     {"time": "11:00 AM", "event": "Swimming"}
   ]
 }
+
 
 
 
