@@ -1,8 +1,5 @@
 {
   "videoUrl": "https://www.youtube.com/embed/UbMFjm_mLR8?autoplay=1&mute=1&controls=0&loop=1&playlist=UbMFjm_mLR8",
-  "temperature": "17",
-  "condition": "Partly Cloudy",
-  "wind": "15 km/h",
   "quotes": [
     "Welcome to the YMCA of Saskatoon",
     "join today",
@@ -17,6 +14,7 @@
     {"time": "11:00 AM", "event": "Swimming"}
   ]
 }
+
 
 
 
