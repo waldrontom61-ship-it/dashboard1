@@ -54,6 +54,15 @@
     margin-bottom: 20px;
   }
 
+  /* Weather section */
+  .weather {
+    margin-bottom: 20px;
+  }
+
+  .weather p {
+    margin: 5px 0;
+  }
+
   .schedule {
     flex-grow: 1; /* push quotes and logo down */
   }
@@ -105,12 +114,23 @@
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
+    <!-- Weather section -->
+    <div class="weather">
+      <h3>Weather</h3>
+      <p>Temp: <span id="temperature">--</span></p>
+      <p>Condition: <span id="condition">--</span></p>
+      <p>Wind: <span id="wind">--</span></p>
+    </div>
+
+    <!-- Schedule -->
     <div class="schedule">
       <ul id="schedule"></ul>
     </div>
 
+    <!-- Quote slider -->
     <div id="quote-slider"></div>
 
+    <!-- Logo -->
     <div id="logo-container">
       <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
     </div>
@@ -118,7 +138,7 @@
 </div>
 
 <script>
-  // Fetch JSON from your hosted file
+  // Fetch JSON for video, schedule, quotes
   fetch('dashboard-data.json')
     .then(res => res.json())
     .then(data => {
@@ -138,19 +158,51 @@
       const quotes = data.quotes || [];
       const slider = document.getElementById('quote-slider');
       let current = 0;
-
       function showQuote() {
         slider.textContent = quotes[current];
         current = (current + 1) % quotes.length;
       }
-
-      // Show first quote immediately
       showQuote();
-
-      // Rotate quotes every 5 seconds
       setInterval(showQuote, 5000);
+
+      // Fetch live weather from Open-Meteo
+      fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
+        .then(res => res.json())
+        .then(weather => {
+          const tempC = weather.current_weather.temperature;
+          const wind = weather.current_weather.windspeed;
+          const code = weather.current_weather.weathercode;
+
+          // Simple condition mapping (can expand)
+          const conditionMap = {
+            0: 'Clear sky',
+            1: 'Mainly clear',
+            2: 'Partly cloudy',
+            3: 'Overcast',
+            45: 'Fog',
+            48: 'Depositing rime fog',
+            51: 'Drizzle',
+            53: 'Drizzle',
+            55: 'Drizzle',
+            61: 'Rain',
+            63: 'Rain',
+            65: 'Rain',
+            71: 'Snow',
+            73: 'Snow',
+            75: 'Snow',
+            80: 'Rain showers',
+            81: 'Rain showers',
+            82: 'Rain showers',
+            95: 'Thunderstorm'
+          };
+
+          document.getElementById('temperature').innerText = `${tempC}°C`;
+          document.getElementById('wind').innerText = `${wind} km/h`;
+          document.getElementById('condition').innerText = conditionMap[code] || 'N/A';
+        })
+        .catch(err => console.error('Weather fetch error:', err));
     })
-    .catch(err => console.error('Error fetching dashboard data:', err));
+    .catch(err => console.error('Dashboard fetch error:', err));
 </script>
 
 </body>
