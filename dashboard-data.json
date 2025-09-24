@@ -1,0 +1,12 @@
+{
+  "videoUrl": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/welcome-video.mp4",
+  "temperature": "17",
+  "condition": "Partly Cloudy",
+  "wind": "15 km/h",
+  "ticker": "Welcome to the YMCA | Fall programs start next week | Register online today!",
+  "schedule": [
+    {"time": "9:00 AM", "event": "Morning Stretch"},
+    {"time": "10:00 AM", "event": "Art Class"},
+    {"time": "11:00 AM", "event": "Swimming"}
+  ]
+}
