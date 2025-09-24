@@ -30,7 +30,18 @@
     background: #000;
   }
 
-  .main iframe {
+  /* 16:9 wrapper for iframe */
+  .video-wrapper {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    padding-top: 56.25%; /* 16:9 ratio */
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     border: none;
@@ -132,13 +143,18 @@
 <body>
 
 <div class="container">
+  <!-- Main video area -->
   <div class="main">
-    <iframe id="video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="video-wrapper">
+      <iframe id="video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
   </div>
 
+  <!-- Sidebar -->
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
+    <!-- Weather + Now Playing -->
     <div class="weather-nowplaying">
       <div class="weather">
         <p>
@@ -153,13 +169,16 @@
       </div>
     </div>
 
+    <!-- Schedule -->
     <div class="schedule">
       <div id="schedule-header"></div>
       <ul id="schedule"></ul>
     </div>
 
+    <!-- Quote slider -->
     <div id="quote-slider"></div>
 
+    <!-- Logo -->
     <div id="logo-container">
       <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
     </div>
@@ -210,7 +229,7 @@ fetch('dashboard-data.json')
       currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
   }
   updateNowPlaying();
-  setInterval(updateNowPlaying,1800000);
+  setInterval(updateNowPlaying,1800000); // refresh every 30 mins
 
   const quotes = data.quotes || [];
   const slider = document.getElementById('quote-slider');
@@ -257,5 +276,3 @@ fetch('dashboard-data.json')
 
 </body>
 </html>
-
-
