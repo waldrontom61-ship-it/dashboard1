@@ -9,33 +9,35 @@
     margin: 0;
     font-family: Arial, sans-serif;
     overflow-x: hidden;
-  }
-
-  /* Main video area */
-  #main-area {
-    width: 70%;
-    float: left;
-    height: 100vh;
     background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 2rem;
   }
 
-  video {
-    max-width: 100%;
-    max-height: 100%;
+  /* Container */
+  .container {
+    display: flex;
+    height: 100vh;
+  }
+
+  /* Main area for video */
+  .main {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
   /* Sidebar */
-  #sidebar {
-    width: 30%;
-    float: right;
+  .sidebar {
+    flex: 1;
     background-color: #e00034;
     color: white;
-    height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -49,19 +51,17 @@
     margin-bottom: 20px;
   }
 
-  #weather {
-    margin-bottom: 20px;
-    text-align: center;
+  .schedule {
+    flex-grow: 1; /* push quotes and logo down */
   }
 
-  #schedule {
+  .schedule ul {
     list-style: none;
     padding: 0;
-    flex-grow: 1;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
   }
 
-  #schedule li {
+  .schedule li {
     padding: 10px;
     border-bottom: 1px solid rgba(255,255,255,0.2);
     text-align: center;
@@ -80,7 +80,7 @@
   /* Logo at bottom */
   #logo-container {
     text-align: center;
-    margin-top: auto;
+    margin-top: auto; /* push to bottom */
     margin-bottom: 20px;
   }
 
@@ -92,45 +92,37 @@
 </head>
 <body>
 
-<!-- Main Area -->
-<div id="main-area">
-  <video id="video" autoplay muted loop></video>
-</div>
-
-<!-- Sidebar -->
-<div id="sidebar">
-  <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
-
-  <div id="weather">
-    <p>Temp: <span id="temperature"></span></p>
-    <p>Condition: <span id="condition"></span></p>
-    <p>Wind: <span id="wind"></span></p>
+<div class="container">
+  <!-- Main video area -->
+  <div class="main">
+    <iframe id="video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
-  <ul id="schedule"></ul>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
-  <!-- Quote slider -->
-  <div id="quote-slider"></div>
+    <div class="schedule">
+      <ul id="schedule"></ul>
+    </div>
 
-  <div id="logo-container">
-    <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
+    <div id="quote-slider"></div>
+
+    <div id="logo-container">
+      <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
+    </div>
   </div>
 </div>
 
 <script>
-  // Fetch JSON from GitHub Pages or hosted file
+  // Fetch JSON from your hosted file
   fetch('dashboard-data.json')
     .then(res => res.json())
     .then(data => {
-      // Video
+      // Set YouTube embed URL
       document.getElementById('video').src = data.videoUrl;
 
-      // Weather
-      document.getElementById('temperature').innerText = data.temperature + '°C';
-      document.getElementById('condition').innerText = data.condition;
-      document.getElementById('wind').innerText = data.wind;
-
-      // Schedule
+      // Populate schedule
       const scheduleList = document.getElementById('schedule');
       scheduleList.innerHTML = '';
       data.schedule.forEach(item => {
@@ -139,8 +131,8 @@
         scheduleList.appendChild(li);
       });
 
-      // Quotes/Slider (use ticker field for messages)
-      const quotes = data.ticker.split('|').map(q => q.trim());
+      // Quote slider
+      const quotes = data.quotes || [];
       const slider = document.getElementById('quote-slider');
       let current = 0;
 
@@ -149,13 +141,18 @@
         current = (current + 1) % quotes.length;
       }
 
-      showQuote(); // show first quote immediately
-      setInterval(showQuote, 5000); // rotate every 5s
+      // Show first quote immediately
+      showQuote();
+
+      // Rotate quotes every 5 seconds
+      setInterval(showQuote, 5000);
     })
     .catch(err => console.error('Error fetching dashboard data:', err));
 </script>
 
 </body>
 </html>
+
+
 
 
