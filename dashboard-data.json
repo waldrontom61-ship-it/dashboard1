@@ -1,15 +1,22 @@
 {
-  "videoUrl": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/Community-builder-TV.mp4",
+  "videoUrl": "https://www.youtube.com/embed/UbMFjm_mLR8?autoplay=1&mute=1&controls=0&loop=1&playlist=UbMFjm_mLR8",
   "temperature": "17",
   "condition": "Partly Cloudy",
   "wind": "15 km/h",
-  "ticker": "Welcome to the YMCA of Saskatoon | Bronze Medallion Class Soon | Register online today!",
+  "quotes": [
+    "Welcome to the YMCA of Saskatoon",
+    "Fall programs start next week",
+    "Register online today!",
+    "Check out our swimming schedule",
+    "New fitness classes available"
+  ],
   "schedule": [
     {"time": "9:00 AM", "event": "Morning Stretch"},
     {"time": "10:00 AM", "event": "Art Class"},
     {"time": "11:00 AM", "event": "Swimming"}
   ]
 }
+
 
 
 
