@@ -11,8 +11,9 @@
   "schedule": [
     {"time": "10:00 AM", "event": "active aging"},
     {"time": "10:00 AM", "event": "Art Class"},
-    {"time": "11:00 AM", "event": "Swimming"}
+    {"time": "11:00 AM", "event": "Swimming"},
     {"time": "2:40 PM", "event": "Aquafit"}
   ]
 }
+
 
