@@ -3,6 +3,7 @@
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
     { "type": "video", "src": "https://www.youtube.com/embed/IVvYR7_wKAo" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" }
+     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
   ],
   "quotes": [
     "Welcome to the YMCA of Saskatoon",
@@ -19,5 +20,6 @@
     { "time": "2:40 PM", "event": "Aquafit" }
   ]
 }
+
 
 
