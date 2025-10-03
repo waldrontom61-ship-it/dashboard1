@@ -17,30 +17,6 @@
     background: #000;
   }
 
-  /* Background slideshow */
-  .slideshow {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    overflow: hidden;
-  }
-
-  .slideshow img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-  }
-
-  .slideshow img.active {
-    opacity: 1;
-  }
-
   /* Overlay container */
   .overlay {
     position: fixed;
@@ -50,7 +26,7 @@
     height: 100%;
     z-index: 1;
     display: flex;
-    justify-content: flex-end; /* sidebar on right */
+    justify-content: flex-end;
     align-items: stretch;
     pointer-events: none;
   }
@@ -150,10 +126,6 @@
 </head>
 <body>
 
-<!-- Background Slideshow -->
-<div class="slideshow" id="slideshow"></div>
-
-<!-- Overlay Sidebar -->
 <div class="overlay">
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
@@ -186,26 +158,6 @@
 </div>
 
 <script>
-// === Slideshow from JSON ===
-const slideshow = document.getElementById('slideshow');
-
-function startSlideshow(images) {
-  images.forEach((src, idx) => {
-    const img = document.createElement('img');
-    img.src = src;
-    if(idx===0) img.classList.add('active');
-    slideshow.appendChild(img);
-  });
-
-  let currentSlide = 0;
-  setInterval(() => {
-    const imgs = slideshow.querySelectorAll('img');
-    imgs[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % imgs.length;
-    imgs[currentSlide].classList.add('active');
-  }, 4000);
-}
-
 // === Dashboard Data ===
 function getCurrentClass(schedule) {
   const now = new Date();
@@ -228,10 +180,6 @@ function getCurrentClass(schedule) {
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
-    // Start slideshow from JSON images
-    if(data.images && data.images.length > 0) {
-      startSlideshow(data.images);
-    }
 
     // Schedule
     const now = new Date();
@@ -246,6 +194,7 @@ fetch('dashboard-data.json')
       scheduleList.appendChild(li);
     });
 
+    // Now playing
     function updateNowPlaying(){
       const currentClass = getCurrentClass(data.schedule);
       document.getElementById('now-playing-class').textContent = currentClass;
@@ -297,3 +246,5 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
+
+
