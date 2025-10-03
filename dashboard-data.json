@@ -7,6 +7,10 @@
     {
       "type": "video",
       "src": "https://www.youtube.com/embed/IVvYR7_wKAo"
+    },
+     {
+      "type": "image",
+      "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg"
     }
   ],
   "quotes": [
@@ -24,3 +28,4 @@
     {"time": "2:40 PM", "event": "Aquafit"}
   ]
 }
+
