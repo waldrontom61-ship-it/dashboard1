@@ -52,7 +52,7 @@
     display: flex;
     justify-content: flex-end; /* sidebar on right */
     align-items: stretch;
-    pointer-events: none; /* allow clicks to pass if needed */
+    pointer-events: none;
   }
 
   .sidebar {
@@ -64,7 +64,7 @@
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
-    pointer-events: auto; /* make sidebar interactive */
+    pointer-events: auto;
     font-family: 'Montserrat', sans-serif;
   }
 
@@ -186,30 +186,27 @@
 </div>
 
 <script>
-// === Slideshow Images ===
-// Add all the images you want to show here
-const images = [
-  'https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_03565-scaled.jpg',
-];
-
+// === Slideshow from JSON ===
 const slideshow = document.getElementById('slideshow');
-images.forEach((src, idx) => {
-  const img = document.createElement('img');
-  img.src = src;
-  if(idx===0) img.classList.add('active');
-  slideshow.appendChild(img);
-});
 
-let currentSlide = 0;
-setInterval(() => {
-  const imgs = slideshow.querySelectorAll('img');
-  imgs[currentSlide].classList.remove('active');
-  currentSlide = (currentSlide + 1) % imgs.length;
-  imgs[currentSlide].classList.add('active');
-}, 4000); // 4 seconds per slide
+function startSlideshow(images) {
+  images.forEach((src, idx) => {
+    const img = document.createElement('img');
+    img.src = src;
+    if(idx===0) img.classList.add('active');
+    slideshow.appendChild(img);
+  });
+
+  let currentSlide = 0;
+  setInterval(() => {
+    const imgs = slideshow.querySelectorAll('img');
+    imgs[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % imgs.length;
+    imgs[currentSlide].classList.add('active');
+  }, 4000);
+}
 
 // === Dashboard Data ===
-// Replace dashboard-data.json with your own JSON file
 function getCurrentClass(schedule) {
   const now = new Date();
   const currentMinutes = now.getHours()*60 + now.getMinutes();
@@ -227,73 +224,80 @@ function getCurrentClass(schedule) {
   return currentClass;
 }
 
+// Fetch JSON
 fetch('dashboard-data.json')
-.then(res=>res.json())
-.then(data=>{
-  const now = new Date();
-  document.getElementById('schedule-header').textContent =
-    now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+  .then(res => res.json())
+  .then(data => {
+    // Start slideshow from JSON images
+    if(data.images && data.images.length > 0) {
+      startSlideshow(data.images);
+    }
 
-  const scheduleList = document.getElementById('schedule');
-  scheduleList.innerHTML='';
-  data.schedule.forEach(item=>{
-    const li = document.createElement('li');
-    li.innerText = item.time + ' - ' + item.event;
-    scheduleList.appendChild(li);
-  });
+    // Schedule
+    const now = new Date();
+    document.getElementById('schedule-header').textContent =
+      now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
 
-  function updateNowPlaying(){
-    const currentClass = getCurrentClass(data.schedule);
-    document.getElementById('now-playing-class').textContent = currentClass;
-    document.getElementById('now-playing').style.background =
-      currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
-  }
-  updateNowPlaying();
-  setInterval(updateNowPlaying,900000); // refresh every 15 mins
+    const scheduleList = document.getElementById('schedule');
+    scheduleList.innerHTML = '';
+    data.schedule.forEach(item=>{
+      const li = document.createElement('li');
+      li.innerText = item.time + ' - ' + item.event;
+      scheduleList.appendChild(li);
+    });
 
-  const quotes = data.quotes || [];
-  const slider = document.getElementById('quote-slider');
-  let current = 0;
-  function showQuote(){
-    slider.textContent = quotes[current];
-    current = (current+1)%quotes.length;
-  }
-  showQuote();
-  setInterval(showQuote,5000);
+    function updateNowPlaying(){
+      const currentClass = getCurrentClass(data.schedule);
+      document.getElementById('now-playing-class').textContent = currentClass;
+      document.getElementById('now-playing').style.background =
+        currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
+    }
+    updateNowPlaying();
+    setInterval(updateNowPlaying,900000);
 
-  // Weather
-  fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
-  .then(res=>res.json())
-  .then(weather=>{
-    const tempC = weather.current_weather.temperature;
-    const wind = weather.current_weather.windspeed;
-    const code = weather.current_weather.weathercode;
+    // Quotes
+    const quotes = data.quotes || [];
+    const slider = document.getElementById('quote-slider');
+    let current = 0;
+    function showQuote(){
+      slider.textContent = quotes[current];
+      current = (current+1)%quotes.length;
+    }
+    showQuote();
+    setInterval(showQuote,5000);
 
-    const conditionMap = {
-      0:{text:'Clear sky', emoji:'☀️'},
-      1:{text:'Mainly clear', emoji:'🌤️'},
-      2:{text:'Partly cloudy', emoji:'⛅'},
-      3:{text:'Overcast', emoji:'☁️'},
-      45:{text:'Fog', emoji:'🌫️'},
-      48:{text:'Fog', emoji:'🌫️'},
-      51:{text:'Drizzle', emoji:'🌦️'},
-      61:{text:'Rain', emoji:'🌧️'},
-      71:{text:'Snow', emoji:'❄️'},
-      80:{text:'Showers', emoji:'🌦️'},
-      95:{text:'Thunderstorm', emoji:'⛈️'}
-    };
-
-    const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
-    document.getElementById('temperature').innerText = `${tempC}°C`;
-    document.getElementById('wind').innerText = `${wind} km/h`;
-    document.getElementById('condition').innerText = condition.text;
-    document.getElementById('weather-emoji').innerText = condition.emoji;
-  });
-})
-.catch(err=>console.error('Dashboard fetch error:',err));
+    // Weather
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
+      .then(res=>res.json())
+      .then(weather=>{
+        const tempC = weather.current_weather.temperature;
+        const wind = weather.current_weather.windspeed;
+        const code = weather.current_weather.weathercode;
+        const conditionMap = {
+          0:{text:'Clear sky', emoji:'☀️'},
+          1:{text:'Mainly clear', emoji:'🌤️'},
+          2:{text:'Partly cloudy', emoji:'⛅'},
+          3:{text:'Overcast', emoji:'☁️'},
+          45:{text:'Fog', emoji:'🌫️'},
+          48:{text:'Fog', emoji:'🌫️'},
+          51:{text:'Drizzle', emoji:'🌦️'},
+          61:{text:'Rain', emoji:'🌧️'},
+          71:{text:'Snow', emoji:'❄️'},
+          80:{text:'Showers', emoji:'🌦️'},
+          95:{text:'Thunderstorm', emoji:'⛈️'}
+        };
+        const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
+        document.getElementById('temperature').innerText = `${tempC}°C`;
+        document.getElementById('wind').innerText = `${wind} km/h`;
+        document.getElementById('condition').innerText = condition.text;
+        document.getElementById('weather-emoji').innerText = condition.emoji;
+      });
+  })
+  .catch(err => console.error('Dashboard fetch error:', err));
 </script>
 </body>
 </html>
+
 
 
 
