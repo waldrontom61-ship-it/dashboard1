@@ -17,30 +17,18 @@
     background: #000;
   }
 
-  /* Overlay container */
   .overlay {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: stretch;
-    pointer-events: none;
-  }
-
-  .sidebar {
+    right: 0;
     width: 30%;
     height: 100%;
-    background-color: rgba(224, 0, 52, 0.9);
+    background-color: rgba(224,0,52,0.9);
     color: white;
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
-    pointer-events: auto;
     font-family: 'Montserrat', sans-serif;
   }
 
@@ -66,20 +54,12 @@
     gap: 6px;
   }
 
-  #weather-emoji {
-    font-size: 1.4em;
-  }
-
   .now-playing {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.2);
     padding: 5px 10px;
     border-radius: 6px;
     font-weight: bold;
     white-space: nowrap;
-  }
-
-  .schedule {
-    flex-grow: 1;
   }
 
   #schedule-header {
@@ -105,11 +85,10 @@
 
   #quote-slider {
     text-align: center;
-    font-size: 32px;
+    font-size: 20px;
     font-style: italic;
     margin-bottom: 20px;
-    min-height: 50px;
-    line-height: 1.5;
+    min-height: 40px;
   }
 
   #logo-container {
@@ -127,33 +106,31 @@
 <body>
 
 <div class="overlay">
-  <div class="sidebar">
-    <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
+  <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
-    <div class="weather-nowplaying">
-      <div class="weather">
-        <p>
-          <span id="weather-emoji">⛅</span>
-          <span id="temperature">--</span> |
-          <span id="condition">--</span> |
-          <span id="wind">--</span>
-        </p>
-      </div>
-      <div class="now-playing" id="now-playing">
-        Now: <span id="now-playing-class">Checking...</span>
-      </div>
+  <div class="weather-nowplaying">
+    <div class="weather">
+      <p>
+        <span id="weather-emoji">⛅</span>
+        <span id="temperature">--</span> |
+        <span id="condition">--</span> |
+        <span id="wind">--</span>
+      </p>
     </div>
-
-    <div class="schedule">
-      <div id="schedule-header"></div>
-      <ul id="schedule"></ul>
+    <div class="now-playing" id="now-playing">
+      Now: <span id="now-playing-class">Checking...</span>
     </div>
+  </div>
 
-    <div id="quote-slider"></div>
+  <div class="schedule">
+    <div id="schedule-header"></div>
+    <ul id="schedule"></ul>
+  </div>
 
-    <div id="logo-container">
-      <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
-    </div>
+  <div id="quote-slider"></div>
+
+  <div id="logo-container">
+    <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
   </div>
 </div>
 
@@ -176,49 +153,49 @@ function getCurrentClass(schedule) {
   return currentClass;
 }
 
-// Fetch JSON
+// Fetch JSON from GitHub Pages
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
-
-    // Schedule
+    // Schedule header
     const now = new Date();
     document.getElementById('schedule-header').textContent =
       now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
 
+    // Schedule list
     const scheduleList = document.getElementById('schedule');
     scheduleList.innerHTML = '';
-    data.schedule.forEach(item=>{
+    data.schedule.forEach(item => {
       const li = document.createElement('li');
       li.innerText = item.time + ' - ' + item.event;
       scheduleList.appendChild(li);
     });
 
     // Now playing
-    function updateNowPlaying(){
+    function updateNowPlaying() {
       const currentClass = getCurrentClass(data.schedule);
       document.getElementById('now-playing-class').textContent = currentClass;
       document.getElementById('now-playing').style.background =
         currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
     }
     updateNowPlaying();
-    setInterval(updateNowPlaying,900000);
+    setInterval(updateNowPlaying, 900000);
 
     // Quotes
     const quotes = data.quotes || [];
     const slider = document.getElementById('quote-slider');
     let current = 0;
-    function showQuote(){
+    function showQuote() {
       slider.textContent = quotes[current];
       current = (current+1)%quotes.length;
     }
     showQuote();
-    setInterval(showQuote,5000);
+    setInterval(showQuote, 5000);
 
-    // Weather
+    // Weather (optional)
     fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
-      .then(res=>res.json())
-      .then(weather=>{
+      .then(res => res.json())
+      .then(weather => {
         const tempC = weather.current_weather.temperature;
         const wind = weather.current_weather.windspeed;
         const code = weather.current_weather.weathercode;
@@ -246,5 +223,7 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
+
+
 
 
