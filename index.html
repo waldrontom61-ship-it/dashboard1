@@ -29,8 +29,23 @@
     background: #000;
   }
 
-  .media-container img,
-  .media-container iframe {
+  .media-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .media-slide.active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .media-slide img,
+  .media-slide iframe {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -119,22 +134,41 @@
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
-    // --- Media ---
+    // --- Media slideshow ---
     const mediaContainer = document.getElementById('media-container');
+    const slides = [];
+
     data.media.forEach(item => {
-      if(item.type === 'image'){
+      const slide = document.createElement('div');
+      slide.className = 'media-slide';
+
+      if (item.type === 'image') {
         const img = document.createElement('img');
         img.src = item.src;
-        mediaContainer.appendChild(img);
-      } else if(item.type === 'video'){
+        slide.appendChild(img);
+      } else if (item.type === 'video') {
         const iframe = document.createElement('iframe');
         iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
         iframe.frameBorder = "0";
         iframe.allow = "autoplay; fullscreen";
         iframe.allowFullscreen = true;
-        mediaContainer.appendChild(iframe);
+        slide.appendChild(iframe);
       }
+
+      mediaContainer.appendChild(slide);
+      slides.push(slide);
     });
+
+    // Start slideshow
+    let currentSlide = 0;
+    if (slides.length > 0) {
+      slides[0].classList.add('active');
+      setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }, 10000); // 10 seconds per slide
+    }
 
     // --- Schedule ---
     const now = new Date();
@@ -217,5 +251,6 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
+
 
 
