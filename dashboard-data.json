@@ -1,7 +1,5 @@
 {
-  "images": [
-    "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg"
-  ],
+  "videoUrl": "https://youtu.be/IVvYR7_wKAo",
   "quotes": [
     "Welcome to the YMCA of Saskatoon",
     "Join today",
@@ -17,3 +15,4 @@
     {"time": "2:40 PM", "event": "Aquafit"}
   ]
 }
+
