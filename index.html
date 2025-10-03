@@ -33,8 +33,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 70%;
-    height: 100%;
+    width: 100%;    /* match parent */
+    height: 100%;   /* match parent */
     opacity: 0;
     transition: opacity 1s ease-in-out;
   }
@@ -46,6 +46,9 @@
 
   .media-slide img,
   .media-slide iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -130,7 +133,6 @@
 </div>
 
 <script>
-// === Dashboard Data ===
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
@@ -159,7 +161,7 @@ fetch('dashboard-data.json')
       slides.push(slide);
     });
 
-    // Start slideshow
+    // Slideshow rotation
     let currentSlide = 0;
     if (slides.length > 0) {
       slides[0].classList.add('active');
@@ -251,6 +253,7 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
+
 
 
 
