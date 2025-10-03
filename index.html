@@ -3,60 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YMCA Dashboard</title>
+<title>YMCA Overlay Dashboard</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
 
-  body {
+  html, body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    background: #000;
-  }
-
-  .container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-  }
-
-  /* Video takes 70% width */
-  .main {
-    width: 70%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #000;
-  }
-
-  /* 16:9 wrapper for iframe */
-  .video-wrapper {
+    padding: 0;
     width: 100%;
-    max-width: 100%;
-    position: relative;
-    padding-top: 56.25%; /* 16:9 ratio */
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #000;
   }
 
-  .video-wrapper iframe {
-    position: absolute;
+  /* Background slideshow */
+  .slideshow {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    border: none;
+    z-index: 0;
+    overflow: hidden;
   }
 
-  /* Sidebar takes 30% width */
+  .slideshow img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .slideshow img.active {
+    opacity: 1;
+  }
+
+  /* Overlay container */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end; /* sidebar on right */
+    align-items: stretch;
+    pointer-events: none; /* allow clicks to pass if needed */
+  }
+
   .sidebar {
     width: 30%;
     height: 100%;
-    background-color: #e00034;
+    background-color: rgba(224, 0, 52, 0.9);
     color: white;
     display: flex;
     flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
+    pointer-events: auto; /* make sidebar interactive */
     font-family: 'Montserrat', sans-serif;
   }
 
@@ -142,19 +150,14 @@
 </head>
 <body>
 
-<div class="container">
-  <!-- Main video area -->
-  <div class="main">
-    <div class="video-wrapper">
-      <iframe id="video" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
-  </div>
+<!-- Background Slideshow -->
+<div class="slideshow" id="slideshow"></div>
 
-  <!-- Sidebar -->
+<!-- Overlay Sidebar -->
+<div class="overlay">
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
-    <!-- Weather + Now Playing -->
     <div class="weather-nowplaying">
       <div class="weather">
         <p>
@@ -169,16 +172,13 @@
       </div>
     </div>
 
-    <!-- Schedule -->
     <div class="schedule">
       <div id="schedule-header"></div>
       <ul id="schedule"></ul>
     </div>
 
-    <!-- Quote slider -->
     <div id="quote-slider"></div>
 
-    <!-- Logo -->
     <div id="logo-container">
       <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
     </div>
@@ -186,11 +186,36 @@
 </div>
 
 <script>
+// === Slideshow Images ===
+// Add all the images you want to show here
+const images = [
+  'images/image1.jpg',
+  'images/image2.jpg',
+  'images/image3.jpg'
+];
+
+const slideshow = document.getElementById('slideshow');
+images.forEach((src, idx) => {
+  const img = document.createElement('img');
+  img.src = src;
+  if(idx===0) img.classList.add('active');
+  slideshow.appendChild(img);
+});
+
+let currentSlide = 0;
+setInterval(() => {
+  const imgs = slideshow.querySelectorAll('img');
+  imgs[currentSlide].classList.remove('active');
+  currentSlide = (currentSlide + 1) % imgs.length;
+  imgs[currentSlide].classList.add('active');
+}, 4000); // 4 seconds per slide
+
+// === Dashboard Data ===
+// Replace dashboard-data.json with your own JSON file
 function getCurrentClass(schedule) {
   const now = new Date();
   const currentMinutes = now.getHours()*60 + now.getMinutes();
   let currentClass = "No class right now";
-
   schedule.forEach(item => {
     const [time, ampm] = item.time.split(" ");
     let [hours, minutes] = time.split(":").map(Number);
@@ -201,15 +226,12 @@ function getCurrentClass(schedule) {
       currentClass = item.event;
     }
   });
-
   return currentClass;
 }
 
 fetch('dashboard-data.json')
 .then(res=>res.json())
 .then(data=>{
-  document.getElementById('video').src = data.videoUrl;
-
   const now = new Date();
   document.getElementById('schedule-header').textContent =
     now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
@@ -229,7 +251,7 @@ fetch('dashboard-data.json')
       currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
   }
   updateNowPlaying();
-  setInterval(updateNowPlaying,900000); // refresh every 30 mins
+  setInterval(updateNowPlaying,900000); // refresh every 15 mins
 
   const quotes = data.quotes || [];
   const slider = document.getElementById('quote-slider');
@@ -241,6 +263,7 @@ fetch('dashboard-data.json')
   showQuote();
   setInterval(showQuote,5000);
 
+  // Weather
   fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
   .then(res=>res.json())
   .then(weather=>{
@@ -263,17 +286,15 @@ fetch('dashboard-data.json')
     };
 
     const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
-
     document.getElementById('temperature').innerText = `${tempC}°C`;
     document.getElementById('wind').innerText = `${wind} km/h`;
     document.getElementById('condition').innerText = condition.text;
     document.getElementById('weather-emoji').innerText = condition.emoji;
-  })
-  .catch(err=>console.error('Weather fetch error:',err));
+  });
 })
 .catch(err=>console.error('Dashboard fetch error:',err));
 </script>
-
 </body>
 </html>
+
 
