@@ -1,17 +1,8 @@
 {
   "media": [
-    {
-      "type": "image",
-      "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg"
-    },
-    {
-      "type": "video",
-      "src": "https://www.youtube.com/embed/IVvYR7_wKAo"
-    },
-     {
-      "type": "image",
-      "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg"
-    }
+    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
+    { "type": "video", "src": "https://www.youtube.com/embed/IVvYR7_wKAo" },
+    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" }
   ],
   "quotes": [
     "Welcome to the YMCA of Saskatoon",
@@ -22,10 +13,11 @@
     "New fitness classes available"
   ],
   "schedule": [
-    {"time": "10:00 AM", "event": "Active Aging"},
-    {"time": "10:00 AM", "event": "Art Class"},
-    {"time": "11:00 AM", "event": "Swimming"},
-    {"time": "2:40 PM", "event": "Aquafit"}
+    { "time": "10:00 AM", "event": "Active Aging" },
+    { "time": "10:00 AM", "event": "Art Class" },
+    { "time": "11:00 AM", "event": "Swimming" },
+    { "time": "2:40 PM", "event": "Aquafit" }
   ]
 }
+
 
