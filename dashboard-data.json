@@ -1,7 +1,7 @@
 {
   "media": [
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
-    { "type": "video", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.mp4" },
+    { "type": "video", "src": "" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
      { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
   ],
@@ -20,6 +20,7 @@
     { "time": "2:40 PM", "event": "Aquafit" }
   ]
 }
+
 
 
 
