@@ -25,13 +25,17 @@
     "Wednesday": [
       { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
     ],
-    "Thursday": [],
-    "Friday": [],
-    "Saturday": [],
-    "Sunday": []
+    "Thursday": [
+      { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
+    ],
+    "Friday": [
+      { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
+    ],
+    "Saturday": [
+      { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
+    ],
+    "Sunday": [
+      { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
+    ]
   }
 }
-
-
-
-
