@@ -51,7 +51,8 @@
       { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" },
     ],
     "Sunday": [
-      { "NO CLASS" }  ← needs a key, e.g., { "time": "", "event": "NO CLASS" }
+      { "time": "", "event": "NO CLASS" }
     ]
   }
 }
+
