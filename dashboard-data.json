@@ -19,7 +19,9 @@
       { "time": "11:00 AM", "event": "Swimming" },
       { "time": "2:40 PM", "event": "Aquafit" }
     ],
-    "Tuesday": [],
+    "Tuesday": [
+      {"time": "2:00 pm", "event"; "Active Aging with Fred Dyck"}
+    ],
     "Wednesday": [],
     "Thursday": [],
     "Friday": [],
@@ -27,3 +29,4 @@
     "Sunday": []
   }
 }
+
