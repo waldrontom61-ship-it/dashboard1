@@ -20,14 +20,17 @@
       { "time": "2:40 PM", "event": "Aquafit" }
     ],
     "Tuesday": [
-      {"time": "2:00 pm", "event": "Active Aging with Fred Dyck"}
+      { "time": "2:00 pm", "event": "Active Aging with Fred Dyck" }
     ],
-    "Wednesday": [],
+    "Wednesday": [
+      { "time": "2:00 pm", "event": "Active Aging with Fred Dyck" }
+    ],
     "Thursday": [],
     "Friday": [],
     "Saturday": [],
     "Sunday": []
   }
 }
+
 
 
