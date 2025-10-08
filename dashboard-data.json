@@ -12,10 +12,18 @@
     "Check out our swimming schedule",
     "New fitness classes available"
   ],
-  "schedule": [
-    { "time": "10:00 AM", "event": "Active Aging" },
-    { "time": "10:00 AM", "event": "Art Class" },
-    { "time": "11:00 AM", "event": "Swimming" },
-    { "time": "2:40 PM", "event": "Aquafit" }
-  ]
+  "weekly_schedule": {
+    "Monday": [
+      { "time": "10:00 AM", "event": "Active Aging" },
+      { "time": "10:00 AM", "event": "Art Class" },
+      { "time": "11:00 AM", "event": "Swimming" },
+      { "time": "2:40 PM", "event": "Aquafit" }
+    ],
+    "Tuesday": [],
+    "Wednesday": [],
+    "Thursday": [],
+    "Friday": [],
+    "Saturday": [],
+    "Sunday": []
+  }
 }
