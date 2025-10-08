@@ -311,7 +311,9 @@ fetch('dashboard-data.json')
           61:{text:'Rain', emoji:'🌧️'},
           71:{text:'Snow', emoji:'❄️'},
           80:{text:'Showers', emoji:'🌦️'},
-          95:{text:'Thunderstorm', emoji:'⛈️'}
+          95:{text:'Thunderstorm', emoji:'⛈️'},
+          56:{text:'Smoke', emoji:'💨'},
+          57:{text:'Dense smoke', emoji:'💨'}
         };
         const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
         document.getElementById('temperature').innerText = `${tempC}°C`;
@@ -324,3 +326,4 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
+
