@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YMCA Overlay Dashboard</title>
 <style>
+  /* === EASY CONTROLS === */
+  :root {
+    --title-size: 40px;
+    --weather-size: 26px;
+    --date-size: 28px;
+    --class-size: 20px;
+    --sidebar-padding: 25px;
+    --sidebar-bg: rgba(224, 0, 52, 0.9);
+  }
+
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
 
   html, body {
@@ -33,8 +43,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;    /* match parent */
-    height: 100%;   /* match parent */
+    width: 100%;
+    height: 100%;
     opacity: 0;
     transition: opacity 1s ease-in-out;
   }
@@ -71,36 +81,113 @@
   .sidebar {
     width: 100%;
     height: 100%;
-    background-color: rgba(224, 0, 52, 0.9);
+    background-color: var(--sidebar-bg);
     color: white;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    justify-content: center;
+    padding: var(--sidebar-padding);
     box-sizing: border-box;
     pointer-events: auto;
     font-family: 'Montserrat', sans-serif;
   }
 
-  #sidebar-header { text-align: center; font-size: 24px; font-weight: 900; margin-bottom: 20px; }
-  .weather-nowplaying { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 14px; }
-  .weather p { margin: 0; display: flex; align-items: center; gap: 6px; }
-  #weather-emoji { font-size: 1.4em; }
-  .now-playing { background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 6px; font-weight: bold; white-space: nowrap; }
-  .schedule { flex-grow: 1; }
-  #schedule-header { text-align: center; font-size: 18px; font-weight: 900; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.4); }
-  .schedule ul { list-style: none; padding: 0; margin: 0 0 20px 0; }
-  .schedule li { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); text-align: center; }
-  #quote-slider { text-align: center; font-size: 32px; font-style: italic; margin-bottom: 20px; min-height: 50px; line-height: 1.5; }
-  #logo-container { text-align: center; margin-top: auto; margin-bottom: 20px; }
-  #logo { width: 80%; max-width: 150px; }
+  /* Title */
+  #sidebar-header {
+    text-align: center;
+    font-size: var(--title-size);
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  /* Weather */
+  .weather-nowplaying {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: var(--weather-size);
+    gap: 10px;
+  }
+
+  .weather p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #weather-emoji {
+    font-size: 1.4em;
+  }
+
+  .now-playing {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+    font-size: 18px;
+  }
+
+  /* Schedule */
+  .schedule {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #schedule-header {
+    text-align: center;
+    font-size: var(--date-size);
+    font-weight: 900;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255,255,255,0.4);
+  }
+
+  .schedule ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 90%;
+  }
+
+  .schedule li {
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    text-align: center;
+    font-size: var(--class-size);
+  }
+
+  /* Quote & Logo */
+  #quote-slider {
+    text-align: center;
+    font-size: 28px;
+    font-style: italic;
+    margin: 20px 0;
+    line-height: 1.4;
+    min-height: 60px;
+  }
+
+  #logo-container {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: 20px;
+  }
+
+  #logo {
+    width: 80%;
+    max-width: 180px;
+  }
 </style>
 </head>
 <body>
 
-<!-- Media container -->
 <div class="media-container" id="media-container"></div>
 
-<!-- Sidebar -->
 <div class="overlay">
   <div class="sidebar">
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
@@ -253,8 +340,3 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
-
-
-
-
-
