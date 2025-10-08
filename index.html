@@ -122,15 +122,6 @@
     font-size: 1.4em;
   }
 
-  .now-playing {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    white-space: nowrap;
-    font-size: 18px;
-  }
-
   /* Schedule */
   .schedule {
     flex-grow: 1;
@@ -144,8 +135,8 @@
     font-size: var(--date-size);
     font-weight: 900;
     margin-bottom: 20px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid rgba(255,255,255,0.4);
+    padding-bottom: 0;
+    border-bottom: none;
   }
 
   .schedule ul {
@@ -157,7 +148,7 @@
 
   .schedule li {
     padding: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: none;
     text-align: center;
     font-size: var(--class-size);
   }
@@ -194,17 +185,16 @@
   }
 
   .media-container {
-    contain: strict; /* keeps slides from bleeding into sidebar */
+    contain: strict;
   }
 
   .media-slide {
-    background: #000; /* prevents flashes on load */
+    background: #000;
   }
 
   .overlay {
-    z-index: 10; /* ensure sidebar always stays on top */
+    z-index: 10;
   }
-
 </style>
 </head>
 <body>
@@ -223,9 +213,6 @@
           <span id="condition">--</span> |
           <span id="wind">--</span>
         </p>
-      </div>
-      <div class="now-playing" id="now-playing">
-        Now: <span id="now-playing-class">Checking...</span>
       </div>
     </div>
 
@@ -279,7 +266,7 @@ fetch('dashboard-data.json')
         slides[currentSlide].classList.remove('active');
         currentSlide = (currentSlide + 1) % slides.length;
         slides[currentSlide].classList.add('active');
-      }, 15000); // 15 seconds per slide
+      }, 15000);
     }
 
     // --- Schedule ---
@@ -294,34 +281,6 @@ fetch('dashboard-data.json')
       li.innerText = item.time + ' - ' + item.event;
       scheduleList.appendChild(li);
     });
-
-    // --- Now playing ---
-    function getCurrentClass(schedule){
-      const now = new Date();
-      const currentMinutes = now.getHours()*60 + now.getMinutes();
-      let currentClass = "No class right now";
-      schedule.forEach(item => {
-        const [time, ampm] = item.time.split(" ");
-        let [hours, minutes] = time.split(":").map(Number);
-        if(ampm==="PM" && hours!==12) hours+=12;
-        if(ampm==="AM" && hours===12) hours=0;
-        const classStart = hours*60 + minutes;
-        if(currentMinutes >= classStart && currentMinutes < classStart+60){
-          currentClass = item.event;
-        }
-      });
-      return currentClass;
-    }
-
-    function updateNowPlaying(){
-      const currentClass = getCurrentClass(data.schedule);
-      document.getElementById('now-playing-class').textContent = currentClass;
-      document.getElementById('now-playing').style.background =
-        currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
-    }
-
-    updateNowPlaying();
-    setInterval(updateNowPlaying,900000);
 
     // --- Quotes ---
     const quotes = data.quotes || [];
