@@ -43,7 +43,7 @@
       { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
       { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
       { "time": "12:10 PM - 12:50 PM", "event": "Spin" },
-      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball" },
+      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball" }
     ],
     "Saturday": [
       { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle" },
@@ -51,10 +51,7 @@
       { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" },
     ],
     "Sunday": [
-      { "NO CLASS" }
+      { "NO CLASS" }  ← needs a key, e.g., { "time": "", "event": "NO CLASS" }
     ]
   }
 }
-
-
-
