@@ -23,7 +23,8 @@
       { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
     ],
     "Wednesday": [
-      { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
+      { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" },
+      { "time": "3:00 PM", "event": "Aquafit" }
     ],
     "Thursday": [
       { "time": "2:00 PM", "event": "Active Aging with Fred Dyck" }
@@ -39,3 +40,4 @@
     ]
   }
 }
+
