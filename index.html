@@ -228,7 +228,6 @@
     </div>
   </div>
 </div>
-
 <script>
 fetch('dashboard-data.json')
   .then(res => res.json())
@@ -269,14 +268,18 @@ fetch('dashboard-data.json')
       }, 15000);
     }
 
-    // --- Schedule ---
+    // --- Schedule (weekly) ---
     const now = new Date();
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const todayName = days[now.getDay()];
+
     document.getElementById('schedule-header').textContent =
       now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
 
     const scheduleList = document.getElementById('schedule');
     scheduleList.innerHTML = '';
-    data.schedule.forEach(item=>{
+    const todaySchedule = data.weekly_schedule[todayName] || [];
+    todaySchedule.forEach(item => {
       const li = document.createElement('li');
       li.innerText = item.time + ' - ' + item.event;
       scheduleList.appendChild(li);
@@ -326,4 +329,3 @@ fetch('dashboard-data.json')
 </script>
 </body>
 </html>
-
