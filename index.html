@@ -182,6 +182,29 @@
     width: 80%;
     max-width: 180px;
   }
+
+  /* === FIX: Prevent flicker/duplication on slide transitions === */
+  .media-container,
+  .media-slide,
+  .media-slide img,
+  .media-slide iframe {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: opacity;
+  }
+
+  .media-container {
+    contain: strict; /* keeps slides from bleeding into sidebar */
+  }
+
+  .media-slide {
+    background: #000; /* prevents flashes on load */
+  }
+
+  .overlay {
+    z-index: 10; /* ensure sidebar always stays on top */
+  }
+
 </style>
 </head>
 <body>
@@ -256,7 +279,7 @@ fetch('dashboard-data.json')
         slides[currentSlide].classList.remove('active');
         currentSlide = (currentSlide + 1) % slides.length;
         slides[currentSlide].classList.add('active');
-      }, 15000); // 10 seconds per slide
+      }, 15000); // 15 seconds per slide
     }
 
     // --- Schedule ---
@@ -289,12 +312,14 @@ fetch('dashboard-data.json')
       });
       return currentClass;
     }
+
     function updateNowPlaying(){
       const currentClass = getCurrentClass(data.schedule);
       document.getElementById('now-playing-class').textContent = currentClass;
       document.getElementById('now-playing').style.background =
         currentClass==="No class right now" ? "rgba(255,255,255,0.2)" : "rgba(0,255,0,0.3)";
     }
+
     updateNowPlaying();
     setInterval(updateNowPlaying,900000);
 
