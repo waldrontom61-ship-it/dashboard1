@@ -11,11 +11,11 @@
 
   /* === EASY CONTROLS === */
   :root {
-    --title-size: 42px;
-    --weather-size: 24px;
-    --date-size: 30px;
-    --class-size: 18px;
-    --sidebar-padding: 25px;
+    --title-size: 38px;
+    --weather-size: 20px;
+    --date-size: 26px;
+    --class-size: 16px;
+    --sidebar-padding: 20px;
     --sidebar-bg: #e00034;
     --accent-color: #ffffff;
     --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -40,7 +40,7 @@
     top: 0;
     left: 0;
     width: 70%;
-    height: 100vh;
+    height: 100%;
     overflow: hidden;
     z-index: 0;
     background: linear-gradient(45deg, #1a1a1a, #000);
@@ -79,7 +79,7 @@
     top: 0;
     right: 0;
     width: 30%;
-    height: 100vh;
+    height: 100%;
     z-index: 10;
     display: flex;
     align-items: stretch;
@@ -101,6 +101,7 @@
     font-family: 'Inter', sans-serif;
     box-shadow: var(--card-shadow);
     border-left: 3px solid white;
+    overflow-y: auto; /* allows scrolling if content exceeds viewport */
   }
 
   /* Title */
@@ -109,7 +110,7 @@
     font-size: var(--title-size);
     font-weight: 900;
     font-family: 'Montserrat', sans-serif;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     line-height: 1.1;
     text-shadow: var(--text-shadow);
     color: white;
@@ -125,29 +126,29 @@
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-
-  .weather p {
-    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+  }
+
+  .weather {
+    text-align: center;
+    font-size: var(--weather-size);
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 5px;
   }
 
   #weather-emoji {
     font-size: 2em;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    margin-bottom: 5px;
   }
 
-  .weather-line {
-    display: flex;
-    gap: 10px;
+  .weather-item {
     font-weight: 600;
-    flex-wrap: nowrap;
-    justify-content: center;
   }
 
   /* Schedule Section */
@@ -186,9 +187,9 @@
   }
 
   .schedule li {
-    padding: 12px 16px;
+    padding: 12px 15px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 12px;
     text-align: left;
     font-size: var(--class-size);
     font-weight: 500;
@@ -199,14 +200,14 @@
   /* Quote Section */
   #quote-slider {
     text-align: center;
-    font-size: 22px;
+    font-size: 20px;
     font-style: italic;
     font-weight: 400;
     line-height: 1.5;
-    min-height: 60px;
+    min-height: 50px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
     margin-bottom: 15px;
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: #f0f0f0;
@@ -222,8 +223,8 @@
   }
 
   #logo {
-    width: 75%;
-    max-width: 160px;
+    width: 70%;
+    max-width: 150px;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   }
 
@@ -244,6 +245,26 @@
   .media-slide {
     background: #000;
   }
+
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    :root {
+      --title-size: 32px;
+      --weather-size: 18px;
+      --date-size: 24px;
+      --class-size: 14px;
+      --sidebar-padding: 15px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .overlay {
+      width: 30%;
+    }
+    .media-container {
+      width: 70%;
+    }
+  }
 </style>
 </head>
 <body>
@@ -256,14 +277,10 @@
 
     <div class="weather-nowplaying">
       <div class="weather">
-        <p>
-          <span id="weather-emoji">⛅</span>
-          <div class="weather-line">
-            <span id="temperature">--°C</span> |
-            <span id="condition">--</span> |
-            <span id="wind">-- km/h</span>
-          </div>
-        </p>
+        <span id="weather-emoji">⛅</span>
+        <div class="weather-item"><span id="temperature">--</span></div>
+        <div class="weather-item"><span id="condition">--</span></div>
+        <div class="weather-item"><span id="wind">--</span></div>
       </div>
     </div>
 
@@ -284,29 +301,32 @@
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
+    // --- Media slideshow ---
     const mediaContainer = document.getElementById('media-container');
     const slides = [];
 
     data.media.forEach(item => {
       const slide = document.createElement('div');
       slide.className = 'media-slide';
+
       if(item.type==='image'){
         const img=document.createElement('img');
         img.src=item.src;
         slide.appendChild(img);
       } else if(item.type==='video'){
         const iframe=document.createElement('iframe');
-        iframe.src=item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
+        iframe.src=item.src+"?autoplay=1&mute=1&loop=1&playlist="+item.src.split('/').pop();
         iframe.frameBorder="0";
         iframe.allow="autoplay; fullscreen";
         iframe.allowFullscreen=true;
         slide.appendChild(iframe);
       }
+
       mediaContainer.appendChild(slide);
       slides.push(slide);
     });
 
-    let currentSlide=0;
+    let currentSlide = 0;
     if(slides.length>0){
       slides[0].classList.add('active');
       setInterval(()=>{
@@ -316,31 +336,30 @@ fetch('dashboard-data.json')
       },15000);
     }
 
-    const now=new Date();
+    // --- Schedule ---
+    const now = new Date();
     const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const todayName=days[now.getDay()];
+    const todayName = days[now.getDay()];
+    document.getElementById('schedule-header').textContent = now.toLocaleDateString(undefined,{weekday:'long', month:'long', day:'numeric'});
 
-    document.getElementById('schedule-header').textContent=now.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
-
-    const scheduleList=document.getElementById('schedule');
-    scheduleList.innerHTML='';
-    const todaySchedule=data.weekly_schedule[todayName]||[];
+    const scheduleList = document.getElementById('schedule');
+    scheduleList.innerHTML = '';
+    const todaySchedule = data.weekly_schedule[todayName] || [];
     todaySchedule.forEach(item=>{
       const li=document.createElement('li');
       li.innerText=item.time + ' - ' + item.event;
       scheduleList.appendChild(li);
     });
 
-    const quotes=data.quotes||[];
+    // --- Quotes ---
+    const quotes=data.quotes || [];
     const slider=document.getElementById('quote-slider');
     let current=0;
-    function showQuote(){
-      slider.textContent=quotes[current];
-      current=(current+1)%quotes.length;
-    }
+    function showQuote(){slider.textContent=quotes[current]; current=(current+1)%quotes.length;}
     showQuote();
     setInterval(showQuote,5000);
 
+    // --- Weather ---
     fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
       .then(res=>res.json())
       .then(weather=>{
@@ -362,15 +381,14 @@ fetch('dashboard-data.json')
           56:{text:'Smoke', emoji:'💨'},
           57:{text:'Dense smoke', emoji:'💨'}
         };
-        const condition=conditionMap[code]||{text:'N/A',emoji:'❔'};
+        const condition=conditionMap[code]||{text:'N/A', emoji:'❔'};
         document.getElementById('temperature').innerText=`${tempC}°C`;
         document.getElementById('wind').innerText=`${wind} km/h`;
         document.getElementById('condition').innerText=condition.text;
         document.getElementById('weather-emoji').innerText=condition.emoji;
       });
   })
-  .catch(err => console.error('Dashboard fetch error:', err));
+  .catch(err=>console.error('Dashboard fetch error:', err));
 </script>
-
 </body>
 </html>
