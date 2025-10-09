@@ -11,11 +11,11 @@
 
   /* === EASY CONTROLS === */
   :root {
-    --title-size: 38px;
+    --title-size: 36px;
     --weather-size: 20px;
-    --date-size: 26px;
+    --date-size: 24px;
     --class-size: 16px;
-    --sidebar-padding: 20px;
+    --sidebar-padding: 25px;
     --sidebar-bg: #e00034;
     --accent-color: #ffffff;
     --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
@@ -101,7 +101,6 @@
     font-family: 'Inter', sans-serif;
     box-shadow: var(--card-shadow);
     border-left: 3px solid white;
-    overflow-y: auto; /* allows scrolling if content exceeds viewport */
   }
 
   /* Title */
@@ -120,12 +119,11 @@
   /* Weather Section */
   .weather-nowplaying {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 15px;
     margin-bottom: 20px;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -135,20 +133,20 @@
     text-align: center;
     font-size: var(--weather-size);
     font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
   }
 
   #weather-emoji {
     font-size: 2em;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
     margin-bottom: 5px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   }
 
-  .weather-item {
+  .weather-info {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
     font-weight: 600;
+    flex-wrap: wrap;
   }
 
   /* Schedule Section */
@@ -157,8 +155,8 @@
     display: flex;
     flex-direction: column;
     background: rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 15px;
+    padding: 15px;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     margin-bottom: 20px;
@@ -169,7 +167,7 @@
     font-size: var(--date-size);
     font-weight: 700;
     font-family: 'Montserrat', sans-serif;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: white;
     text-shadow: var(--text-shadow);
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
@@ -183,18 +181,17 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
   }
 
   .schedule li {
-    padding: 12px 15px;
+    padding: 10px 15px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 10px;
     text-align: left;
     font-size: var(--class-size);
     font-weight: 500;
-    border-left: 4px solid white;
-    backdrop-filter: blur(3px);
+    border-left: 3px solid white;
   }
 
   /* Quote Section */
@@ -203,10 +200,10 @@
     font-size: 20px;
     font-style: italic;
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.3;
     min-height: 50px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+    border-radius: 10px;
     padding: 15px;
     margin-bottom: 15px;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -216,9 +213,9 @@
   /* Logo Section */
   #logo-container {
     text-align: center;
-    padding: 15px;
+    padding: 10px;
     background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
+    border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -246,23 +243,13 @@
     background: #000;
   }
 
-  /* Responsive adjustments */
   @media (max-width: 1200px) {
     :root {
-      --title-size: 32px;
+      --title-size: 30px;
       --weather-size: 18px;
-      --date-size: 24px;
+      --date-size: 22px;
       --class-size: 14px;
       --sidebar-padding: 15px;
-    }
-  }
-
-  @media (max-width: 900px) {
-    .overlay {
-      width: 30%;
-    }
-    .media-container {
-      width: 70%;
     }
   }
 </style>
@@ -276,11 +263,11 @@
     <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
     <div class="weather-nowplaying">
-      <div class="weather">
-        <span id="weather-emoji">⛅</span>
-        <div class="weather-item"><span id="temperature">--</span></div>
-        <div class="weather-item"><span id="condition">--</span></div>
-        <div class="weather-item"><span id="wind">--</span></div>
+      <span id="weather-emoji">⛅</span>
+      <div class="weather-info">
+        <span id="temperature">--°C</span> |
+        <span id="condition">--</span> |
+        <span id="wind">-- km/h</span>
       </div>
     </div>
 
@@ -301,27 +288,24 @@
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
-    // --- Media slideshow ---
+    // Media slideshow
     const mediaContainer = document.getElementById('media-container');
     const slides = [];
-
     data.media.forEach(item => {
       const slide = document.createElement('div');
       slide.className = 'media-slide';
-
-      if(item.type==='image'){
-        const img=document.createElement('img');
-        img.src=item.src;
+      if (item.type === 'image') {
+        const img = document.createElement('img');
+        img.src = item.src;
         slide.appendChild(img);
-      } else if(item.type==='video'){
-        const iframe=document.createElement('iframe');
-        iframe.src=item.src+"?autoplay=1&mute=1&loop=1&playlist="+item.src.split('/').pop();
-        iframe.frameBorder="0";
-        iframe.allow="autoplay; fullscreen";
-        iframe.allowFullscreen=true;
+      } else if (item.type === 'video') {
+        const iframe = document.createElement('iframe');
+        iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
+        iframe.frameBorder = "0";
+        iframe.allow = "autoplay; fullscreen";
+        iframe.allowFullscreen = true;
         slide.appendChild(iframe);
       }
-
       mediaContainer.appendChild(slide);
       slides.push(slide);
     });
@@ -329,44 +313,49 @@ fetch('dashboard-data.json')
     let currentSlide = 0;
     if(slides.length>0){
       slides[0].classList.add('active');
-      setInterval(()=>{
+      setInterval(() => {
         slides[currentSlide].classList.remove('active');
-        currentSlide=(currentSlide+1)%slides.length;
+        currentSlide = (currentSlide + 1) % slides.length;
         slides[currentSlide].classList.add('active');
-      },15000);
+      }, 15000);
     }
 
-    // --- Schedule ---
+    // Schedule
     const now = new Date();
-    const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     const todayName = days[now.getDay()];
-    document.getElementById('schedule-header').textContent = now.toLocaleDateString(undefined,{weekday:'long', month:'long', day:'numeric'});
+
+    document.getElementById('schedule-header').textContent =
+      now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
 
     const scheduleList = document.getElementById('schedule');
     scheduleList.innerHTML = '';
     const todaySchedule = data.weekly_schedule[todayName] || [];
-    todaySchedule.forEach(item=>{
-      const li=document.createElement('li');
-      li.innerText=item.time + ' - ' + item.event;
+    todaySchedule.forEach(item => {
+      const li = document.createElement('li');
+      li.innerText = item.time + ' - ' + item.event;
       scheduleList.appendChild(li);
     });
 
-    // --- Quotes ---
-    const quotes=data.quotes || [];
-    const slider=document.getElementById('quote-slider');
-    let current=0;
-    function showQuote(){slider.textContent=quotes[current]; current=(current+1)%quotes.length;}
+    // Quotes
+    const quotes = data.quotes || [];
+    const slider = document.getElementById('quote-slider');
+    let current = 0;
+    function showQuote(){
+      slider.textContent = quotes[current];
+      current = (current+1)%quotes.length;
+    }
     showQuote();
     setInterval(showQuote,5000);
 
-    // --- Weather ---
+    // Weather
     fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
       .then(res=>res.json())
       .then(weather=>{
-        const tempC=weather.current_weather.temperature;
-        const wind=weather.current_weather.windspeed;
-        const code=weather.current_weather.weathercode;
-        const conditionMap={
+        const tempC = weather.current_weather.temperature;
+        const wind = weather.current_weather.windspeed;
+        const code = weather.current_weather.weathercode;
+        const conditionMap = {
           0:{text:'Clear sky', emoji:'☀️'},
           1:{text:'Mainly clear', emoji:'🌤️'},
           2:{text:'Partly cloudy', emoji:'⛅'},
@@ -381,14 +370,14 @@ fetch('dashboard-data.json')
           56:{text:'Smoke', emoji:'💨'},
           57:{text:'Dense smoke', emoji:'💨'}
         };
-        const condition=conditionMap[code]||{text:'N/A', emoji:'❔'};
-        document.getElementById('temperature').innerText=`${tempC}°C`;
-        document.getElementById('wind').innerText=`${wind} km/h`;
-        document.getElementById('condition').innerText=condition.text;
-        document.getElementById('weather-emoji').innerText=condition.emoji;
+        const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
+        document.getElementById('temperature').innerText = `${tempC}°C`;
+        document.getElementById('wind').innerText = `${wind} km/h`;
+        document.getElementById('condition').innerText = condition.text;
+        document.getElementById('weather-emoji').innerText = condition.emoji;
       });
   })
-  .catch(err=>console.error('Dashboard fetch error:', err));
+  .catch(err => console.error('Dashboard fetch error:', err));
 </script>
 </body>
 </html>
