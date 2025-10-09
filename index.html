@@ -5,17 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YMCA Overlay Dashboard</title>
 <style>
-  /* === EASY CONTROLS === */
-  :root {
-    --title-size: 40px;
-    --weather-size: 26px;
-    --date-size: 28px;
-    --class-size: 20px;
-    --sidebar-padding: 25px;
-    --sidebar-bg: rgba(224, 0, 52, 0.9);
+  body {
+    box-sizing: border-box;
   }
 
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+  /* === EASY CONTROLS === */
+  :root {
+    --title-size: 42px;
+    --weather-size: 24px;
+    --date-size: 30px;
+    --class-size: 18px;
+    --sidebar-padding: 35px;
+    --sidebar-bg: #e00034;
+    --accent-color: #ffffff;
+    --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    --card-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
 
   html, body {
     margin: 0;
@@ -23,7 +30,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif;
     background: #000;
   }
 
@@ -36,7 +43,7 @@
     height: 100%;
     overflow: hidden;
     z-index: 0;
-    background: #000;
+    background: linear-gradient(45deg, #1a1a1a, #000);
   }
 
   .media-slide {
@@ -46,7 +53,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .media-slide.active {
@@ -63,6 +70,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: brightness(0.9) contrast(1.1);
   }
 
   /* Sidebar */
@@ -72,7 +80,7 @@
     right: 0;
     width: 30%;
     height: 100%;
-    z-index: 1;
+    z-index: 10;
     display: flex;
     align-items: stretch;
     pointer-events: none;
@@ -81,15 +89,18 @@
   .sidebar {
     width: 100%;
     height: 100%;
-    background-color: var(--sidebar-bg);
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(10px);
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     padding: var(--sidebar-padding);
     box-sizing: border-box;
     pointer-events: auto;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Inter', sans-serif;
+    box-shadow: var(--card-shadow);
+    border-left: 3px solid white;
   }
 
   /* Title */
@@ -97,84 +108,130 @@
     text-align: center;
     font-size: var(--title-size);
     font-weight: 900;
-    margin-bottom: 20px;
-    line-height: 1.2;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 25px;
+    line-height: 1.1;
+    text-shadow: var(--text-shadow);
+    color: white;
+    padding: 0 10px;
   }
 
-  /* Weather */
+  /* Weather Section */
   .weather-nowplaying {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .weather {
+    text-align: center;
     font-size: var(--weather-size);
-    gap: 10px;
+    font-weight: 500;
   }
 
   .weather p {
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
   }
 
   #weather-emoji {
-    font-size: 1.4em;
+    font-size: 2em;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
   }
 
-  /* Schedule */
+  .weather-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+  }
+
+  /* Schedule Section */
   .schedule {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 25px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 25px;
   }
 
   #schedule-header {
     text-align: center;
     font-size: var(--date-size);
-    font-weight: 900;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 20px;
-    padding-bottom: 0;
-    border-bottom: none;
+    color: white;
+    text-shadow: var(--text-shadow);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 15px;
   }
 
   .schedule ul {
     list-style: none;
     padding: 0;
-    margin: 0 auto;
-    width: 90%;
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .schedule li {
-    padding: 10px;
-    border-bottom: none;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
     text-align: left;
     font-size: var(--class-size);
+    font-weight: 500;
+    border-left: 4px solid white;
+    backdrop-filter: blur(3px);
   }
 
-  /* Quote & Logo */
+  /* Quote Section */
   #quote-slider {
     text-align: center;
-    font-size: 28px;
+    font-size: 22px;
     font-style: italic;
-    margin: 20px 0;
-    line-height: 1.4;
+    font-weight: 400;
+    line-height: 1.5;
     min-height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #f0f0f0;
   }
 
+  /* Logo Section */
   #logo-container {
     text-align: center;
-    margin-top: auto;
-    margin-bottom: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   #logo {
-    width: 80%;
-    max-width: 180px;
+    width: 75%;
+    max-width: 160px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
   }
 
-  /* === FIX: Prevent flicker/duplication on slide transitions === */
+  /* Performance optimizations */
   .media-container,
   .media-slide,
   .media-slide img,
@@ -192,8 +249,24 @@
     background: #000;
   }
 
-  .overlay {
-    z-index: 10;
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    :root {
+      --title-size: 36px;
+      --weather-size: 22px;
+      --date-size: 26px;
+      --class-size: 16px;
+      --sidebar-padding: 25px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .overlay {
+      width: 30%;
+    }
+    .media-container {
+      width: 70%;
+    }
   }
 </style>
 </head>
@@ -209,101 +282,105 @@
       <div class="weather">
         <p>
           <span id="weather-emoji">⛅</span>
-          <span id="temperature">--</span> |
-          <span id="condition">--</span> |
-          <span id="wind">--</span>
+          <div class="weather-item">
+            <span id="temperature">--</span>
+          </div>
+          <div class="weather-item">
+            <span id="condition">--</span>
+          </div>
+          <div class="weather-item">
+            <span id="wind">--</span>
+          </div>
         </p>
       </div>
     </div>
 
     <div class="schedule">
-      <div id="schedule-header"></div>
-      <ul id="schedule"></ul>
+      <h3 id="schedule-header">December 15, 2024</h3>
+      <ul id="schedule">
+        <!-- Schedule items populated by JS -->
+      </ul>
     </div>
 
-    <div id="quote-slider"></div>
+    <div id="quote-slider">
+      "Building stronger through health, fitness, and connection."
+    </div>
 
     <div id="logo-container">
       <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
     </div>
   </div>
 </div>
+
 <script>
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
-    // --- Media slideshow ---
+    // Media slideshow
     const mediaContainer = document.getElementById('media-container');
     const slides = [];
-
     data.media.forEach(item => {
       const slide = document.createElement('div');
       slide.className = 'media-slide';
-
-      if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.src;
+      if(item.type==='image'){
+        const img=document.createElement('img');
+        img.src=item.src;
         slide.appendChild(img);
-      } else if (item.type === 'video') {
-        const iframe = document.createElement('iframe');
-        iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
-        iframe.frameBorder = "0";
-        iframe.allow = "autoplay; fullscreen";
-        iframe.allowFullscreen = true;
+      }else if(item.type==='video'){
+        const iframe=document.createElement('iframe');
+        iframe.src=item.src+"?autoplay=1&mute=1&loop=1&playlist="+item.src.split('/').pop();
+        iframe.frameBorder="0";
+        iframe.allow="autoplay; fullscreen";
+        iframe.allowFullscreen=true;
         slide.appendChild(iframe);
       }
-
       mediaContainer.appendChild(slide);
       slides.push(slide);
     });
-
-    // Slideshow rotation
-    let currentSlide = 0;
-    if (slides.length > 0) {
+    let currentSlide=0;
+    if(slides.length>0){
       slides[0].classList.add('active');
-      setInterval(() => {
+      setInterval(()=>{
         slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
+        currentSlide=(currentSlide+1)%slides.length;
         slides[currentSlide].classList.add('active');
-      }, 15000);
+      },15000);
     }
 
-    // --- Schedule (weekly) ---
-    const now = new Date();
-    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const todayName = days[now.getDay()];
-
-    document.getElementById('schedule-header').textContent =
-      now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
-
-    const scheduleList = document.getElementById('schedule');
-    scheduleList.innerHTML = '';
-    const todaySchedule = data.weekly_schedule[todayName] || [];
-    todaySchedule.forEach(item => {
-      const li = document.createElement('li');
-      li.innerText = item.time + ' - ' + item.event;
+    // Schedule
+    const now=new Date();
+    const days=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const todayName=days[now.getDay()];
+    document.getElementById('schedule-header').textContent=
+      now.toLocaleDateString(undefined,{ weekday:'long', month:'long', day:'numeric' });
+    const scheduleList=document.getElementById('schedule');
+    scheduleList.innerHTML='';
+    const todaySchedule=data.weekly_schedule[todayName]||[];
+    todaySchedule.forEach(item=>{
+      const li=document.createElement('li');
+      li.innerText=item.time+' - '+item.event;
       scheduleList.appendChild(li);
     });
 
-    // --- Quotes ---
-    const quotes = data.quotes || [];
-    const slider = document.getElementById('quote-slider');
-    let current = 0;
+    // Quotes
+    const quotes=data.quotes||[];
+    const slider=document.getElementById('quote-slider');
+    let current=0;
     function showQuote(){
-      slider.textContent = quotes[current];
-      current = (current+1)%quotes.length;
+      slider.textContent=quotes[current];
+      current=(current+1)%quotes.length;
     }
     showQuote();
     setInterval(showQuote,5000);
 
-    // --- Weather ---
+    // Weather
     fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
       .then(res=>res.json())
       .then(weather=>{
-        const tempC = weather.current_weather.temperature;
-        const wind = weather.current_weather.windspeed;
-        const code = weather.current_weather.weathercode;
-        const conditionMap = {
+        const tempC=weather.current_weather.temperature;
+        const wind=weather.current_weather.windspeed;
+        const code=weather.current_weather.weathercode;
+        const conditionMap={
           0:{text:'Clear sky', emoji:'☀️'},
           1:{text:'Mainly clear', emoji:'🌤️'},
           2:{text:'Partly cloudy', emoji:'⛅'},
@@ -318,15 +395,14 @@ fetch('dashboard-data.json')
           56:{text:'Smoke', emoji:'💨'},
           57:{text:'Dense smoke', emoji:'💨'}
         };
-        const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
-        document.getElementById('temperature').innerText = `${tempC}°C`;
-        document.getElementById('wind').innerText = `${wind} km/h`;
-        document.getElementById('condition').innerText = condition.text;
-        document.getElementById('weather-emoji').innerText = condition.emoji;
+        const condition=conditionMap[code]||{text:'N/A', emoji:'❔'};
+        document.getElementById('temperature').innerText=`${tempC}°C`;
+        document.getElementById('wind').innerText=`${wind} km/h`;
+        document.getElementById('condition').innerText=condition.text;
+        document.getElementById('weather-emoji').innerText=condition.emoji;
       });
   })
   .catch(err => console.error('Dashboard fetch error:', err));
 </script>
 </body>
 </html>
-
