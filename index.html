@@ -3,381 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YMCA Overlay Dashboard</title>
+<title>YMCA TV Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body {
-    box-sizing: border-box;
-  }
-
-  /* === EASY CONTROLS === */
-  :root {
-    --title-size: 36px;
-    --weather-size: 20px;
-    --date-size: 24px;
-    --class-size: 16px;
-    --sidebar-padding: 25px;
-    --sidebar-bg: #e00034;
-    --accent-color: #ffffff;
-    --text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    --card-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  }
-
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap');
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: 'Inter', sans-serif;
-    background: #000;
-  }
-
-  /* Media container */
-  .media-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 70%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-    background: linear-gradient(45deg, #1a1a1a, #000);
-  }
-
-  .media-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .media-slide.active {
-    opacity: 1;
-    z-index: 1;
-  }
-
-  .media-slide img,
-  .media-slide iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: brightness(0.9) contrast(1.1);
-  }
-
-  /* Sidebar */
-  .overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    z-index: 10;
-    display: flex;
-    align-items: stretch;
-    pointer-events: none;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: 100%;
-    background: var(--sidebar-bg);
-    backdrop-filter: blur(10px);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: var(--sidebar-padding);
-    box-sizing: border-box;
-    pointer-events: auto;
-    font-family: 'Inter', sans-serif;
-    box-shadow: var(--card-shadow);
-    border-left: 3px solid white;
-  }
-
-  /* Title */
-  #sidebar-header {
-    text-align: center;
-    font-size: var(--title-size);
-    font-weight: 900;
-    font-family: 'Montserrat', sans-serif;
-    margin-bottom: 20px;
-    line-height: 1.1;
-    text-shadow: var(--text-shadow);
-    color: white;
-    padding: 0 10px;
-  }
-
-  /* Weather Section */
-  .weather-nowplaying {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 20px;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .weather {
-    text-align: center;
-    font-size: var(--weather-size);
-    font-weight: 500;
-  }
-
-  #weather-emoji {
-    font-size: 2em;
-    margin-bottom: 5px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-  }
-
-  .weather-info {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    font-weight: 600;
-    flex-wrap: wrap;
-  }
-
-  /* Schedule Section */
-  .schedule {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 15px;
-    padding: 15px;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    margin-bottom: 20px;
-  }
-
-  #schedule-header {
-    text-align: center;
-    font-size: var(--date-size);
-    font-weight: 700;
-    font-family: 'Montserrat', sans-serif;
-    margin-bottom: 10px;
-    color: white;
-    text-shadow: var(--text-shadow);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-    padding-bottom: 10px;
-  }
-
-  .schedule ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .schedule li {
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    text-align: left;
-    font-size: var(--class-size);
-    font-weight: 500;
-    border-left: 3px solid white;
-  }
-
-  /* Quote Section */
-  #quote-slider {
-    text-align: center;
-    font-size: 20px;
-    font-style: italic;
-    font-weight: 400;
-    line-height: 1.3;
-    min-height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #f0f0f0;
-  }
-
-  /* Logo Section */
-  #logo-container {
-    text-align: center;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  #logo {
-    width: 70%;
-    max-width: 150px;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-  }
-
-  /* Performance optimizations */
-  .media-container,
-  .media-slide,
-  .media-slide img,
-  .media-slide iframe {
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    will-change: opacity;
-  }
-
-  .media-container {
-    contain: strict;
-  }
-
-  .media-slide {
-    background: #000;
-  }
-
-  @media (max-width: 1200px) {
-    :root {
-      --title-size: 30px;
-      --weather-size: 18px;
-      --date-size: 22px;
-      --class-size: 14px;
-      --sidebar-padding: 15px;
-    }
-  }
+    body { font-family: sans-serif; background-color: #000; color: #fff; margin: 0; }
+    .admin-panel { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); justify-content:center; align-items:center; }
+    .admin-content { background: #111; padding: 20px; border-radius: 10px; width: 400px; }
 </style>
 </head>
 <body>
 
-<div class="media-container" id="media-container"></div>
-
-<div class="overlay">
-  <div class="sidebar">
-    <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
-
-    <div class="weather-nowplaying">
-      <span id="weather-emoji">⛅</span>
-      <div class="weather-info">
-        <span id="temperature">--°C</span> |
-        <span id="condition">--</span> |
-        <span id="wind">-- km/h</span>
-      </div>
-    </div>
-
-    <div class="schedule">
-      <h3 id="schedule-header"></h3>
-      <ul id="schedule"></ul>
-    </div>
-
-    <div id="quote-slider"></div>
-
-    <div id="logo-container">
-      <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
-    </div>
-  </div>
+<div class="flex flex-col items-center justify-center h-screen">
+    <div id="logo" class="text-6xl mb-4">🟦</div>
+    <div id="title" class="text-3xl font-bold">YMCA of Saskatoon</div>
 </div>
 
+<!-- Admin Panel -->
+<div id="adminPanel" class="admin-panel flex">
+    <div class="admin-content">
+        <h2 class="text-xl font-bold mb-4">Admin Panel</h2>
+        <label class="block mb-2">Logo:</label>
+        <input type="text" id="logoInput" class="w-full p-2 mb-4 rounded bg-gray-900 text-white">
+        <label class="block mb-2">Title:</label>
+        <input type="text" id="titleInput" class="w-full p-2 mb-4 rounded bg-gray-900 text-white">
+        <button id="saveBtn" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">Update</button>
+        <button id="closeBtn" class="ml-2 bg-gray-600 px-4 py-2 rounded hover:bg-gray-700">Close</button>
+    </div>
+</div>
+
+<!-- Admin Toggle -->
+<button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 text-white px-3 py-1 rounded">⚙️</button>
+
 <script>
-fetch('dashboard-data.json')
-  .then(res => res.json())
-  .then(data => {
-    // Media slideshow
-    const mediaContainer = document.getElementById('media-container');
-    const slides = [];
-    data.media.forEach(item => {
-      const slide = document.createElement('div');
-      slide.className = 'media-slide';
-      if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.src;
-        slide.appendChild(img);
-      } else if (item.type === 'video') {
-        const iframe = document.createElement('iframe');
-        iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
-        iframe.frameBorder = "0";
-        iframe.allow = "autoplay; fullscreen";
-        iframe.allowFullscreen = true;
-        slide.appendChild(iframe);
-      }
-      mediaContainer.appendChild(slide);
-      slides.push(slide);
-    });
+// Simulate fetching JSON from server
+let tvData = {
+    "logo": "🟦",
+    "title": "YMCA of Saskatoon"
+};
 
-    let currentSlide = 0;
-    if(slides.length>0){
-      slides[0].classList.add('active');
-      setInterval(() => {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-      }, 15000);
-    }
+// Display on TV
+function renderTV() {
+    document.getElementById('logo').textContent = tvData.logo;
+    document.getElementById('title').textContent = tvData.title;
+}
+renderTV();
 
-    // Schedule
-    const now = new Date();
-    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const todayName = days[now.getDay()];
+// Admin Panel
+const panel = document.getElementById('adminPanel');
+document.getElementById('adminToggle').addEventListener('click', () => {
+    panel.style.display = 'flex';
+    document.getElementById('logoInput').value = tvData.logo;
+    document.getElementById('titleInput').value = tvData.title;
+});
 
-    document.getElementById('schedule-header').textContent =
-      now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+document.getElementById('closeBtn').addEventListener('click', () => {
+    panel.style.display = 'none';
+});
 
-    const scheduleList = document.getElementById('schedule');
-    scheduleList.innerHTML = '';
-    const todaySchedule = data.weekly_schedule[todayName] || [];
-    todaySchedule.forEach(item => {
-      const li = document.createElement('li');
-      li.innerText = item.time + ' - ' + item.event;
-      scheduleList.appendChild(li);
-    });
-
-    // Quotes
-    const quotes = data.quotes || [];
-    const slider = document.getElementById('quote-slider');
-    let current = 0;
-    function showQuote(){
-      slider.textContent = quotes[current];
-      current = (current+1)%quotes.length;
-    }
-    showQuote();
-    setInterval(showQuote,5000);
-
-    // Weather
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
-      .then(res=>res.json())
-      .then(weather=>{
-        const tempC = weather.current_weather.temperature;
-        const wind = weather.current_weather.windspeed;
-        const code = weather.current_weather.weathercode;
-        const conditionMap = {
-          0:{text:'Clear sky', emoji:'☀️'},
-          1:{text:'Mainly clear', emoji:'🌤️'},
-          2:{text:'Partly cloudy', emoji:'⛅'},
-          3:{text:'Overcast', emoji:'☁️'},
-          45:{text:'Fog', emoji:'🌫️'},
-          48:{text:'Fog', emoji:'🌫️'},
-          51:{text:'Drizzle', emoji:'🌦️'},
-          61:{text:'Rain', emoji:'🌧️'},
-          71:{text:'Snow', emoji:'❄️'},
-          80:{text:'Showers', emoji:'🌦️'},
-          95:{text:'Thunderstorm', emoji:'⛈️'},
-          56:{text:'Smoke', emoji:'💨'},
-          57:{text:'Dense smoke', emoji:'💨'}
-        };
-        const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
-        document.getElementById('temperature').innerText = `${tempC}°C`;
-        document.getElementById('wind').innerText = `${wind} km/h`;
-        document.getElementById('condition').innerText = condition.text;
-        document.getElementById('weather-emoji').innerText = condition.emoji;
-      });
-  })
-  .catch(err => console.error('Dashboard fetch error:', err));
+// Save changes
+document.getElementById('saveBtn').addEventListener('click', () => {
+    tvData.logo = document.getElementById('logoInput').value;
+    tvData.title = document.getElementById('titleInput').value;
+    renderTV();
+    alert("Updated! Copy this JSON for permanent save:\n" + JSON.stringify(tvData, null, 2));
+});
 </script>
 </body>
 </html>
