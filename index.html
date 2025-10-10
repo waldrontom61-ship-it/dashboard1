@@ -121,8 +121,19 @@
         .content-section {
             padding: 1.5rem;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .classes-section {
+            flex: 1;
             overflow-y: auto;
-            max-height: calc(100vh - 120px);
+            margin-bottom: 1rem;
+        }
+
+        .announcements-section {
+            flex-shrink: 0;
         }
 
         .section-title {
@@ -295,9 +306,9 @@
         }
 
         .media-slide img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* === ADMIN CONTROLS === */
@@ -544,15 +555,19 @@
             <!-- Content Sections -->
             <div class="content-section">
                 <!-- Classes Section -->
-                <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
-                <div id="classes-container">
-                    <!-- Classes will be populated here -->
+                <div class="classes-section">
+                    <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
+                    <div id="classes-container">
+                        <!-- Classes will be populated here -->
+                    </div>
                 </div>
 
                 <!-- Announcements -->
-                <h3 class="section-title">📢 ANNOUNCEMENTS</h3>
-                <div class="announcement-container" id="announcement-container">
-                    <!-- Announcements will be populated here -->
+                <div class="announcements-section">
+                    <h3 class="section-title">📢 ANNOUNCEMENTS</h3>
+                    <div class="announcement-container" id="announcement-container">
+                        <!-- Announcements will be populated here -->
+                    </div>
                 </div>
             </div>
 
@@ -1314,5 +1329,5 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c78d13143c493d',t:'MTc2MDExNDMzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c7937013c6493d',t:'MTc2MDExNDU5OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
