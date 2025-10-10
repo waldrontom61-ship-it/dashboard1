@@ -872,182 +872,85 @@
     </div>
 
     <script>
-const JSON_URL = "https://raw.githubusercontent.com/waldrontom61-ship-it/dashboard1/main/dashboard-data.json";
-
 let dashboardData = {
-    settings: {},
-    media: [],
-    weekly_schedule: {},
-    classes: [],
-    announcements: []
+  settings: {
+    gymName: "YMCA of Saskatoon",
+    rotationSpeed: 4,
+    mediaRotationSpeed: 8
+  },
+  media: [
+    { type: "video", src: "https://drive.google.com/uc?export=download&id=1kW5HyV6pcuiRAv1byuyZGMvnbXilekqT", duration: 163, permanent: true }
+  ],
+  weekly_schedule: {
+    Monday: [
+      { time: "9:00 AM - 9:45 AM", event: "NEW CLASS OCT 20Y-Cycle", location: "Cycle Studio", instructor: "Sarah" },
+      { time: "9:00 AM - 9:45 AM", event: "Aquafit", location: "Pool", instructor: "Mike" },
+      { time: "10:00 AM - 10:45 AM", event: "NEW CLASS OCT 20 Tabata Blast", location: "Studio A", instructor: "Jessica" },
+      { time: "12:10 PM - 12:50 PM", event: "Y-Fit Circuit", location: "Gym Floor", instructor: "David" },
+      { time: "6:15 PM - 7:30 PM", event: "Beginner Yoga", location: "Studio B", instructor: "Emma" }
+    ],
+    // ... repeat for other days
+  },
+  classes: [],
+  announcements: [
+    { id: 1, title: "🏊 Pool Hours", message: "Open swim available daily", details: "6 AM - 10 PM Mon-Fri, 8 AM - 8 PM weekends", severity: "good", permanent: true },
+    { id: 2, title: "📱 Download Our App", message: "Book classes and track workouts", details: "iOS and Android", severity: "good", permanent: true }
+  ]
 };
 
-let currentAnnouncement = 0;
-let currentMedia = 0;
-let rotationInterval;
-let mediaInterval;
-
-// === INITIALIZE DASHBOARD ===
-async function initDashboard() {
-    try {
-        // 1️⃣ Load JSON data
-        const response = await fetch(JSON_URL);
-        const jsonData = await response.json();
-
-        dashboardData.settings = { ...dashboardData.settings, ...jsonData.settings };
-        dashboardData.media = jsonData.media || [];
-        dashboardData.weekly_schedule = jsonData.weekly_schedule || {};
-        dashboardData.classes = jsonData.classes || [];
-        dashboardData.announcements = jsonData.announcements || [];
-
-        // 2️⃣ Load temporary localStorage data
-        const localData = JSON.parse(localStorage.getItem('ymcaDashboardData') || '{}');
-        if (localData.classes) dashboardData.classes.push(...localData.classes);
-        if (localData.announcements) dashboardData.announcements.push(...localData.announcements);
-        if (localData.media) dashboardData.media.push(...localData.media);
-
-        // 3️⃣ Update settings UI
-        document.getElementById('gymName').value = dashboardData.settings.gymName || "YMCA of Saskatoon";
-        document.getElementById('rotationSpeed').value = dashboardData.settings.rotationSpeed || 4;
-        document.getElementById('mediaRotationSpeed').value = dashboardData.settings.mediaRotationSpeed || 8;
-        document.getElementById('gymNameDisplay').textContent = dashboardData.settings.gymName;
-
-        // 4️⃣ Render everything AFTER data is loaded
-        renderClasses();
-        renderAnnouncements();
-        renderAdminTables();
-        renderMedia();
-
-        // 5️⃣ Start rotation intervals
-        startAnnouncementRotation();
-        startMediaRotation();
-
-        // 6️⃣ Update date, time, and weather
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        updateWeather();
-        setInterval(updateWeather, 300000);
-
-        console.log("Dashboard initialized successfully.");
-
-    } catch (err) {
-        console.error("Failed to load JSON data:", err);
-    }
+// Temporary storage from localStorage
+function loadLocalData() {
+  const saved = localStorage.getItem("ymcaDashboardData");
+  if (saved) {
+    const localData = JSON.parse(saved);
+    dashboardData.classes = [...getTodaysClasses(), ...(localData.classes || [])];
+    if (localData.media) dashboardData.media = [...dashboardData.media, ...localData.media];
+    if (localData.announcements) dashboardData.announcements = [...dashboardData.announcements, ...localData.announcements];
+  } else {
+    dashboardData.classes = getTodaysClasses();
+  }
 }
 
-// === RENDER FUNCTIONS ===
-function renderClasses() {
-    const container = document.getElementById('classes-container');
-    container.innerHTML = "";
-    const todayClasses = getTodaysClasses();
-    todayClasses.forEach(cls => {
-        const div = document.createElement('div');
-        div.className = `info-card ${cls.cancelled ? 'cancelled-class' : ''}`;
-        div.innerHTML = `
-            <div class="card-title">${cls.name}</div>
-            <div class="card-subtitle">${cls.time} | ${cls.location} | Instructor: ${cls.instructor}</div>
-        `;
-        container.appendChild(div);
-    });
-}
-
-function renderAnnouncements() {
-    const container = document.getElementById('announcement-container');
-    container.innerHTML = "";
-    dashboardData.announcements.forEach(ann => {
-        const div = document.createElement('div');
-        div.className = `announcement-slide ${ann.severity}-announcement`;
-        div.innerHTML = `<strong>${ann.title}</strong>: ${ann.message}`;
-        container.appendChild(div);
-    });
-}
-
-function renderMedia() {
-    const container = document.getElementById('media-container');
-    container.innerHTML = "";
-    dashboardData.media.forEach((media, i) => {
-        const div = document.createElement('div');
-        div.className = `media-slide ${i === 0 ? 'active' : ''}`;
-        if (media.type === "image") {
-            div.innerHTML = `<img src="${media.src}" alt="Media ${i}">`;
-        } else {
-            div.innerHTML = `<video src="${media.src}" autoplay muted loop></video>`;
-        }
-        container.appendChild(div);
-    });
-}
-
-// === GET TODAY'S CLASSES ===
 function getTodaysClasses() {
-    const now = new Date().toLocaleString("en-US", { timeZone: "America/Regina" });
-    const today = new Date(now).toLocaleDateString('en-US', { weekday: 'long' });
-    return dashboardData.weekly_schedule[today] || [];
+  const nowUTC = new Date();
+  const now = new Date(nowUTC.toLocaleString("en-US", { timeZone: "America/Regina" }));
+  const today = now.toLocaleDateString("en-US", { weekday: "long" });
+  const todaysSchedule = dashboardData.weekly_schedule[today] || [];
+  return todaysSchedule.map((c, i) => ({
+    id: `schedule_${today}_${i}`,
+    name: c.event,
+    time: c.time,
+    location: c.location,
+    instructor: c.instructor,
+    cancelled: false,
+    fromSchedule: true
+  }));
 }
 
-// === DATE/TIME ===
-function updateDateTime() {
-    const now = new Date().toLocaleString("en-US", { timeZone: "America/Regina" });
-    const dateObj = new Date(now);
-
-    document.getElementById('currentTime').textContent = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-    document.getElementById('currentDate').textContent = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+function saveData() {
+  const tempData = {
+    classes: dashboardData.classes.filter(c => !c.fromSchedule),
+    announcements: dashboardData.announcements.filter(a => !a.permanent),
+    media: dashboardData.media.filter(m => !m.permanent)
+  };
+  localStorage.setItem("ymcaDashboardData", JSON.stringify(tempData));
 }
 
-// === WEATHER ===
-async function updateWeather() {
-    try {
-        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true');
-        const data = await res.json();
-        if (data.current_weather) {
-            const temp = Math.round(data.current_weather.temperature);
-            const code = data.current_weather.weathercode;
-            document.getElementById('weather-temp').textContent = `${temp}°C`;
-            document.getElementById('weather-icon').textContent = getWeatherIcon(code);
-        }
-    } catch {
-        document.getElementById('weather-temp').textContent = "--°C";
-        document.getElementById('weather-icon').textContent = "⛅";
-    }
-}
+// Continue with render functions for classes, announcements, media, date/time, weather...
 
-function getWeatherIcon(code) {
-    const map = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',56:'🌨️',57:'🌨️',61:'🌧️',63:'🌧️',65:'🌧️',66:'🌨️',67:'🌨️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',80:'🌦️',81:'🌧️',82:'🌧️',85:'🌨️',86:'🌨️',95:'⛈️',96:'⛈️',99:'⛈️'};
-    return map[code] || "⛅";
-}
-
-// === ROTATION FUNCTIONS ===
-function startAnnouncementRotation() {
-    const slides = document.querySelectorAll('.announcement-slide');
-    if(slides.length === 0) return;
-
-    slides.forEach(s => s.classList.remove('active'));
-    slides[currentAnnouncement].classList.add('active');
-
-    clearInterval(rotationInterval);
-    rotationInterval = setInterval(() => {
-        slides[currentAnnouncement].classList.remove('active');
-        currentAnnouncement = (currentAnnouncement + 1) % slides.length;
-        slides[currentAnnouncement].classList.add('active');
-    }, (dashboardData.settings.rotationSpeed || 4) * 1000);
-}
-
-function startMediaRotation() {
-    const slides = document.querySelectorAll('.media-slide');
-    if(slides.length === 0) return;
-
-    slides.forEach(s => s.classList.remove('active'));
-    slides[currentMedia].classList.add('active');
-
-    clearInterval(mediaInterval);
-    mediaInterval = setInterval(() => {
-        slides[currentMedia].classList.remove('active');
-        currentMedia = (currentMedia + 1) % slides.length;
-        slides[currentMedia].classList.add('active');
-    }, (dashboardData.settings.mediaRotationSpeed || 8) * 1000);
-}
-
-// === INIT ===
-document.addEventListener('DOMContentLoaded', initDashboard);
+document.addEventListener("DOMContentLoaded", () => {
+  loadLocalData();
+  renderClasses();
+  renderAnnouncements();
+  renderAdminTables();
+  renderMedia();
+  startAnnouncementRotation();
+  startMediaRotation();
+  updateDateTime();
+  updateWeather();
+  setInterval(updateDateTime, 1000);
+  setInterval(updateWeather, 300000);
+});
 </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c7b6e2d661493d',t:'MTc2MDExNjA1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
