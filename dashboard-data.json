@@ -1,113 +1,128 @@
 {
   "media": [
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
-    { "type": "video", "src": "https://ymcasaskatoon.org/videos/sample-room-tour.mp4" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
+    {
+      "type": "image",
+      "src": "https://example.com/gym-promo1.jpg"
+    },
+    {
+      "type": "image", 
+      "src": "https://example.com/new-equipment-ad.jpg"
+    },
+    {
+      "type": "video",
+      "src": "https://example.com/workout-video.mp4"
+    }
   ],
   "weekly_schedule": {
     "Monday": {
       "classes": [
-        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20 Y-Cycle" },
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit" },
-        { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga" }
-      ],
-      "motivation": "Push yourself, because no one else is going to do it for you!",
-      "tip": "Drink a glass of water before starting your workout.",
-      "wod": [
-        "3 sets x 12 Push-ups",
-        "3 sets x 15 Squats",
-        "3 sets x 10 Pull-ups"
+        {
+          "time": "6:00 AM - Studio A",
+          "event": "Morning Yoga",
+          "status": "active"
+        },
+        {
+          "time": "7:00 PM - Main Floor",
+          "event": "HIIT Training",
+          "status": "active"
+        }
       ]
     },
     "Tuesday": {
       "classes": [
-        { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Step" },
-        { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
-      ],
-      "motivation": "Every workout is progress, no matter how small.",
-      "tip": "Stretch your arms and legs before starting.",
-      "wod": [
-        "3 sets x 10 Lunges",
-        "3 sets x 15 Sit-ups",
-        "2 min Plank Hold"
+        {
+          "time": "6:30 AM - Pool",
+          "event": "Aqua Fitness",
+          "status": "active"
+        },
+        {
+          "time": "8:00 PM - Studio B",
+          "event": "Spin Class",
+          "status": "full"
+        }
       ]
     },
     "Wednesday": {
       "classes": [
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis" }
-      ],
-      "motivation": "Consistency is key — show up even when you don't feel like it.",
-      "tip": "Focus on your breathing during exercises.",
-      "wod": [
-        "3 sets x 12 Push-ups",
-        "3 sets x 15 Dumbbell Rows",
-        "3 sets x 20 Jumping Jacks"
+        {
+          "time": "12:00 PM - Studio A",
+          "event": "Lunch Break Yoga",
+          "status": "active"
+        },
+        {
+          "time": "6:00 PM - Main Floor",
+          "event": "CrossFit",
+          "status": "cancelled"
+        }
       ]
     },
     "Thursday": {
       "classes": [
-        { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch" },
-        { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp" },
-        { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" },
-        { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep" }
-      ],
-      "motivation": "You don't have to be great to start, but you have to start to be great.",
-      "tip": "Warm up for at least 5 minutes.",
-      "wod": [
-        "3 sets x 15 Squats",
-        "3 sets x 12 Shoulder Press",
-        "2 min Plank Hold"
+        {
+          "time": "7:00 AM - Studio B",
+          "event": "Pilates",
+          "status": "active"
+        },
+        {
+          "time": "7:30 PM - Cycle Room",
+          "event": "Indoor Cycling",
+          "status": "delayed"
+        }
       ]
     },
     "Friday": {
       "classes": [
-        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More" },
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Spin" },
-        { "time": "12:00 PM - 1:30 PM", "event": "Pickleball" }
-      ],
-      "motivation": "Sweat now, shine later.",
-      "tip": "Hydrate during breaks in your workout.",
-      "wod": [
-        "3 sets x 12 Push-ups",
-        "3 sets x 10 Pull-ups",
-        "3 sets x 20 Mountain Climbers"
+        {
+          "time": "6:00 PM - Studio A",
+          "event": "Zumba Party",
+          "status": "active"
+        },
+        {
+          "time": "8:00 PM - Main Floor",
+          "event": "Strength Training",
+          "status": "active"
+        }
       ]
     },
     "Saturday": {
       "classes": [
-        { "time": "10:00 AM - 11:00 AM", "event": "Weekend Warrior Workout" },
-        { "time": "11:30 AM - 12:15 PM", "event": "Family Swim" }
-      ],
-      "motivation": "Weekends are for warriors!",
-      "tip": "Make time for recovery and rest.",
-      "wod": [
-        "3 sets x 15 Burpees",
-        "3 sets x 20 Jump Squats",
-        "3 sets x 12 Push-ups"
+        {
+          "time": "9:00 AM - Studio A",
+          "event": "Weekend Warrior Workout",
+          "status": "active"
+        },
+        {
+          "time": "11:00 AM - Pool",
+          "event": "Family Swim",
+          "status": "active"
+        }
       ]
     },
     "Sunday": {
       "classes": [
-        { "time": "10:00 AM - 11:00 AM", "event": "Sunday Stretch & Flow" },
-        { "time": "2:00 PM - 3:00 PM", "event": "Open Swim" }
-      ],
-      "motivation": "Rest, recover, and prepare for the week ahead.",
-      "tip": "Light activity helps with recovery.",
-      "wod": [
-        "20 min gentle yoga flow",
-        "10 min meditation",
-        "Light stretching"
+        {
+          "time": "10:00 AM - Studio B",
+          "event": "Gentle Yoga",
+          "status": "active"
+        }
       ]
     }
-  }
+  },
+  "announcements": [
+    {
+      "type": "red",
+      "title": "Pool Maintenance",
+      "message": "Pool will be closed Dec 20-22 for maintenance"
+    },
+    {
+      "type": "green",
+      "title": "New Year Special!",
+      "message": "Join now and get 2 months free - limited time offer"
+    },
+    {
+      "type": "blue",
+      "title": "Holiday Schedule",
+      "message": "Modified hours Dec 24-26. Check our website for details"
+    }
+  ]
 }
