@@ -48,22 +48,17 @@
     "Sunday": []
   },
   "classes": [],
+ {
   "announcements": [
     {
       "id": 1,
-      "title": "🏊 Pool Hours",
-      "message": "Open swim available daily",
-      "details": "6 AM - 10 PM Monday-Friday, 8 AM - 8 PM weekends",
-      "severity": "warning",
-      "permanent": true
-    },
-    {
-      "id": 2,
-      "title": "📱 Download Our App",
-      "message": "Book classes and track workouts",
-      "details": "Available on iOS and Android",
+      "title": "80 + Memberships FREE",
+      "message": "If you're over 80 you are eligible for a free membership",
+      "details": "Ask the front desk for more information",
       "severity": "good",
       "permanent": true
     }
   ]
 }
+
+
