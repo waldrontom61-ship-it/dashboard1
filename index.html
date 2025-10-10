@@ -5,137 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>YMCA Dashboard</title>
 <style>
-    body { box-sizing: border-box; margin:0; font-family: system-ui, -apple-system, sans-serif;}
-    .main-layout { display: flex; height: 100vh; background: black; }
-    .content-area { width: 70%; background: #111827; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; flex-direction: column; color:white;}
-    .sidebar-overlay { width: 30%; height: 100vh; background: linear-gradient(to bottom, #dc2626, #991b1b); color:white; display:flex; flex-direction:column; }
-    .sidebar-footer { background:#7f1d1d; padding:1rem; display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.2);}
-    .footer-time { font-size:0.875rem; font-weight:600;}
-    .footer-date { font-size:0.75rem; opacity:0.8; margin-top:0.25rem;}
-    .footer-weather { display:flex; align-items:center; gap:0.5rem; font-size:0.875rem;}
-    .sidebar-header { background: rgba(0,0,0,0.3); padding:1rem; text-align:center; }
-    .sidebar-logo { max-width:200px; height:auto; margin-bottom:0.5rem;}
-    .sidebar-title { font-size:1.5rem; font-weight:bold; margin-bottom:0.5rem;}
-    .content-section { padding:1.5rem; flex:1; overflow-y:auto; max-height: calc(100vh - 120px);}
-    .section-title { font-size:1.25rem; font-weight:bold; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:0.5rem; text-align:center;}
-    .info-card { background: rgba(255,255,255,0.2); border-radius:0.5rem; padding:0.75rem; margin-bottom:0.75rem;}
-    .card-title { font-weight:600; margin-bottom:0.25rem;}
-    .card-subtitle { font-size:0.875rem; opacity:0.9;}
-    .card-meta { font-size:0.75rem; opacity:0.7; margin-top:0.25rem;}
-    .cancelled-class { background: rgba(239,68,68,0.3) !important; border:2px solid #ef4444 !important; position:relative;}
-    .cancelled-badge { background:#ef4444; color:white; padding:0.25rem 0.5rem; border-radius:0.25rem; font-size:0.75rem; font-weight:bold; margin-top:0.5rem; display:inline-block;}
-    img.media-image { width: 80%; margin-bottom:1rem; border-radius:0.5rem; }
+body {margin:0; font-family:system-ui, -apple-system, sans-serif; background:black; color:white;}
+.main-layout {display:flex; height:100vh;}
+.content-area {width:70%; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center;}
+.content-media img {position:absolute; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 1s;}
+.content-media img.active {opacity:1;}
+.sidebar-overlay {width:30%; background:#111827; display:flex; flex-direction:column; justify-content:space-between; padding:1rem;}
+.section-title {margin:1rem 0 0.5rem; font-weight:bold; border-bottom:1px solid rgba(255,255,255,0.3); text-align:center;}
+.info-card {background:rgba(255,255,255,0.1); padding:0.5rem; margin-bottom:0.5rem; border-radius:0.25rem;}
+.footer {font-size:0.85rem; display:flex; justify-content:space-between; align-items:center;}
 </style>
 </head>
 <body>
 <div class="main-layout">
-    <div class="content-area">
-        <h1>YMCA Media</h1>
-        <div id="media-container"></div>
+  <div class="content-area">
+    <div class="content-media" id="media-container"></div>
+  </div>
+  <div class="sidebar-overlay">
+    <div>
+      <h3 class="section-title">Today's Schedule</h3>
+      <div id="today-schedule"></div>
+      <h3 class="section-title">Announcements</h3>
+      <div id="announcement-container"></div>
     </div>
-    <div class="sidebar-overlay">
-        <div class="sidebar-header">
-            <img src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo" class="sidebar-logo">
-            <h2 class="sidebar-title">YMCA of Saskatoon</h2>
-        </div>
-        <div class="content-section">
-            <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
-            <div id="classes-container"></div>
-        </div>
-        <div class="sidebar-footer">
-            <div>
-                <div class="footer-time" id="currentTime">12:34 PM</div>
-                <div class="footer-date" id="currentDate">Monday, Oct 10</div>
-            </div>
-            <div class="footer-weather" id="weather-display">
-                <span class="footer-weather-icon" id="weather-icon">⛅</span>
-                <span id="weather-temp">--°C</span>
-            </div>
-        </div>
+    <div class="footer">
+      <div><span id="currentTime"></span> | <span id="currentDate"></span></div>
+      <div><span id="weather-icon">⛅</span> <span id="weather-temp">--°C</span></div>
     </div>
+  </div>
 </div>
 
 <script>
 // JSON data
-const ymcaData = {
+const dashboardData = {
+  "settings": { "gymName": "YMCA of Saskatoon", "rotationSpeed": 4 },
   "media": [
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
   ],
   "weekly_schedule": {
-    "Monday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" }
-    ],
-    "Tuesday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" }
-    ],
-    "Wednesday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" }
-    ],
-    "Thursday": [
-      { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch" }
-    ],
-    "Friday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More" }
-    ],
-    "Saturday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle" }
-    ],
-    "Sunday": [
-      { "time": "", "event": "NO CLASS" }
-    ]
-  }
+    "Monday":[{"time":"9:00 AM - 9:45 AM","event":"NEW CLASS OCT 20Y-Cycle"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"10:00 AM - 10:45 AM","event":"NEW CLASS OCT 20 Tabata Blast"},{"time":"12:10 PM - 12:50 PM","event":"Y-Fit Circuit"},{"time":"6:15 PM - 7:30 PM","event":"Beginner Yoga"}],
+    "Tuesday":[{"time":"8:00 AM - 8:45 AM","event":"Active Aging with Fred Dyck"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"12:10 PM - 12:50 PM","event":"Step"},{"time":"1:30 PM - 2:15 PM","event":"Aquafit"}],
+    "Wednesday":[{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"12:10 PM - 12:50 PM","event":"Y-Fit Full Body with Kris Seto Davis"}],
+    "Thursday":[{"time":"6:15 AM - 7:00 AM","event":"Strength, Sweat & Stretch"},{"time":"8:00 AM - 8:45 AM","event":"Active Aging with Fred Dyck"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"12:10 PM - 12:50 PM","event":"Bootcamp"},{"time":"1:30 PM - 2:15 PM","event":"Aquafit"},{"time":"7:00 PM - 7:45 PM","event":"OCT 16 Aquastep"}],
+    "Friday":[{"time":"9:00 AM - 9:45 AM","event":"NEW CLASS OCT 24 Core & More"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"10:00 AM - 10:45 AM","event":"NEW CLASS OCT 20 Tabata Blast"},{"time":"12:10 PM - 12:50 PM","event":"Spin"},{"time":"12:00 PM - 1:30 PM","event":"Pickleball"}],
+    "Saturday":[{"time":"8:00 AM - 8:45 AM","event":"NEW CLASS OCT 25 Y-Cycle"},{"time":"10:00 AM - 11:00 AM","event":"Energizing Yoga"},{"time":"1:30 PM - 2:15 PM","event":"Aquafit"}],
+    "Sunday":[{"time":"","event":"NO CLASS"}]
+  },
+  "classes": [], "announcements": []
 };
 
-// Render classes for today
-function renderClasses() {
-    const container = document.getElementById('classes-container');
-    container.innerHTML = '';
-    const today = new Date().toLocaleDateString('en-US', { weekday:'long' });
-    const todaysClasses = ymcaData.weekly_schedule[today] || [];
-    todaysClasses.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'info-card';
-        card.innerHTML = `
-            <div class="card-title">${c.event}</div>
-            <div class="card-subtitle">${c.time}</div>
-        `;
-        container.appendChild(card);
-    });
-}
-
-// Render media
+// Render media slideshow
+let currentMedia = 0;
 function renderMedia() {
-    const container = document.getElementById('media-container');
-    ymcaData.media.forEach(item => {
-        if(item.type === 'image') {
-            const img = document.createElement('img');
-            img.src = item.src;
-            img.className = 'media-image';
-            container.appendChild(img);
-        }
-    });
+  const container = document.getElementById('media-container');
+  container.innerHTML = '';
+  dashboardData.media.forEach((item, i)=>{
+    const img = document.createElement('img');
+    img.src = item.src;
+    if(i===0) img.classList.add('active');
+    container.appendChild(img);
+  });
+  setInterval(()=>{
+    const images = document.querySelectorAll('#media-container img');
+    images[currentMedia].classList.remove('active');
+    currentMedia = (currentMedia+1)%images.length;
+    images[currentMedia].classList.add('active');
+  }, 5000);
 }
 
-// Update time/date
-function updateDateTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', hour12:true});
-    const dateString = now.toLocaleDateString('en-US', { weekday:'long', month:'short', day:'numeric' });
-    document.getElementById('currentTime').textContent = timeString;
-    document.getElementById('currentDate').textContent = dateString;
+// Render today's schedule
+function renderSchedule() {
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long'});
+  const events = dashboardData.weekly_schedule[today] || [];
+  const container = document.getElementById('today-schedule');
+  container.innerHTML = '';
+  if(events.length===0) { container.innerHTML='<div class="info-card">No classes today</div>'; return;}
+  events.forEach(ev=>{
+    const div = document.createElement('div');
+    div.className='info-card';
+    div.textContent = `${ev.time} • ${ev.event}`;
+    container.appendChild(div);
+  });
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    renderClasses();
-    renderMedia();
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
+// Weather
+async function updateWeather(){
+  try{
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true');
+    const d = await r.json();
+    if(d.current_weather){
+      const t=Math.round(d.current_weather.temperature);
+      document.getElementById('weather-temp').textContent=`${t}°C`;
+      document.getElementById('weather-icon').textContent='⛅'; // optional: map codes
+    }
+  } catch(e){console.log('Weather failed');}
+}
+
+// Date/time
+function updateDateTime(){
+  const now=new Date();
+  document.getElementById('currentTime').textContent=now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+  document.getElementById('currentDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+}
+
+// Init
+document.addEventListener('DOMContentLoaded',()=>{
+  renderMedia();
+  renderSchedule();
+  updateDateTime();
+  setInterval(updateDateTime,1000);
+  updateWeather();
+  setInterval(updateWeather,300000);
 });
 </script>
 </body>
