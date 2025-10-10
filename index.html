@@ -1,685 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym TV Sidebar Overlay</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            box-sizing: border-box;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(-100%); opacity: 0; }
-        }
-        .slide-in {
-            animation: slideIn 0.5s ease-out;
-        }
-        .slide-out {
-            animation: slideOut 0.5s ease-in;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .pulse-dot {
-            animation: pulse 2s infinite;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YMCA Overlay Dashboard</title>
+<style>
+  /* === EASY CONTROLS === */
+  :root {
+    --title-size: 40px;
+    --weather-size: 26px;
+    --date-size: 28px;
+    --class-size: 20px;
+    --sidebar-padding: 25px;
+    --sidebar-bg: rgba(224, 0, 52, 0.9);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    background: #000;
+  }
+
+  /* Media container */
+  .media-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    background: #000;
+  }
+
+  .media-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .media-slide.active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .media-slide img,
+  .media-slide iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Sidebar */
+  .overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    pointer-events: none;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 100%;
+    background-color: var(--sidebar-bg);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--sidebar-padding);
+    box-sizing: border-box;
+    pointer-events: auto;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* Title */
+  #sidebar-header {
+    text-align: center;
+    font-size: var(--title-size);
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  /* Weather */
+  .weather-nowplaying {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: var(--weather-size);
+    gap: 10px;
+  }
+
+  .weather p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #weather-emoji {
+    font-size: 1.4em;
+  }
+
+  /* Schedule */
+  .schedule {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #schedule-header {
+    text-align: center;
+    font-size: var(--date-size);
+    font-weight: 900;
+    margin-bottom: 20px;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .schedule ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 90%;
+  }
+
+  .schedule li {
+    padding: 10px;
+    border-bottom: none;
+    text-align: left;
+    font-size: var(--class-size);
+  }
+
+  /* Quote & Logo */
+  #quote-slider {
+    text-align: center;
+    font-size: 28px;
+    font-style: italic;
+    margin: 20px 0;
+    line-height: 1.4;
+    min-height: 60px;
+  }
+
+  #logo-container {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: 20px;
+  }
+
+  #logo {
+    width: 80%;
+    max-width: 180px;
+  }
+
+  /* === FIX: Prevent flicker/duplication on slide transitions === */
+  .media-container,
+  .media-slide,
+  .media-slide img,
+  .media-slide iframe {
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: opacity;
+  }
+
+  .media-container {
+    contain: strict;
+  }
+
+  .media-slide {
+    background: #000;
+  }
+
+  .overlay {
+    z-index: 10;
+  }
+</style>
 </head>
-<body class="bg-black min-h-full font-sans">
-    <!-- Main TV Content Area (70%) -->
-    <div class="flex h-screen">
-        <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden">
-            <div id="mainContent" class="w-full h-full flex items-center justify-center">
-                <div class="text-white text-center">
-                    <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
-                    <p class="text-xl opacity-75">Load JSON data to display media</p>
-                    <div class="mt-8 text-6xl">🖼️</div>
-                </div>
-            </div>
-        </div>
+<body>
 
-        <!-- Sidebar Overlay (30%) -->
-        <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 text-white relative overflow-hidden">
-            <!-- Header -->
-            <div class="bg-black bg-opacity-30 p-4 text-center">
-                <h2 class="text-2xl font-bold">💪 FitZone Gym</h2>
-                <div class="flex items-center justify-center mt-2">
-                    <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot mr-2"></div>
-                    <span class="text-sm">LIVE UPDATES</span>
-                </div>
-            </div>
+<div class="media-container" id="media-container"></div>
 
-            <!-- Content Area -->
-            <div class="h-full pb-32 relative">
-                <!-- Current Classes Section -->
-                <div id="content-classes" class="content-section p-6 absolute inset-0">
-                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
-                        🕐 TODAY'S CLASSES
-                    </h3>
-                    <div class="space-y-3" id="classList">
-                        <div class="bg-white bg-opacity-20 rounded-lg p-3">
-                            <div class="font-semibold">HIIT Training</div>
-                            <div class="text-sm opacity-90">6:00 PM - Studio A</div>
-                        </div>
-                        <div class="bg-white bg-opacity-20 rounded-lg p-3">
-                            <div class="font-semibold">Yoga Flow</div>
-                            <div class="text-sm opacity-90">7:30 PM - Studio B</div>
-                        </div>
-                        <div class="bg-white bg-opacity-20 rounded-lg p-3">
-                            <div class="font-semibold">Spin Class</div>
-                            <div class="text-sm opacity-90">8:00 PM - Cycle Room</div>
-                        </div>
-                    </div>
-                </div>
+<div class="overlay">
+  <div class="sidebar">
+    <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
 
-                <!-- Announcements Section -->
-                <div id="content-announcements" class="content-section p-6 absolute inset-0 hidden">
-                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
-                        📢 ANNOUNCEMENTS
-                    </h3>
-                    <div class="space-y-4" id="announcementsList">
-                        <div class="bg-yellow-500 bg-opacity-20 border-l-4 border-yellow-500 p-4 rounded">
-                            <div class="font-semibold">New Equipment Arrival!</div>
-                            <div class="text-sm mt-1">Check out our new rowing machines on the 2nd floor</div>
-                        </div>
-                        <div class="bg-blue-500 bg-opacity-20 border-l-4 border-blue-500 p-4 rounded">
-                            <div class="font-semibold">Holiday Hours</div>
-                            <div class="text-sm mt-1">We'll be open 6AM-8PM on Christmas Eve</div>
-                        </div>
-                        <div class="bg-green-500 bg-opacity-20 border-l-4 border-green-500 p-4 rounded">
-                            <div class="font-semibold">Member Referral Program</div>
-                            <div class="text-sm mt-1">Bring a friend and get 1 month free!</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer with Time and Weather -->
-            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4">
-                <div class="flex justify-between items-center text-sm">
-                    <div>
-                        <div class="font-semibold" id="currentTime">5:45 PM</div>
-                        <div class="opacity-75" id="currentDate">Monday, Dec 16</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="font-semibold" id="weather">72°F ☀️</div>
-                        <div class="opacity-75">Perfect workout weather!</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="weather-nowplaying">
+      <div class="weather">
+        <p>
+          <span id="weather-emoji">⛅</span>
+          <span id="temperature">--</span> |
+          <span id="condition">--</span> |
+          <span id="wind">--</span>
+        </p>
+      </div>
     </div>
 
-    <!-- Admin Panel Toggle -->
-    <button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 bg-opacity-30 hover:bg-opacity-60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm z-50 transition-all duration-200">
-        ⚙️
-    </button>
-
-    <!-- Admin Panel Modal -->
-    <div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
-                    <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-                </div>
-
-                <div class="space-y-6">
-                    <!-- Today's Class Schedule -->
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <h3 class="font-semibold mb-2">🕐 Manage Today's Classes</h3>
-                        
-                        <!-- Add New Class -->
-                        <div class="mb-4">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                                <input id="className" class="p-2 border rounded" placeholder="Class Name">
-                                <input id="classTime" class="p-2 border rounded" placeholder="Time (e.g., 6:00 PM - Studio A)">
-                            </div>
-                            <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
-                        </div>
-
-                        <!-- Current Classes List -->
-                        <div class="border-t pt-3">
-                            <h4 class="font-medium mb-2">Today's Classes:</h4>
-                            <div id="currentClasses" class="space-y-2 max-h-60 overflow-y-auto">
-                                <!-- Classes will be listed here -->
-                            </div>
-                            <button id="clearSchedule" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Clear All Classes</button>
-                        </div>
-                    </div>
-
-                    <!-- Add Announcement -->
-                    <div class="bg-yellow-50 p-4 rounded-lg">
-                        <h3 class="font-semibold mb-2">📢 Add Announcement</h3>
-                        <input id="announcementTitle" class="w-full p-2 border rounded-lg mb-2" placeholder="Announcement Title">
-                        <textarea id="announcementMessage" class="w-full p-2 border rounded-lg mb-2" rows="2" placeholder="Announcement message..."></textarea>
-                        <div class="flex gap-2">
-                            <select id="announcementType" class="p-2 border rounded">
-                                <option value="yellow">⚠️ General (Yellow)</option>
-                                <option value="blue">ℹ️ Info (Blue)</option>
-                                <option value="green">✅ Good News (Green)</option>
-                                <option value="red">🚨 Urgent (Red)</option>
-                            </select>
-                            <button id="addAnnouncement" class="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Add Announcement</button>
-                        </div>
-                        
-                        <!-- Current Announcements List -->
-                        <div class="border-t pt-3 mt-3">
-                            <h4 class="font-medium mb-2">Current Announcements:</h4>
-                            <div id="currentAnnouncements" class="space-y-2 max-h-40 overflow-y-auto">
-                                <!-- Announcements will be listed here -->
-                            </div>
-                            <button id="clearAnnouncements" class="mt-2 bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">Clear All Announcements</button>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
+    <div class="schedule">
+      <div id="schedule-header"></div>
+      <ul id="schedule"></ul>
     </div>
 
-    <script>
-        let currentContentIndex = 0;
-        const contentSections = ['classes', 'announcements'];
-        let rotationInterval;
+    <div id="quote-slider"></div>
 
-        // Data structure to hold all gym display data
-        let gymData = {
-            media: [],
-            quotes: [],
-            weekly_schedule: {},
-            announcements: [
-                {
-                    type: 'yellow',
-                    title: 'New Equipment Arrival!',
-                    message: 'Check out our new rowing machines on the 2nd floor'
-                },
-                {
-                    type: 'blue',
-                    title: 'Holiday Hours',
-                    message: 'We\'ll be open 6AM-8PM on Christmas Eve'
-                },
-                {
-                    type: 'green',
-                    title: 'Member Referral Program',
-                    message: 'Bring a friend and get 1 month free!'
-                }
-            ]
+    <div id="logo-container">
+      <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
+    </div>
+  </div>
+</div>
+<script>
+fetch('dashboard-data.json')
+  .then(res => res.json())
+  .then(data => {
+    // --- Media slideshow ---
+    const mediaContainer = document.getElementById('media-container');
+    const slides = [];
+
+    data.media.forEach(item => {
+      const slide = document.createElement('div');
+      slide.className = 'media-slide';
+
+      if (item.type === 'image') {
+        const img = document.createElement('img');
+        img.src = item.src;
+        slide.appendChild(img);
+      } else if (item.type === 'video') {
+        const iframe = document.createElement('iframe');
+        iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
+        iframe.frameBorder = "0";
+        iframe.allow = "autoplay; fullscreen";
+        iframe.allowFullscreen = true;
+        slide.appendChild(iframe);
+      }
+
+      mediaContainer.appendChild(slide);
+      slides.push(slide);
+    });
+
+    // Slideshow rotation
+    let currentSlide = 0;
+    if (slides.length > 0) {
+      slides[0].classList.add('active');
+      setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+      }, 15000);
+    }
+
+    // --- Schedule (weekly) ---
+    const now = new Date();
+    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const todayName = days[now.getDay()];
+
+    document.getElementById('schedule-header').textContent =
+      now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+
+    const scheduleList = document.getElementById('schedule');
+    scheduleList.innerHTML = '';
+    const todaySchedule = data.weekly_schedule[todayName] || [];
+    todaySchedule.forEach(item => {
+      const li = document.createElement('li');
+      li.innerText = item.time + ' - ' + item.event;
+      scheduleList.appendChild(li);
+    });
+
+    // --- Quotes ---
+    const quotes = data.quotes || [];
+    const slider = document.getElementById('quote-slider');
+    let current = 0;
+    function showQuote(){
+      slider.textContent = quotes[current];
+      current = (current+1)%quotes.length;
+    }
+    showQuote();
+    setInterval(showQuote,5000);
+
+    // --- Weather ---
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
+      .then(res=>res.json())
+      .then(weather=>{
+        const tempC = weather.current_weather.temperature;
+        const wind = weather.current_weather.windspeed;
+        const code = weather.current_weather.weathercode;
+        const conditionMap = {
+          0:{text:'Clear sky', emoji:'☀️'},
+          1:{text:'Mainly clear', emoji:'🌤️'},
+          2:{text:'Partly cloudy', emoji:'⛅'},
+          3:{text:'Overcast', emoji:'☁️'},
+          45:{text:'Fog', emoji:'🌫️'},
+          48:{text:'Fog', emoji:'🌫️'},
+          51:{text:'Drizzle', emoji:'🌦️'},
+          61:{text:'Rain', emoji:'🌧️'},
+          71:{text:'Snow', emoji:'❄️'},
+          80:{text:'Showers', emoji:'🌦️'},
+          95:{text:'Thunderstorm', emoji:'⛈️'},
+          56:{text:'Smoke', emoji:'💨'},
+          57:{text:'Dense smoke', emoji:'💨'}
         };
-
-        // Function to load JSON data from URL
-        async function loadGymData(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const newData = await response.json();
-                
-                // Merge the loaded data with existing data
-                if (newData.media) gymData.media = newData.media;
-                if (newData.quotes) gymData.quotes = newData.quotes;
-                if (newData.weekly_schedule) gymData.weekly_schedule = newData.weekly_schedule;
-                if (newData.announcements) gymData.announcements = newData.announcements;
-                
-                // Convert quotes to announcements if quotes exist but no announcements
-                if (newData.quotes && (!newData.announcements || newData.announcements.length === 0)) {
-                    gymData.announcements = newData.quotes.map(quote => ({
-                        type: 'blue',
-                        title: 'YMCA Update',
-                        message: quote
-                    }));
-                }
-                
-                renderAll();
-                updateAnnouncementsList();
-                updateCurrentClassesList();
-                console.log('✅ Gym data loaded successfully!');
-                return true;
-            } catch (error) {
-                console.error('❌ Failed to load gym data:', error);
-                return false;
-            }
-        }
-
-        let currentMediaIndex = 0;
-        let mediaRotationInterval;
-
-        // Content rotation
-        function rotateContent() {
-            const current = document.getElementById(`content-${contentSections[currentContentIndex]}`);
-            current.classList.add('slide-out');
-            
-            setTimeout(() => {
-                current.classList.add('hidden');
-                current.classList.remove('slide-out');
-                
-                currentContentIndex = (currentContentIndex + 1) % contentSections.length;
-                const next = document.getElementById(`content-${contentSections[currentContentIndex]}`);
-                
-                next.classList.remove('hidden');
-                next.classList.add('slide-in');
-                
-                setTimeout(() => {
-                    next.classList.remove('slide-in');
-                }, 500);
-            }, 500);
-        }
-
-        // Start content rotation
-        function startRotation() {
-            rotationInterval = setInterval(rotateContent, 10000); // 10 seconds
-        }
-
-        // Media rotation for main content
-        function rotateMedia() {
-            if (gymData.media && gymData.media.length > 0) {
-                const media = gymData.media[currentMediaIndex];
-                const mainContent = document.getElementById('mainContent');
-                
-                if (media.type === 'image') {
-                    mainContent.innerHTML = `
-                        <img src="${media.src}" 
-                             alt="Main content display" 
-                             class="max-w-full max-h-full object-contain"
-                             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'text-white text-center\\'><h2 class=\\'text-2xl mb-2\\'>❌ Media Failed to Load</h2></div>';">
-                    `;
-                } else if (media.type === 'video') {
-                    mainContent.innerHTML = `
-                        <video class="max-w-full max-h-full object-contain" autoplay muted loop>
-                            <source src="${media.src}" type="video/mp4">
-                            <div class="text-white text-center">
-                                <h2 class="text-2xl mb-2">❌ Video Not Supported</h2>
-                            </div>
-                        </video>
-                    `;
-                }
-                
-                currentMediaIndex = (currentMediaIndex + 1) % gymData.media.length;
-            }
-        }
-
-        function startMediaRotation() {
-            if (gymData.media && gymData.media.length > 0) {
-                rotateMedia(); // Show first media immediately
-                mediaRotationInterval = setInterval(rotateMedia, 8000); // 8 seconds per media
-            }
-        }
-
-        function stopMediaRotation() {
-            if (mediaRotationInterval) {
-                clearInterval(mediaRotationInterval);
-                mediaRotationInterval = null;
-            }
-        }
-
-        // Get current day's data
-        function getTodayData() {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const today = days[new Date().getDay()];
-            const todaySchedule = gymData.weekly_schedule[today];
-            
-            // Handle both array format (from JSON) and object format (from admin)
-            if (Array.isArray(todaySchedule)) {
-                return {
-                    classes: todaySchedule.map(item => ({
-                        time: item.time,
-                        event: item.event,
-                        status: item.status || 'active'
-                    }))
-                };
-            } else if (todaySchedule && todaySchedule.classes) {
-                return todaySchedule;
-            } else {
-                return { classes: [] };
-            }
-        }
-
-        // Render functions to update display from data
-        function renderMainContent() {
-            const mainContent = document.getElementById('mainContent');
-            if (gymData.media && gymData.media.length > 0) {
-                stopMediaRotation();
-                startMediaRotation();
-            } else {
-                stopMediaRotation();
-                mainContent.innerHTML = `
-                    <div class="text-white text-center">
-                        <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
-                        <p class="text-xl opacity-75">Load JSON data to display media</p>
-                        <div class="mt-8 text-6xl">🖼️</div>
-                    </div>
-                `;
-            }
-        }
-
-        function renderClasses() {
-            const classList = document.getElementById('classList');
-            const todayData = getTodayData();
-            
-            if (todayData.classes && todayData.classes.length > 0) {
-                classList.innerHTML = todayData.classes.map(cls => {
-                    const status = cls.status || 'active';
-                    let statusDisplay = '';
-                    let classStyle = 'bg-white bg-opacity-20';
-                    
-                    switch(status) {
-                        case 'cancelled':
-                            statusDisplay = '<span class="text-red-300 text-xs">❌ CANCELLED</span>';
-                            classStyle = 'bg-red-500 bg-opacity-30 line-through';
-                            break;
-                        case 'delayed':
-                            statusDisplay = '<span class="text-yellow-300 text-xs">⏰ DELAYED</span>';
-                            classStyle = 'bg-yellow-500 bg-opacity-30';
-                            break;
-                        case 'full':
-                            statusDisplay = '<span class="text-orange-300 text-xs">👥 CLASS FULL</span>';
-                            classStyle = 'bg-orange-500 bg-opacity-30';
-                            break;
-                        default:
-                            statusDisplay = '<span class="text-green-300 text-xs">✅ ACTIVE</span>';
-                    }
-                    
-                    return `
-                        <div class="${classStyle} rounded-lg p-3">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="font-semibold">${cls.event}</div>
-                                    <div class="text-sm opacity-90">${cls.time}</div>
-                                </div>
-                                <div>${statusDisplay}</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } else {
-                classList.innerHTML = `
-                    <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
-                        <div class="font-semibold">No Classes Scheduled</div>
-                        <div class="text-sm opacity-90">Check back tomorrow!</div>
-                    </div>
-                `;
-            }
-        }
-
-        function renderAnnouncements() {
-            const announcementsList = document.getElementById('announcementsList');
-            const colorMap = {
-                'yellow': 'bg-yellow-500 bg-opacity-20 border-l-4 border-yellow-500',
-                'blue': 'bg-blue-500 bg-opacity-20 border-l-4 border-blue-500',
-                'green': 'bg-green-500 bg-opacity-20 border-l-4 border-green-500',
-                'red': 'bg-red-500 bg-opacity-20 border-l-4 border-red-500'
-            };
-            
-            announcementsList.innerHTML = gymData.announcements.map(ann => `
-                <div class="${colorMap[ann.type] || colorMap.yellow} p-4 rounded">
-                    <div class="font-semibold">${ann.title}</div>
-                    <div class="text-sm mt-1">${ann.message}</div>
-                </div>
-            `).join('');
-        }
-
-        function renderAll() {
-            renderMainContent();
-            renderClasses();
-            renderAnnouncements();
-        }
-
-        // Update time and date
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'});
-        }
-
-        // Admin panel functionality
-        document.getElementById('adminToggle').addEventListener('click', () => {
-            document.getElementById('adminPanel').classList.remove('hidden');
-        });
-
-        document.getElementById('closeAdmin').addEventListener('click', () => {
-            document.getElementById('adminPanel').classList.add('hidden');
-        });
-
-
-
-        // Add announcement
-        document.getElementById('addAnnouncement').addEventListener('click', () => {
-            const title = document.getElementById('announcementTitle').value.trim();
-            const message = document.getElementById('announcementMessage').value.trim();
-            const type = document.getElementById('announcementType').value;
-            
-            if (title && message) {
-                gymData.announcements.unshift({
-                    type: type,
-                    title: title,
-                    message: message
-                });
-                renderAnnouncements();
-                updateAnnouncementsList();
-                
-                // Clear inputs
-                document.getElementById('announcementTitle').value = '';
-                document.getElementById('announcementMessage').value = '';
-                document.getElementById('announcementType').value = 'yellow';
-            }
-        });
-
-        // Clear all announcements
-        document.getElementById('clearAnnouncements').addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all announcements?')) {
-                gymData.announcements = [];
-                renderAnnouncements();
-                updateAnnouncementsList();
-            }
-        });
-
-        // Update announcements list in admin panel
-        function updateAnnouncementsList() {
-            const container = document.getElementById('currentAnnouncements');
-            if (gymData.announcements.length === 0) {
-                container.innerHTML = '<div class="text-gray-500 text-sm">No announcements</div>';
-                return;
-            }
-            
-            container.innerHTML = gymData.announcements.map((ann, index) => `
-                <div class="flex justify-between items-start bg-white p-2 rounded border text-sm">
-                    <div class="flex-1">
-                        <div class="font-medium">${ann.title}</div>
-                        <div class="text-gray-600">${ann.message}</div>
-                        <div class="text-xs text-gray-400 mt-1">${ann.type} border</div>
-                    </div>
-                    <button onclick="removeAnnouncement(${index})" class="text-red-500 hover:text-red-700 ml-2">×</button>
-                </div>
-            `).join('');
-        }
-
-        // Remove individual announcement
-        function removeAnnouncement(index) {
-            gymData.announcements.splice(index, 1);
-            renderAnnouncements();
-            updateAnnouncementsList();
-        }
-
-        // Add class to today's schedule
-        document.getElementById('addToSchedule').addEventListener('click', () => {
-            const className = document.getElementById('className').value.trim();
-            const classTime = document.getElementById('classTime').value.trim();
-            
-            if (className && classTime) {
-                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const today = days[new Date().getDay()];
-                
-                // Convert array format to object format if needed
-                if (Array.isArray(gymData.weekly_schedule[today])) {
-                    gymData.weekly_schedule[today] = {
-                        classes: gymData.weekly_schedule[today].map(item => ({
-                            time: item.time,
-                            event: item.event,
-                            status: item.status || 'active'
-                        }))
-                    };
-                } else if (!gymData.weekly_schedule[today]) {
-                    gymData.weekly_schedule[today] = {
-                        classes: []
-                    };
-                }
-                
-                gymData.weekly_schedule[today].classes.push({
-                    time: classTime,
-                    event: className,
-                    status: 'active' // active, cancelled, delayed, full
-                });
-                renderClasses();
-                updateCurrentClassesList();
-                
-                // Clear inputs
-                document.getElementById('className').value = '';
-                document.getElementById('classTime').value = '';
-            }
-        });
-
-        // Clear today's schedule
-        document.getElementById('clearSchedule').addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear today\'s classes?')) {
-                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const today = days[new Date().getDay()];
-                
-                if (gymData.weekly_schedule[today]) {
-                    if (Array.isArray(gymData.weekly_schedule[today])) {
-                        gymData.weekly_schedule[today] = [];
-                    } else {
-                        gymData.weekly_schedule[today].classes = [];
-                    }
-                }
-                renderClasses();
-                updateCurrentClassesList();
-            }
-        });
-
-        // Update current classes list in admin panel
-        function updateCurrentClassesList() {
-            const container = document.getElementById('currentClasses');
-            const todayData = getTodayData();
-            
-            if (!todayData.classes || todayData.classes.length === 0) {
-                container.innerHTML = '<div class="text-gray-500 text-sm">No classes scheduled for today</div>';
-                return;
-            }
-            
-            container.innerHTML = todayData.classes.map((cls, index) => {
-                const status = cls.status || 'active';
-                const statusOptions = ['active', 'cancelled', 'delayed', 'full'];
-                const statusLabels = {
-                    'active': '✅ Active',
-                    'cancelled': '❌ Cancelled', 
-                    'delayed': '⏰ Delayed',
-                    'full': '👥 Full'
-                };
-                
-                return `
-                    <div class="flex justify-between items-center bg-white p-3 rounded border">
-                        <div class="flex-1">
-                            <div class="font-medium">${cls.event}</div>
-                            <div class="text-sm text-gray-600">${cls.time}</div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <select onchange="updateClassStatus(${index}, this.value)" class="text-xs p-1 border rounded">
-                                ${statusOptions.map(opt => 
-                                    `<option value="${opt}" ${status === opt ? 'selected' : ''}>${statusLabels[opt]}</option>`
-                                ).join('')}
-                            </select>
-                            <button onclick="removeClass(${index})" class="text-red-500 hover:text-red-700 text-sm">×</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Update class status
-        function updateClassStatus(index, newStatus) {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const today = days[new Date().getDay()];
-            const todayData = getTodayData();
-            
-            if (todayData.classes[index]) {
-                // Convert to object format if needed
-                if (Array.isArray(gymData.weekly_schedule[today])) {
-                    gymData.weekly_schedule[today] = {
-                        classes: gymData.weekly_schedule[today].map(item => ({
-                            time: item.time,
-                            event: item.event,
-                            status: item.status || 'active'
-                        }))
-                    };
-                }
-                
-                gymData.weekly_schedule[today].classes[index].status = newStatus;
-                renderClasses();
-                updateCurrentClassesList();
-            }
-        }
-
-        // Remove class
-        function removeClass(index) {
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const today = days[new Date().getDay()];
-            const todayData = getTodayData();
-            
-            if (todayData.classes[index]) {
-                // Convert to object format if needed
-                if (Array.isArray(gymData.weekly_schedule[today])) {
-                    gymData.weekly_schedule[today] = {
-                        classes: gymData.weekly_schedule[today].map(item => ({
-                            time: item.time,
-                            event: item.event,
-                            status: item.status || 'active'
-                        }))
-                    };
-                }
-                
-                gymData.weekly_schedule[today].classes.splice(index, 1);
-                renderClasses();
-                updateCurrentClassesList();
-            }
-        }
-
-        // Initialize with some sample data
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const today = days[new Date().getDay()];
-        
-        // Initialize today's schedule with sample classes if empty
-        if (!gymData.weekly_schedule[today]) {
-            gymData.weekly_schedule[today] = {
-                classes: [
-                    { time: '6:00 PM - Studio A', event: 'HIIT Training', status: 'active' },
-                    { time: '7:30 PM - Studio B', event: 'Yoga Flow', status: 'active' },
-                    { time: '8:00 PM - Cycle Room', event: 'Spin Class', status: 'active' }
-                ]
-            };
-        }
-
-        updateDateTime();
-        setInterval(updateDateTime, 60000); // Update every minute
-        renderAll(); // Initial render from data
-        updateAnnouncementsList(); // Initialize announcements list in admin
-        updateCurrentClassesList(); // Initialize classes list in admin
-        startRotation();
-
-        // Close admin panel when clicking outside
-        document.getElementById('adminPanel').addEventListener('click', (e) => {
-            if (e.target.id === 'adminPanel') {
-                document.getElementById('adminPanel').classList.add('hidden');
-            }
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c70f8b24f4493d',t:'MTc2MDEwOTE5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+        const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
+        document.getElementById('temperature').innerText = `${tempC}°C`;
+        document.getElementById('wind').innerText = `${wind} km/h`;
+        document.getElementById('condition').innerText = condition.text;
+        document.getElementById('weather-emoji').innerText = condition.emoji;
+      });
+  })
+  .catch(err => console.error('Dashboard fetch error:', err));
+</script>
+</body>
 </html>
