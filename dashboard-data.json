@@ -37,7 +37,7 @@
       { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More", "location": "Studio B", "instructor": "Emma" },
       { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
       { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Spin", "location": "Studio", "instructor": "Tom Waldron" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Spin", "location": "Studio", "instructor": "Peggy Anderson" },
       { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Gymnasium", "instructor": "Fred Dyck" }
     ],
     "Saturday": [
@@ -67,6 +67,7 @@
     }
   ]
 }
+
 
 
 
