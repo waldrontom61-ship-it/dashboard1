@@ -1,7 +1,8 @@
 {
   "settings": {
     "gymName": "YMCA of Saskatoon",
-    "rotationSpeed": 4
+    "rotationSpeed": 4,
+    "mediaRotationSpeed": 8
   },
   "media": [
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
@@ -10,46 +11,61 @@
   ],
   "weekly_schedule": {
     "Monday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit" },
-      { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga" }
+      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit", "location": "Gym Floor", "instructor": "David" },
+      { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga", "location": "Studio B", "instructor": "Emma" }
     ],
     "Tuesday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Step" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
+      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": "Lisa" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" }
     ],
     "Wednesday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis" }
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis", "location": "Gym Floor", "instructor": "Kris Seto Davis" }
     ],
     "Thursday": [
-      { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch" },
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" },
-      { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep" }
+      { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch", "location": "Studio A", "instructor": "Tom" },
+      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp", "location": "Outdoor/Studio A", "instructor": "Jessica" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" },
+      { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep", "location": "Pool", "instructor": "Lisa" }
     ],
     "Friday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Spin" },
-      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball" }
+      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More", "location": "Studio B", "instructor": "Emma" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Spin", "location": "Cycle Studio", "instructor": "David" },
+      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Court 1", "instructor": "Open Play" }
     ],
     "Saturday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle" },
-      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
+      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
+      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio B", "instructor": "Emma" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" }
     ],
-    "Sunday": [
-      { "time": "", "event": "NO CLASS" }
-    ]
+    "Sunday": []
   },
   "classes": [],
-  "announcements": []
+  "announcements": [
+    {
+      "id": 1,
+      "title": "🏊 Pool Hours",
+      "message": "Open swim available daily",
+      "details": "6 AM - 10 PM Monday-Friday, 8 AM - 8 PM weekends",
+      "severity": "good",
+      "permanent": true
+    },
+    {
+      "id": 2,
+      "title": "📱 Download Our App",
+      "message": "Book classes and track workouts",
+      "details": "Available on iOS and Android",
+      "severity": "good",
+      "permanent": true
+    }
+  ]
 }
