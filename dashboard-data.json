@@ -40,7 +40,7 @@
       { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
       { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
       { "time": "12:10 PM - 12:50 PM", "event": "Spin", "location": "Cycle Studio", "instructor": "David" },
-      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Court 1", "instructor": "Open Play" }
+      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Gymnasium", "instructor": "Fred Dyck" }
     ],
     "Saturday": [
       { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
@@ -69,3 +69,4 @@
     }
   ]
 }
+
