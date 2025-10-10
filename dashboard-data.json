@@ -41,9 +41,9 @@
       { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Gymnasium", "instructor": "Fred" }
     ],
     "Saturday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
-      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio B", "instructor": "Emma" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" }
+      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Studio", "instructor": "" },
+      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio ", "instructor": "" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "" }
     ],
     "Sunday": []
   },
@@ -59,4 +59,5 @@
     }
   ]
 }
+
 
