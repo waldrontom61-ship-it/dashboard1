@@ -3,262 +3,250 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YMCA of Saskatoon TV Dashboard</title>
+<title>YMCA of Saskatoon TV</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body { box-sizing: border-box; background-color:#000; font-family:sans-serif; color:#fff; }
-@keyframes slideIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
-@keyframes slideOut { from { transform: translateX(0); opacity:1; } to { transform: translateX(-100%); opacity:0; } }
-.slide-in { animation: slideIn 0.5s ease-out; }
-.slide-out { animation: slideOut 0.5s ease-in; }
-.pulse-dot { animation: pulse 2s infinite; }
-@keyframes pulse {0%,100%{opacity:1;}50%{opacity:0.7;}}
+    body { box-sizing: border-box; background-color: #000; font-family: sans-serif; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity:1; } to { transform: translateX(-100%); opacity:0; } }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    .slide-in { animation: slideIn 0.5s ease-out; }
+    .slide-out { animation: slideOut 0.5s ease-in; }
+    .pulse-dot { animation: pulse 2s infinite; }
 </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
 
-<!-- Main layout -->
-<div class="flex h-screen">
-
-  <!-- TV Content -->
-  <div class="w-3/5 flex items-center justify-center bg-gray-900">
-    <div class="text-center">
-      <div class="text-6xl mb-4" id="logo">🟦</div>
-      <h1 class="text-4xl font-bold" id="title">YMCA of Saskatoon</h1>
-      <p class="text-xl opacity-75 mt-4">Your regular TV content area</p>
+<!-- Top Header -->
+<div class="bg-gray-900 bg-opacity-80 p-4 flex justify-between items-center text-white">
+    <div class="flex items-center gap-3">
+        <img src="https://ymcasaskatoon.org/wp-content/uploads/2025/09/YMCA-logo.png" alt="YMCA Logo" class="h-12">
+        <h1 class="text-2xl font-bold">YMCA of Saskatoon</h1>
     </div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 relative overflow-hidden">
-    <!-- Header -->
-    <div class="bg-black bg-opacity-30 p-4 text-center">
-      <h2 class="text-2xl font-bold">💪 YMCA of Saskatoon</h2>
-      <div class="flex items-center justify-center mt-2">
-        <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot mr-2"></div>
-        <span class="text-sm">LIVE UPDATES</span>
-      </div>
-    </div>
-
-    <!-- Content -->
-    <div class="h-full pb-32 relative">
-      <!-- Classes -->
-      <div id="content-classes" class="content-section p-6 absolute inset-0">
-        <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">🕐 TODAY'S CLASSES</h3>
-        <div id="classList" class="space-y-3"></div>
-      </div>
-
-      <!-- Announcements -->
-      <div id="content-announcements" class="content-section p-6 absolute inset-0 hidden">
-        <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">📢 ANNOUNCEMENTS</h3>
-        <div id="announcementsList" class="space-y-4"></div>
-      </div>
-
-      <!-- WOD -->
-      <div id="content-wod" class="content-section p-6 absolute inset-0 hidden">
-        <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">🔥 WORKOUT OF THE DAY</h3>
-        <div class="bg-white bg-opacity-20 rounded-lg p-4 mb-4">
-          <h4 class="font-bold text-lg mb-3" id="wodTitle"></h4>
-          <div class="space-y-2 text-sm" id="wodExercises"></div>
-        </div>
-      </div>
-
-      <!-- Spotlight -->
-      <div id="content-spotlight" class="content-section p-6 absolute inset-0 hidden">
-        <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">⭐ MEMBER SPOTLIGHT</h3>
-        <div class="text-center mb-4">
-          <div class="w-20 h-20 bg-white bg-opacity-30 rounded-full mx-auto mb-3 flex items-center justify-center text-3xl">👤</div>
-          <h4 class="font-bold text-lg" id="memberName"></h4>
-          <div class="text-sm opacity-90" id="memberAchievement"></div>
-        </div>
-        <div class="bg-white bg-opacity-20 rounded-lg p-4">
-          <div class="text-sm" id="memberQuote"></div>
-        </div>
-      </div>
-
-      <!-- Motivation -->
-      <div id="content-motivation" class="content-section p-6 absolute inset-0 hidden">
-        <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">💪 DAILY MOTIVATION</h3>
-        <div class="text-center mb-6">
-          <blockquote class="text-lg font-semibold mb-4" id="motivationalQuote"></blockquote>
-          <div class="text-sm opacity-75" id="fitnesstip"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer Time/Weather -->
-    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4">
-      <div class="flex justify-between items-center text-sm">
-        <div>
-          <div class="font-semibold" id="currentTime">5:45 PM</div>
-          <div class="opacity-75" id="currentDate">Monday, Dec 16</div>
-        </div>
-        <div class="text-right">
-          <div class="font-semibold" id="weather">72°F ☀️</div>
-          <div class="opacity-75">Perfect workout weather!</div>
-        </div>
-      </div>
-    </div>
-  </div>
+    <button id="adminToggle" class="bg-gray-800 bg-opacity-50 hover:bg-opacity-70 px-3 py-1 rounded">⚙️</button>
 </div>
 
-<!-- Admin Toggle -->
-<button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 bg-opacity-30 text-white px-2 py-1 rounded z-50">⚙️</button>
+<!-- Main Content Area -->
+<div class="flex flex-1 overflow-hidden">
+    <!-- Media / Ads (70%) -->
+    <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden">
+        <div id="mainContent" class="w-full h-full flex items-center justify-center">
+            <div class="text-white text-center">
+                <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
+                <p class="text-xl opacity-75">Media rotation from JSON</p>
+                <div class="mt-8 text-6xl">🖼️</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar (30%) -->
+    <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 text-white relative overflow-hidden">
+        <!-- Header in Sidebar -->
+        <div class="bg-black bg-opacity-30 p-4 text-center">
+            <div class="flex items-center justify-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+                <span class="text-sm">LIVE UPDATES</span>
+            </div>
+        </div>
+
+        <!-- Content Sections -->
+        <div class="h-full overflow-y-auto p-4">
+            <!-- Classes -->
+            <div id="content-classes" class="mb-6">
+                <h2 class="font-bold text-xl mb-3 border-b border-white border-opacity-30 pb-2">🕐 TODAY'S CLASSES</h2>
+                <div id="classList" class="space-y-2"></div>
+            </div>
+
+            <!-- Announcements -->
+            <div id="content-announcements" class="mb-6">
+                <h2 class="font-bold text-xl mb-3 border-b border-white border-opacity-30 pb-2">📢 ANNOUNCEMENTS</h2>
+                <div id="announcementsList" class="space-y-2"></div>
+            </div>
+
+            <!-- Workout of the Day + Tip -->
+            <div id="content-wod" class="mb-6">
+                <h2 class="font-bold text-xl mb-3 border-b border-white border-opacity-30 pb-2">🔥 WORKOUT OF THE DAY</h2>
+                <div class="bg-white bg-opacity-20 rounded-lg p-3 mb-2">
+                    <h3 class="font-bold text-lg" id="wodTitle"></h3>
+                    <ul class="text-sm mt-2 list-disc list-inside" id="wodExercises"></ul>
+                </div>
+                <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                    <h3 class="font-semibold text-sm mb-1">💡 Today's Tip</h3>
+                    <div class="text-sm" id="dailyTip"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4 text-sm flex justify-between">
+            <div>
+                <div id="currentTime" class="font-semibold">5:45 PM</div>
+                <div id="currentDate" class="opacity-75">Monday, Dec 16</div>
+            </div>
+            <div class="text-right">
+                <div id="weather" class="font-semibold">72°F ☀️</div>
+                <div class="opacity-75">Perfect workout weather!</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Admin Panel -->
-<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
-  <div class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
-        <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-      </div>
+<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
+                <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
 
-      <div class="space-y-6">
+            <!-- Classes -->
+            <div class="mb-4">
+                <h3 class="font-semibold mb-2">Update Today's Classes</h3>
+                <input id="className" class="w-full p-2 border rounded mb-2" placeholder="Class Name">
+                <input id="classTime" class="w-full p-2 border rounded mb-2" placeholder="Time & Location">
+                <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
+                <button id="clearSchedule" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear All</button>
+            </div>
 
-        <!-- Classes -->
-        <div>
-          <h3 class="font-semibold mb-2">Classes</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
-            <input id="className" class="p-2 border rounded" placeholder="Class Name">
-            <input id="classTime" class="p-2 border rounded" placeholder="Time & Location">
-            <input id="spotsLeft" class="p-2 border rounded" placeholder="Spots Left" type="number">
-          </div>
-          <div class="flex gap-2">
-            <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
-            <button id="clearSchedule" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear All</button>
-          </div>
+            <!-- Announcements -->
+            <div class="mb-4">
+                <h3 class="font-semibold mb-2">Add Announcement</h3>
+                <textarea id="quickAnnouncement" class="w-full p-2 border rounded mb-2" placeholder="Enter announcement"></textarea>
+                <button id="addAnnouncement" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Add</button>
+            </div>
         </div>
-
-        <!-- WOD -->
-        <div>
-          <h3 class="font-semibold mb-2">Workout of the Day</h3>
-          <input id="wodTitleInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Workout Title">
-          <textarea id="wodExercisesInput" class="w-full p-3 border rounded-lg" rows="4" placeholder="Exercise list (one per line)"></textarea>
-          <button id="updateWOD" class="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Update WOD</button>
-        </div>
-
-        <!-- Spotlight -->
-        <div>
-          <h3 class="font-semibold mb-2">Member Spotlight</h3>
-          <input id="memberNameInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Member Name">
-          <input id="memberAchievementInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Achievement">
-          <textarea id="memberQuoteInput" class="w-full p-3 border rounded-lg mb-2" rows="3" placeholder="Member Quote"></textarea>
-          <button id="updateSpotlight" class="mt-2 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Update Spotlight</button>
-        </div>
-
-        <!-- Motivation -->
-        <div>
-          <h3 class="font-semibold mb-2">Daily Motivation</h3>
-          <input id="motivationQuoteInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Motivational Quote">
-          <textarea id="fitnessTipInput" class="w-full p-3 border rounded-lg" rows="2" placeholder="Fitness Tip"></textarea>
-          <button id="updateMotivation" class="mt-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Update Motivation</button>
-        </div>
-
-        <button id="exportJSON" class="w-full mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Copy JSON for Save</button>
-
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
-// JSON data structure
-let tvData = {
-  logo: "🟦",
-  title: "YMCA of Saskatoon",
-  classes: [],
-  announcements: [],
-  wod: {title:"", exercises:[]},
-  spotlight: {name:"", achievement:"", quote:""},
-  motivation: {quote:"", tip:""}
+// ------------------------
+// JSON Data
+// ------------------------
+let gymData = {
+  "media": [
+    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
+    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
+    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
+  ],
+  "quotes": [
+    "Welcome to the YMCA of Saskatoon",
+    "Join today",
+    "Fall programs start next week",
+    "Register online today!",
+    "Check out our swimming schedule",
+    "New fitness classes available"
+  ],
+  "weekly_schedule": {
+    "Monday": {
+      "classes": [
+        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle" },
+        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+        { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
+        { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit" },
+        { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga" }
+      ],
+      "wod": { "title": "Full Body Blast", "exercises": ["3 sets x 12 Push-ups","3 sets x 10 Pull-ups","3 sets x 15 Dumbbell Rows"] },
+      "tip": "Stay hydrated and stretch before your first class."
+    },
+    "Tuesday": {
+      "classes":[
+        { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
+        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+        { "time": "12:10 PM - 12:50 PM", "event": "Step" },
+        { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
+      ],
+      "wod": { "title": "Cardio Core", "exercises":["20 min cycling","15 min planks","10 min stretching"] },
+      "tip": "Focus on controlled breathing during your workout."
+    }
+    // Add rest of week here...
+  },
+  "announcements": []
 };
 
-// Render functions
-function renderTV() {
-  document.getElementById('logo').textContent = tvData.logo;
-  document.getElementById('title').textContent = tvData.title;
+// ------------------------
+// Functions
+// ------------------------
+let mediaIndex = 0;
+function rotateMedia() {
+    const main = document.getElementById('mainContent');
+    const item = gymData.media[mediaIndex];
+    if(item.type==='image'){
+        main.innerHTML=`<img src="${item.src}" class="max-w-full max-h-full object-contain" alt="Media">`;
+    }
+    mediaIndex = (mediaIndex+1)%gymData.media.length;
+}
+setInterval(rotateMedia,10000);
+rotateMedia();
 
-  // Classes
-  const classList = document.getElementById('classList');
-  classList.innerHTML = '';
-  tvData.classes.forEach(c=>{
-    const div = document.createElement('div');
-    div.className = 'bg-white bg-opacity-20 rounded-lg p-3';
-    div.innerHTML = `<div class="font-semibold">${c.name}</div><div class="text-sm opacity-90">${c.time}</div>${c.spots?`<div class="text-xs mt-1">${c.spots} spots left</div>`:""}`;
-    classList.appendChild(div);
-  });
-
-  // WOD
-  document.getElementById('wodTitle').textContent = tvData.wod.title;
-  document.getElementById('wodExercises').innerHTML = tvData.wod.exercises.map(e=>`• ${e}`).join('<br>');
-
-  // Spotlight
-  document.getElementById('memberName').textContent = tvData.spotlight.name;
-  document.getElementById('memberAchievement').textContent = tvData.spotlight.achievement;
-  document.getElementById('memberQuote').textContent = tvData.spotlight.quote;
-
-  // Motivation
-  document.getElementById('motivationalQuote').textContent = tvData.motivation.quote;
-  document.getElementById('fitnesstip').textContent = tvData.motivation.tip;
+function renderClasses(){
+    const classList = document.getElementById('classList');
+    const today = new Date().toLocaleDateString('en-US',{weekday:'long'});
+    const data = gymData.weekly_schedule[today]?.classes || [];
+    if(data.length===0){
+        classList.innerHTML='<div>No Classes Today</div>';
+    } else {
+        classList.innerHTML = data.map(c=>`<div>${c.time} - ${c.event}</div>`).join('');
+    }
+}
+function renderWOD(){
+    const today = new Date().toLocaleDateString('en-US',{weekday:'long'});
+    const wod = gymData.weekly_schedule[today]?.wod;
+    const tip = gymData.weekly_schedule[today]?.tip;
+    if(wod){
+        document.getElementById('wodTitle').textContent=wod.title;
+        document.getElementById('wodExercises').innerHTML=wod.exercises.map(e=>`<li>${e}</li>`).join('');
+    }
+    if(tip) document.getElementById('dailyTip').textContent=tip;
+}
+function renderAnnouncements(){
+    const annDiv = document.getElementById('announcementsList');
+    annDiv.innerHTML = gymData.announcements.map(a=>`<div class="bg-white bg-opacity-20 p-2 rounded">${a}</div>`).join('');
 }
 
-// Admin toggle
+// ------------------------
+// Admin Panel
+// ------------------------
 document.getElementById('adminToggle').addEventListener('click',()=>document.getElementById('adminPanel').classList.remove('hidden'));
 document.getElementById('closeAdmin').addEventListener('click',()=>document.getElementById('adminPanel').classList.add('hidden'));
 
-// Classes add/clear
 document.getElementById('addToSchedule').addEventListener('click',()=>{
-  const name = document.getElementById('className').value.trim();
-  const time = document.getElementById('classTime').value.trim();
-  const spots = document.getElementById('spotsLeft').value.trim();
-  if(name && time){tvData.classes.push({name,time,spots}); renderTV();
-    document.getElementById('className').value='';
-    document.getElementById('classTime').value='';
-    document.getElementById('spotsLeft').value='';
-  }
+    const className=document.getElementById('className').value.trim();
+    const classTime=document.getElementById('classTime').value.trim();
+    if(className&&classTime){
+        const today=new Date().toLocaleDateString('en-US',{weekday:'long'});
+        gymData.weekly_schedule[today].classes.push({time:classTime,event:className});
+        renderClasses();
+    }
 });
 document.getElementById('clearSchedule').addEventListener('click',()=>{
-  if(confirm("Clear all classes?")){tvData.classes=[]; renderTV();}
+    const today=new Date().toLocaleDateString('en-US',{weekday:'long'});
+    gymData.weekly_schedule[today].classes=[];
+    renderClasses();
+});
+document.getElementById('addAnnouncement').addEventListener('click',()=>{
+    const ann=document.getElementById('quickAnnouncement').value.trim();
+    if(ann){gymData.announcements.push(ann); renderAnnouncements();}
 });
 
-// WOD update
-document.getElementById('updateWOD').addEventListener('click',()=>{
-  tvData.wod.title=document.getElementById('wodTitleInput').value.trim();
-  tvData.wod.exercises=document.getElementById('wodExercisesInput').value.trim().split('\n');
-  renderTV();
-  document.getElementById('wodTitleInput').value='';
-  document.getElementById('wodExercisesInput').value='';
-});
+// ------------------------
+// Clock + Date
+// ------------------------
+function updateTime(){
+    const now=new Date();
+    document.getElementById('currentTime').textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('currentDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+}
+setInterval(updateTime,1000);
+updateTime();
 
-// Spotlight update
-document.getElementById('updateSpotlight').addEventListener('click',()=>{
-  tvData.spotlight.name=document.getElementById('memberNameInput').value.trim();
-  tvData.spotlight.achievement=document.getElementById('memberAchievementInput').value.trim();
-  tvData.spotlight.quote=document.getElementById('memberQuoteInput').value.trim();
-  renderTV();
-  document.getElementById('memberNameInput').value='';
-  document.getElementById('memberAchievementInput').value='';
-  document.getElementById('memberQuoteInput').value='';
-});
+// ------------------------
+// Initial Render
+// ------------------------
+renderClasses();
+renderWOD();
+renderAnnouncements();
 
-// Motivation update
-document.getElementById('updateMotivation').addEventListener('click',()=>{
-  tvData.motivation.quote=document.getElementById('motivationQuoteInput').value.trim();
-  tvData.motivation.tip=document.getElementById('fitnessTipInput').value.trim();
-  renderTV();
-  document.getElementById('motivationQuoteInput').value='';
-  document.getElementById('fitnessTipInput').value='';
-});
-
-// Export JSON
-document.getElementById('exportJSON').addEventListener('click',()=>{
-  navigator.clipboard.writeText(JSON.stringify(tvData,null,2));
-  alert("JSON copied! Paste it into your GitHub data.json for permanent save.");
-});
-
-// Initialize
-renderTV();
 </script>
 </body>
 </html>
