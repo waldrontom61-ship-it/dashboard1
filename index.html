@@ -910,15 +910,7 @@
         // Load data from JSON file
         async function loadJSONData() {
             try {
-                // Add cache-busting parameter to ensure fresh data
-                const cacheBuster = new Date().getTime();
-                const response = await fetch(`${JSON_URL}?v=${cacheBuster}`, {
-                    cache: 'no-cache',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                        'Pragma': 'no-cache'
-                    }
-                });
+                const response = await fetch(JSON_URL);
                 const jsonData = await response.json();
                 
                 // Update dashboard data with JSON data
@@ -939,7 +931,7 @@
                 document.getElementById('mediaRotationSpeed').value = dashboardData.settings.mediaRotationSpeed;
                 document.getElementById('gymNameDisplay').textContent = dashboardData.settings.gymName;
                 
-                console.log('JSON data loaded successfully from GitHub with cache-busting');
+                console.log('JSON data loaded successfully from GitHub');
                 
             } catch (error) {
                 console.log('Could not load JSON data from GitHub, using defaults:', error);
@@ -1544,5 +1536,5 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c7c3157782493d',t:'MTc2MDExNjU1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c7b6e2d661493d',t:'MTc2MDExNjA1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
