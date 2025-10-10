@@ -3,315 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YMCA Overlay Dashboard</title>
+<title>Gym TV Sidebar Overlay</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  :root {
-    --title-size: 40px;
-    --weather-size: 26px;
-    --date-size: 28px;
-    --class-size: 20px;
-    --sidebar-padding: 25px;
-    --sidebar-bg: rgba(224, 0, 52, 0.9);
-  }
-
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
-
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: #000;
-  }
-
-  .media-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 70%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 0;
-    background: #000;
-  }
-
-  .media-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-  }
-
-  .media-slide.active {
-    opacity: 1;
-    z-index: 1;
-  }
-
-  .media-slide img,
-  .media-slide iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    z-index: 1;
-    display: flex;
-    align-items: stretch;
-    pointer-events: none;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: 100%;
-    background-color: var(--sidebar-bg);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: var(--sidebar-padding);
-    box-sizing: border-box;
-    pointer-events: auto;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  #sidebar-header {
-    text-align: center;
-    font-size: var(--title-size);
-    font-weight: 900;
-    margin-bottom: 20px;
-    line-height: 1.2;
-  }
-
-  .weather-nowplaying {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
-    font-size: var(--weather-size);
-    gap: 10px;
-  }
-
-  .weather p {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  #weather-emoji {
-    font-size: 1.4em;
-  }
-
-  .schedule {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  #schedule-header {
-    text-align: center;
-    font-size: var(--date-size);
-    font-weight: 900;
-    margin-bottom: 20px;
-    padding-bottom: 0;
-  }
-
-  .schedule ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 auto;
-    width: 90%;
-  }
-
-  .schedule li {
-    padding: 10px;
-    text-align: left;
-    font-size: var(--class-size);
-  }
-
-  #quote-slider {
-    text-align: center;
-    font-size: 28px;
-    font-style: italic;
-    margin: 20px 0;
-    line-height: 1.4;
-    min-height: 60px;
-  }
-
-  #logo-container {
-    text-align: center;
-    margin-top: auto;
-    margin-bottom: 20px;
-  }
-
-  #logo {
-    width: 80%;
-    max-width: 180px;
-  }
-
-  .media-container,
-  .media-slide,
-  .media-slide img,
-  .media-slide iframe {
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    will-change: opacity;
-  }
-
-  .media-container {
-    contain: strict;
-  }
-
-  .overlay {
-    z-index: 10;
-  }
+    body { box-sizing: border-box; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+    .slide-in { animation: slideIn 0.5s ease-out; }
+    .slide-out { animation: slideOut 0.5s ease-in; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+    .pulse-dot { animation: pulse 2s infinite; }
 </style>
 </head>
-<body>
+<body class="bg-black min-h-full font-sans">
+<div class="flex h-screen">
 
-<div class="media-container" id="media-container"></div>
-
-<div class="overlay">
-  <div class="sidebar">
-    <h2 id="sidebar-header">YMCA of Saskatoon Schedule</h2>
-
-    <div class="weather-nowplaying">
-      <div class="weather">
-        <p>
-          <span id="weather-emoji">⛅</span>
-          <span id="temperature">--</span> |
-          <span id="condition">--</span> |
-          <span id="wind">--</span>
-        </p>
+  <!-- Main TV Content Area (70%) -->
+  <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden">
+      <div id="mainContent" class="w-full h-full flex items-center justify-center">
+          <div class="text-white text-center">
+              <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
+              <p class="text-xl opacity-75">Loading media...</p>
+              <div class="mt-8 text-6xl">🖼️</div>
+          </div>
       </div>
-    </div>
+  </div>
 
-    <div class="schedule">
-      <div id="schedule-header"></div>
-      <ul id="schedule"></ul>
-    </div>
+  <!-- Sidebar Overlay (30%) -->
+  <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 text-white relative overflow-hidden">
+      <!-- Header -->
+      <div class="bg-black bg-opacity-30 p-4 text-center">
+          <h2 class="text-2xl font-bold">💪 FitZone Gym</h2>
+          <div class="flex items-center justify-center mt-2">
+              <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot mr-2"></div>
+              <span class="text-sm">LIVE UPDATES</span>
+          </div>
+      </div>
 
-    <div id="quote-slider"></div>
+      <!-- Content Area -->
+      <div class="h-full pb-32 relative">
+          <!-- Classes Section -->
+          <div id="content-classes" class="content-section p-6 absolute inset-0">
+              <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                  🕐 TODAY'S CLASSES
+              </h3>
+              <div class="space-y-3" id="classList">
+                  <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
+                      <div class="font-semibold">Loading schedule...</div>
+                  </div>
+              </div>
+          </div>
 
-    <div id="logo-container">
-      <img id="logo" src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png" alt="YMCA Logo">
-    </div>
+          <!-- Announcements Section -->
+          <div id="content-announcements" class="content-section p-6 absolute inset-0 hidden">
+              <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                  📢 ANNOUNCEMENTS
+              </h3>
+              <div class="space-y-4" id="announcementsList">
+                  <div class="bg-yellow-500 bg-opacity-20 border-l-4 border-yellow-500 p-4 rounded">
+                      <div class="font-semibold">New Equipment Arrival!</div>
+                      <div class="text-sm mt-1">Check out our new rowing machines on the 2nd floor</div>
+                  </div>
+                  <div class="bg-blue-500 bg-opacity-20 border-l-4 border-blue-500 p-4 rounded">
+                      <div class="font-semibold">Holiday Hours</div>
+                      <div class="text-sm mt-1">We'll be open 6AM-8PM on Christmas Eve</div>
+                  </div>
+                  <div class="bg-green-500 bg-opacity-20 border-l-4 border-green-500 p-4 rounded">
+                      <div class="font-semibold">Member Referral Program</div>
+                      <div class="text-sm mt-1">Bring a friend and get 1 month free!</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Footer with Time and Weather -->
+      <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4">
+          <div class="flex justify-between items-center text-sm">
+              <div>
+                  <div class="font-semibold" id="currentTime">--:--</div>
+                  <div class="opacity-75" id="currentDate">Loading...</div>
+              </div>
+              <div class="text-right">
+                  <div class="font-semibold" id="weather">--°C ⛅</div>
+                  <div class="opacity-75" id="weatherDesc">Loading weather...</div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Admin Panel Toggle -->
+<button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 bg-opacity-30 hover:bg-opacity-60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm z-50 transition-all duration-200">
+    ⚙️
+</button>
+
+<!-- Admin Panel Modal -->
+<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
+  <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
+          <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
+              <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+          </div>
+          <!-- Admin content remains same as Canva -->
+      </div>
   </div>
 </div>
 
 <script>
-fetch('dashboard-data.json')
-  .then(res => res.json())
-  .then(data => {
-    // === Media Slideshow ===
-    const mediaContainer = document.getElementById('media-container');
-    const slides = [];
+let currentContentIndex = 0;
+const contentSections = ['classes','announcements'];
 
-    data.media.forEach(item => {
-      const slide = document.createElement('div');
-      slide.className = 'media-slide';
+// Gym Data JSON (Pixyl-style)
+let gymData = {
+  media: [
+    { type: "image", src: "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
+    { type: "image", src: "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
+    { type: "image", src: "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
+  ],
+  weekly_schedule: {
+    "Monday":[{"time":"9:00 AM - 9:45 AM","event":"NEW CLASS OCT 20Y-Cycle"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"10:00 AM - 10:45 AM","event":"NEW CLASS OCT 20 Tabata Blast"},{"time":"12:10 PM - 12:50 PM","event":"Y-Fit Circuit"},{"time":"6:15 PM - 7:30 PM","event":"Beginner Yoga"}],
+    "Tuesday":[{"time":"8:00 AM - 8:45 AM","event":"Active Aging with Fred Dyck"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"12:10 PM - 12:50 PM","event":"Step"},{"time":"1:30 PM - 2:15 PM","event":"Aquafit"}],
+    "Wednesday":[{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"12:10 PM - 12:50 PM","event":"Y-Fit Full Body with Kris Seto Davis"}],
+    "Thursday":[{"time":"6:15 AM - 7:00 AM","event":"Strength, Sweat & Stretch"},{"time":"8:00 AM - 8:45 AM","event":"Active Aging with Fred Dyck"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"12:10 PM - 12:50 PM","event":"Bootcamp"},{"time":"1:30 PM - 2:15 PM","event":"Aquafit"},{"time":"7:00 PM - 7:45 PM","event":"OCT 16 Aquastep"}],
+    "Friday":[{"time":"9:00 AM - 9:45 AM","event":"NEW CLASS OCT 24 Core & More"},{"time":"9:00 AM - 9:45 AM","event":"Aquafit"},{"time":"10:00 AM - 10:45 AM","event":"NEW CLASS OCT 20 Tabata Blast"},{"time":"12:10 PM - 12:50 PM","event":"Spin"},{"time":"12:00 PM - 1:30 PM","event":"Pickleball"}],
+    "Saturday":[{"time":"8:00 AM - 8:45 AM","event":"NEW CLASS OCT 25 Y-Cycle"},{"time":"10:00 AM - 11:00 AM","event":"Energizing Yoga"},{"time":"1:30 PM - 2:15 PM","event":"Aquafit"}],
+    "Sunday":[{"time":"","event":"NO CLASS"}]
+  }
+};
 
-      if (item.type === 'image') {
-        const img = document.createElement('img');
-        img.src = item.src;
-        slide.appendChild(img);
-      } else if (item.type === 'video') {
-        const iframe = document.createElement('iframe');
-        iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
-        iframe.frameBorder = "0";
-        iframe.allow = "autoplay; fullscreen";
-        iframe.allowFullscreen = true;
-        slide.appendChild(iframe);
-      }
+// Functions
+function getTodayData(){
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const today=days[new Date().getDay()];
+  return gymData.weekly_schedule[today] || [];
+}
 
-      mediaContainer.appendChild(slide);
-      slides.push(slide);
-    });
+// Render schedule dynamically
+function renderClasses(){
+  const classList=document.getElementById('classList');
+  const today=getTodayData();
+  if(today.length===0){
+    classList.innerHTML='<div class="bg-white bg-opacity-20 rounded-lg p-3 text-center"><div class="font-semibold">No Classes Scheduled</div></div>';
+    return;
+  }
+  classList.innerHTML=today.map(item=>`
+    <div class="bg-white bg-opacity-20 rounded-lg p-3">
+        <div class="font-semibold">${item.event}</div>
+        <div class="text-sm opacity-90">${item.time}</div>
+    </div>
+  `).join('');
+}
 
-    let currentSlide = 0;
-    if (slides.length > 0) {
-      slides[0].classList.add('active');
-      setInterval(() => {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-      }, 15000);
-    }
+// Media rotation
+let currentMediaIndex=0;
+function rotateMedia(){
+  const mainContent=document.getElementById('mainContent');
+  if(!gymData.media || gymData.media.length===0) return;
+  const media=gymData.media[currentMediaIndex];
+  if(media.type==='image'){
+    mainContent.innerHTML='<img src="'+media.src+'" class="max-w-full max-h-full object-contain" onerror="this.style.display=\'none\'">';
+  }
+  currentMediaIndex=(currentMediaIndex+1)%gymData.media.length;
+}
+setInterval(rotateMedia,8000);
+rotateMedia(); // first display
 
-    // === Schedule ===
-    const now = new Date();
-    const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const todayName = days[now.getDay()];
-    document.getElementById('schedule-header').textContent =
-      now.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' });
+// Update time/date
+function updateDateTime(){
+  const now=new Date();
+  document.getElementById('currentTime').textContent=now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  document.getElementById('currentDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+}
+setInterval(updateDateTime,60000);
+updateDateTime();
 
-    const scheduleList = document.getElementById('schedule');
-    scheduleList.innerHTML = '';
-    const todaySchedule = data.weekly_schedule[todayName] || [];
-    todaySchedule.forEach(item => {
-      const li = document.createElement('li');
-      li.innerText = item.time + ' - ' + item.event;
-      scheduleList.appendChild(li);
-    });
+// Admin Panel
+document.getElementById('adminToggle').addEventListener('click',()=>document.getElementById('adminPanel').classList.remove('hidden'));
+document.getElementById('closeAdmin').addEventListener('click',()=>document.getElementById('adminPanel').classList.add('hidden'));
+document.getElementById('adminPanel').addEventListener('click',e=>{if(e.target.id==='adminPanel'){document.getElementById('adminPanel').classList.add('hidden');}});
 
-    // === Quotes ===
-    const quotes = data.quotes || [];
-    const slider = document.getElementById('quote-slider');
-    let current = 0;
-    function showQuote() {
-      slider.textContent = quotes[current];
-      current = (current + 1) % quotes.length;
-    }
-    showQuote();
-    setInterval(showQuote, 5000);
+// Initial render
+renderClasses();
 
-    // === Weather ===
-    fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
-      .then(res => res.json())
-      .then(weather => {
-        const tempC = weather.current_weather.temperature;
-        const wind = weather.current_weather.windspeed;
-        const code = weather.current_weather.weathercode;
-        const conditionMap = {
-          0:{text:'Clear sky', emoji:'☀️'},
-          1:{text:'Mainly clear', emoji:'🌤️'},
-          2:{text:'Partly cloudy', emoji:'⛅'},
-          3:{text:'Overcast', emoji:'☁️'},
-          45:{text:'Fog', emoji:'🌫️'},
-          48:{text:'Fog', emoji:'🌫️'},
-          51:{text:'Drizzle', emoji:'🌦️'},
-          61:{text:'Rain', emoji:'🌧️'},
-          71:{text:'Snow', emoji:'❄️'},
-          80:{text:'Showers', emoji:'🌦️'},
-          95:{text:'Thunderstorm', emoji:'⛈️'},
-          56:{text:'Smoke', emoji:'💨'},
-          57:{text:'Dense smoke', emoji:'💨'}
-        };
-        const condition = conditionMap[code] || {text:'N/A', emoji:'❔'};
-        document.getElementById('temperature').innerText = `${tempC}°C`;
-        document.getElementById('wind').innerText = `${wind} km/h`;
-        document.getElementById('condition').innerText = condition.text;
-        document.getElementById('weather-emoji').innerText = condition.emoji;
-      });
-  })
-  .catch(err => console.error('Dashboard fetch error:', err));
 </script>
-
 </body>
 </html>
