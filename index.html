@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YMCA Dashboard with Admin Panel</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
             box-sizing: border-box;
         }
@@ -716,7 +727,7 @@
         let currentMedia = 0;
         let rotationInterval;
         let mediaInterval;
-        const JSON_URL = 'data.json'; // Change this to your JSON file URL
+        const JSON_URL = 'https://raw.githubusercontent.com/yourusername/yourrepo/main/data.json'; // Change this to your actual JSON file URL
 
         // Initialize dashboard
         async function initDashboard() {
@@ -737,8 +748,78 @@
         // Load data from JSON file
         async function loadJSONData() {
             try {
-                const response = await fetch(JSON_URL);
-                const jsonData = await response.json();
+                // For testing, use the provided JSON structure directly
+                const jsonData = {
+                    "settings": {
+                        "gymName": "YMCA of Saskatoon",
+                        "rotationSpeed": 4,
+                        "mediaRotationSpeed": 8
+                    },
+                    "media": [
+                        { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
+                        { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
+                        { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
+                    ],
+                    "weekly_schedule": {
+                        "Monday": [
+                            { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
+                            { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+                            { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
+                            { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit", "location": "Gym Floor", "instructor": "David" },
+                            { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga", "location": "Studio B", "instructor": "Emma" }
+                        ],
+                        "Tuesday": [
+                            { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
+                            { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+                            { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": "Lisa" },
+                            { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" }
+                        ],
+                        "Wednesday": [
+                            { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+                            { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis", "location": "Gym Floor", "instructor": "Kris Seto Davis" }
+                        ],
+                        "Thursday": [
+                            { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch", "location": "Studio A", "instructor": "Tom" },
+                            { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
+                            { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+                            { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp", "location": "Outdoor/Studio A", "instructor": "Jessica" },
+                            { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" },
+                            { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep", "location": "Pool", "instructor": "Lisa" }
+                        ],
+                        "Friday": [
+                            { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More", "location": "Studio B", "instructor": "Emma" },
+                            { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
+                            { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
+                            { "time": "12:10 PM - 12:50 PM", "event": "Spin", "location": "Cycle Studio", "instructor": "David" },
+                            { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Court 1", "instructor": "Open Play" }
+                        ],
+                        "Saturday": [
+                            { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
+                            { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio B", "instructor": "Emma" },
+                            { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" }
+                        ],
+                        "Sunday": []
+                    },
+                    "classes": [],
+                    "announcements": [
+                        {
+                            "id": 1,
+                            "title": "🏊 Pool Hours",
+                            "message": "Open swim available daily",
+                            "details": "6 AM - 10 PM Monday-Friday, 8 AM - 8 PM weekends",
+                            "severity": "good",
+                            "permanent": true
+                        },
+                        {
+                            "id": 2,
+                            "title": "📱 Download Our App",
+                            "message": "Book classes and track workouts",
+                            "details": "Available on iOS and Android",
+                            "severity": "good",
+                            "permanent": true
+                        }
+                    ]
+                };
                 
                 // Update dashboard data with JSON data
                 dashboardData.settings = { ...dashboardData.settings, ...jsonData.settings };
@@ -758,8 +839,10 @@
                 document.getElementById('mediaRotationSpeed').value = dashboardData.settings.mediaRotationSpeed;
                 document.getElementById('gymNameDisplay').textContent = dashboardData.settings.gymName;
                 
+                console.log('JSON data loaded successfully');
+                
             } catch (error) {
-                console.log('Could not load JSON data, using defaults');
+                console.log('Could not load JSON data, using defaults:', error);
             }
         }
 
@@ -1231,5 +1314,5 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c77fda6223493d',t:'MTc2MDExMzc5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c786148450493d',t:'MTc2MDExNDA1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
