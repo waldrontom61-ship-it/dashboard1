@@ -25,6 +25,7 @@
     overflow: hidden;
     font-family: Arial, sans-serif;
     background: #000;
+    box-sizing: border-box;
   }
 
   /* Media container */
@@ -37,6 +38,10 @@
     overflow: hidden;
     z-index: 0;
     background: #000;
+    contain: strict;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: opacity;
   }
 
   .media-slide {
@@ -47,6 +52,7 @@
     height: 100%;
     opacity: 0;
     transition: opacity 1s ease-in-out;
+    background: #000;
   }
 
   .media-slide.active {
@@ -65,14 +71,14 @@
     display: block;
   }
 
-  /* Sidebar */
+  /* === OVERLAY SIDEBAR === */
   .overlay {
     position: fixed;
     top: 0;
     right: 0;
     width: 30%;
     height: 100%;
-    z-index: 1;
+    z-index: 10;
     display: flex;
     align-items: stretch;
     pointer-events: none;
@@ -92,7 +98,7 @@
     font-family: 'Montserrat', sans-serif;
   }
 
-  /* Title */
+  /* Sidebar Header */
   #sidebar-header {
     text-align: center;
     font-size: var(--title-size);
@@ -174,26 +180,89 @@
     max-width: 180px;
   }
 
-  /* === FIX: Prevent flicker/duplication on slide transitions === */
-  .media-container,
-  .media-slide,
-  .media-slide img,
-  .media-slide iframe {
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    will-change: opacity;
+  /* === ADDITIONAL STYLE FEATURES FROM GYM TV SIDEBAR === */
+
+  .info-card {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .media-container {
-    contain: strict;
+  .card-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
   }
 
-  .media-slide {
-    background: #000;
+  .card-subtitle {
+    font-size: 0.875rem;
+    opacity: 0.9;
   }
 
-  .overlay {
-    z-index: 10;
+  .card-meta {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+  }
+
+  .notification-badge {
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  .urgent-notification {
+    background: linear-gradient(45deg, #f59e0b, #d97706);
+    border: 2px solid #fbbf24;
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .gradient-text {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  .border-glow {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .media-container {
+      width: 100%;
+      height: 60%;
+    }
+    .overlay {
+      width: 100%;
+      height: 40%;
+    }
+    #sidebar-header {
+      font-size: 32px;
+    }
+    #schedule-header {
+      font-size: 24px;
+    }
   }
 </style>
 </head>
@@ -228,11 +297,11 @@
     </div>
   </div>
 </div>
+
 <script>
 fetch('dashboard-data.json')
   .then(res => res.json())
   .then(data => {
-    // --- Media slideshow ---
     const mediaContainer = document.getElementById('media-container');
     const slides = [];
 
@@ -257,7 +326,6 @@ fetch('dashboard-data.json')
       slides.push(slide);
     });
 
-    // Slideshow rotation
     let currentSlide = 0;
     if (slides.length > 0) {
       slides[0].classList.add('active');
@@ -268,7 +336,6 @@ fetch('dashboard-data.json')
       }, 15000);
     }
 
-    // --- Schedule (weekly) ---
     const now = new Date();
     const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
     const todayName = days[now.getDay()];
@@ -285,7 +352,6 @@ fetch('dashboard-data.json')
       scheduleList.appendChild(li);
     });
 
-    // --- Quotes ---
     const quotes = data.quotes || [];
     const slider = document.getElementById('quote-slider');
     let current = 0;
@@ -296,7 +362,6 @@ fetch('dashboard-data.json')
     showQuote();
     setInterval(showQuote,5000);
 
-    // --- Weather ---
     fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true')
       .then(res=>res.json())
       .then(weather=>{
