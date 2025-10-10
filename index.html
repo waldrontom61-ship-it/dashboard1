@@ -135,6 +135,11 @@ html, body {
     max-height: 100%;
     overflow: hidden !important;
 }
+        /* Scale everything down to fit screen */
+body > .main-layout {
+    transform: scale(0.95); /* adjust number if still too big or small */
+    transform-origin: top left;
+}
     </style>
 </head>
 <body>
@@ -621,6 +626,7 @@ window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addCla
 </script>
 </body>
 </html>
+
 
 
 
