@@ -135,6 +135,26 @@ html, body {
     max-height: 100%;
     overflow: hidden !important;
 }
+        /* --- Shrink schedule / classes fonts slightly for sidebar fit --- */
+#classes-container .info-card {
+    font-size: 0.8rem; /* smaller overall text */
+    line-height: 1.1;  /* tighter spacing */
+    padding: 0.4rem;   /* reduce padding */
+    margin-bottom: 0.4rem;
+}
+
+#classes-container .info-card .card-title {
+    font-size: 0.9rem; /* slightly smaller than before */
+    margin-bottom: 0.1rem;
+}
+
+#classes-container .info-card .card-subtitle {
+    font-size: 0.75rem;
+}
+
+#classes-container .info-card .card-meta {
+    font-size: 0.65rem;
+}
     </style>
 </head>
 <body>
@@ -660,4 +680,5 @@ renderAnnouncements = function() { origRenderAnnouncements(); scaleSidebarConten
 </script>
 </body>
 </html>
+
 
