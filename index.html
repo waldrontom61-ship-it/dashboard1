@@ -1,132 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gym TV Display</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-    body { margin: 0; font-family: sans-serif; box-sizing: border-box; }
-    .slide-in { animation: slideIn 0.5s ease-out; }
-    .slide-out { animation: slideOut 0.5s ease-in; }
-    @keyframes slideIn { from {opacity:0; transform:translateX(100%);} to {opacity:1; transform:translateX(0);} }
-    @keyframes slideOut { from {opacity:1; transform:translateX(0);} to {opacity:0; transform:translateX(-100%);} }
-    .pulse-dot { animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.7;} }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym TV Sidebar Overlay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100%); opacity: 0; }
+        }
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        .slide-out {
+            animation: slideOut 0.5s ease-in;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+    </style>
 </head>
-<body class="bg-black min-h-screen flex flex-col">
-
-<div class="flex flex-1 h-screen">
-    <!-- Main Content 70% -->
-    <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden" id="mainContentContainer">
-        <div id="mainContent" class="w-full h-full flex items-center justify-center text-white text-center">
-            <div class="text-4xl">🖼️</div>
-        </div>
-    </div>
-
-    <!-- Sidebar 30% -->
-    <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 text-white relative overflow-hidden">
-        <!-- Header -->
-        <div class="bg-black bg-opacity-30 p-4 text-center">
-            <h2 class="text-2xl font-bold">💪 FitZone Gym</h2>
-            <div class="flex items-center justify-center mt-2">
-                <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot mr-2"></div>
-                <span class="text-sm">LIVE UPDATES</span>
-            </div>
-        </div>
-
-        <!-- Sidebar Content -->
-        <div class="h-full pb-32 relative p-6 overflow-y-auto" id="sidebarContent">
-            <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">🕐 TODAY'S CLASSES</h3>
-            <div id="classList" class="space-y-3"></div>
-
-            <h3 class="text-xl font-bold mt-6 mb-2 border-b border-white border-opacity-30 pb-2">🔥 WORKOUT OF THE DAY</h3>
-            <div class="bg-white bg-opacity-20 rounded-lg p-4 mb-4" id="wodContainer"></div>
-
-            <h3 class="text-xl font-bold mt-4 mb-2 border-b border-white border-opacity-30 pb-2">💪 DAILY MOTIVATION</h3>
-            <div class="text-center mb-6" id="motivationContainer"></div>
-        </div>
-
-        <!-- Footer -->
-        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4 text-sm flex justify-between">
-            <div>
-                <div id="currentTime" class="font-semibold">5:45 PM</div>
-                <div id="currentDate" class="opacity-75">Monday, Dec 16</div>
-            </div>
-            <div class="text-right">
-                <div id="weather" class="font-semibold">72°F ☀️</div>
-                <div class="opacity-75">Perfect workout weather!</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Admin Panel Toggle -->
-<button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 bg-opacity-30 hover:bg-opacity-60 text-white text-xs px-2 py-1 rounded z-50">
-⚙️
-</button>
-
-<!-- Admin Panel -->
-<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
-                <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            </div>
-
-            <!-- Only Classes & Announcements -->
-            <div class="space-y-6">
-                <div>
-                    <h3 class="font-semibold mb-2">Update Classes</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
-                        <input id="className" class="p-2 border rounded" placeholder="Class Name">
-                        <input id="classTime" class="p-2 border rounded" placeholder="Time & Location">
-                    </div>
-                    <div class="flex gap-2">
-                        <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
-                        <button id="clearSchedule" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear All</button>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-semibold mb-2">Quick Announcement</h3>
-                    <textarea id="quickAnnouncement" class="w-full p-3 border rounded-lg" rows="3" placeholder="Enter urgent announcement..."></textarea>
-                    <button id="addAnnouncement" class="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Add Announcement</button>
+<body class="bg-black min-h-full font-sans">
+    <!-- Main TV Content Area (70%) -->
+    <div class="flex h-screen">
+        <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden">
+            <div id="mainContent" class="w-full h-full flex items-center justify-center">
+                <div class="text-white text-center">
+                    <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
+                    <p class="text-xl opacity-75">Add your images or GIFs via Admin Panel</p>
+                    <div class="mt-8 text-6xl">🖼️</div>
                 </div>
             </div>
         </div>
+
+        <!-- Sidebar Overlay (30%) -->
+        <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 text-white relative overflow-hidden">
+            <!-- Header -->
+            <div class="bg-black bg-opacity-30 p-4 text-center">
+                <h2 class="text-2xl font-bold">💪 FitZone Gym</h2>
+                <div class="flex items-center justify-center mt-2">
+                    <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot mr-2"></div>
+                    <span class="text-sm">LIVE UPDATES</span>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="h-full pb-32 relative">
+                <!-- Current Classes Section -->
+                <div id="content-classes" class="content-section p-6 absolute inset-0">
+                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                        🕐 TODAY'S CLASSES
+                    </h3>
+                    <div class="space-y-3" id="classList">
+                        <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                            <div class="font-semibold">HIIT Training</div>
+                            <div class="text-sm opacity-90">6:00 PM - Studio A</div>
+                            <div class="text-xs mt-1">8 spots left</div>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                            <div class="font-semibold">Yoga Flow</div>
+                            <div class="text-sm opacity-90">7:30 PM - Studio B</div>
+                            <div class="text-xs mt-1">12 spots left</div>
+                        </div>
+                        <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                            <div class="font-semibold">Spin Class</div>
+                            <div class="text-sm opacity-90">8:00 PM - Cycle Room</div>
+                            <div class="text-xs mt-1">3 spots left</div>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <div class="bg-yellow-500 text-black px-4 py-2 rounded-lg inline-block">
+                            📱 Scan QR to Book Classes
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Announcements Section -->
+                <div id="content-announcements" class="content-section p-6 absolute inset-0 hidden">
+                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                        📢 ANNOUNCEMENTS
+                    </h3>
+                    <div class="space-y-4" id="announcementsList">
+                        <div class="bg-yellow-500 bg-opacity-20 border-l-4 border-yellow-500 p-4 rounded">
+                            <div class="font-semibold">New Equipment Arrival!</div>
+                            <div class="text-sm mt-1">Check out our new rowing machines on the 2nd floor</div>
+                        </div>
+                        <div class="bg-blue-500 bg-opacity-20 border-l-4 border-blue-500 p-4 rounded">
+                            <div class="font-semibold">Holiday Hours</div>
+                            <div class="text-sm mt-1">We'll be open 6AM-8PM on Christmas Eve</div>
+                        </div>
+                        <div class="bg-green-500 bg-opacity-20 border-l-4 border-green-500 p-4 rounded">
+                            <div class="font-semibold">Member Referral Program</div>
+                            <div class="text-sm mt-1">Bring a friend and get 1 month free!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workout of the Day -->
+                <div id="content-wod" class="content-section p-6 absolute inset-0 hidden">
+                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                        🔥 WORKOUT OF THE DAY
+                    </h3>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-lg mb-3" id="wodTitle">Upper Body Blast</h4>
+                        <div class="space-y-2 text-sm" id="wodExercises">
+                            <div>• 3 sets x 12 Push-ups</div>
+                            <div>• 3 sets x 10 Pull-ups</div>
+                            <div>• 3 sets x 15 Dumbbell Rows</div>
+                            <div>• 3 sets x 20 Shoulder Press</div>
+                            <div>• 2 min Plank Hold</div>
+                        </div>
+                    </div>
+                    <div class="text-center text-sm opacity-90">
+                        💡 Ask a trainer for modifications!
+                    </div>
+                </div>
+
+                <!-- Member Spotlight -->
+                <div id="content-spotlight" class="content-section p-6 absolute inset-0 hidden">
+                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                        ⭐ MEMBER SPOTLIGHT
+                    </h3>
+                    <div class="text-center mb-4">
+                        <div class="w-20 h-20 bg-white bg-opacity-30 rounded-full mx-auto mb-3 flex items-center justify-center text-3xl">
+                            👤
+                        </div>
+                        <h4 class="font-bold text-lg" id="memberName">Sarah Johnson</h4>
+                        <div class="text-sm opacity-90" id="memberAchievement">Lost 30 lbs in 6 months!</div>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                        <div class="text-sm" id="memberQuote">
+                            "The supportive community here made all the difference. I never thought I could love working out until I joined FitZone!"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivational Content -->
+                <div id="content-motivation" class="content-section p-6 absolute inset-0 hidden">
+                    <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">
+                        💪 DAILY MOTIVATION
+                    </h3>
+                    <div class="text-center mb-6">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <blockquote class="text-lg font-semibold mb-4" id="motivationalQuote">
+                            "The only bad workout is the one that didn't happen."
+                        </blockquote>
+                        <div class="text-sm opacity-75">- Fitness Wisdom</div>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2">💡 Today's Tip:</h4>
+                        <div class="text-sm" id="fitnesstip">
+                            Stay hydrated! Aim for 8-10 glasses of water throughout your workout day.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer with Time and Weather -->
+            <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 p-4">
+                <div class="flex justify-between items-center text-sm">
+                    <div>
+                        <div class="font-semibold" id="currentTime">5:45 PM</div>
+                        <div class="opacity-75" id="currentDate">Monday, Dec 16</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold" id="weather">72°F ☀️</div>
+                        <div class="opacity-75">Perfect workout weather!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-/* Example: JS to pull from JSON and render */
-let jsonData = {}; // JSON will be fetched or embedded here
+    <!-- Admin Panel Toggle -->
+    <button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 bg-opacity-30 hover:bg-opacity-60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm z-50 transition-all duration-200">
+        ⚙️
+    </button>
 
-// Dummy data: replace with your JSON
-jsonData = {}; // we will add your structured JSON here
+    <!-- Admin Panel Modal -->
+    <div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Admin Panel</h2>
+                    <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                </div>
 
-// Elements
-const classList = document.getElementById('classList');
-const wodContainer = document.getElementById('wodContainer');
-const motivationContainer = document.getElementById('motivationContainer');
-const mainContent = document.getElementById('mainContent');
+                <div class="space-y-6">
+                    <!-- JSON Data Management -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold mb-2">📄 Data Management</h3>
+                        <div class="mb-3">
+                            <input id="jsonUrl" class="w-full p-2 border rounded-lg mb-2" placeholder="Enter JSON URL (https://...)">
+                            <div class="flex gap-2 mb-3">
+                                <button id="loadFromUrl" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Load from URL</button>
+                                <button id="exportData" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export JSON</button>
+                                <button id="loadFromJson" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Load JSON</button>
+                            </div>
+                        </div>
+                        <textarea id="jsonData" class="w-full p-3 border rounded-lg text-xs font-mono" rows="4" placeholder="Paste your JSON data here to load..."></textarea>
+                        <div class="text-xs text-gray-600 mt-2">
+                            💡 Load from GitHub URL or paste JSON directly. Updates automatically refresh the display!
+                        </div>
+                    </div>
 
-// Admin panel toggles
-document.getElementById('adminToggle').addEventListener('click', ()=>document.getElementById('adminPanel').classList.remove('hidden'));
-document.getElementById('closeAdmin').addEventListener('click', ()=>document.getElementById('adminPanel').classList.add('hidden'));
+                    <!-- Main Content Management -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Main Content Display</h3>
+                        <input id="contentUrl" class="w-full p-3 border rounded-lg mb-2" placeholder="Enter image or GIF URL (https://...)">
+                        <div class="flex gap-2 mb-3">
+                            <button id="setMainContent" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Set Content</button>
+                            <button id="clearMainContent" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear</button>
+                        </div>
+                        <div class="text-xs text-gray-600">
+                            💡 Tip: Use direct links to images (.jpg, .png, .gif) hosted on your website
+                        </div>
+                    </div>
 
-// Update Time
-function updateDateTime(){
-    const now = new Date();
-    document.getElementById('currentTime').textContent = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'short', day:'numeric'});
-}
-setInterval(updateDateTime,60000);
-updateDateTime();
+                    <!-- Quick Announcement -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Quick Announcement</h3>
+                        <textarea id="quickAnnouncement" class="w-full p-3 border rounded-lg" rows="3" placeholder="Enter urgent announcement..."></textarea>
+                        <button id="addAnnouncement" class="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Add Announcement</button>
+                    </div>
 
-// TODO: Populate classes, WOD, motivation, and slideshow from JSON
-</script>
-</body>
+                    <!-- Update Schedule -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Update Class Schedule</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                            <input id="className" class="p-2 border rounded" placeholder="Class Name">
+                            <input id="classTime" class="p-2 border rounded" placeholder="Time & Location">
+                            <input id="spotsLeft" class="p-2 border rounded" placeholder="Spots Left" type="number">
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
+                            <button id="clearSchedule" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear All</button>
+                        </div>
+                    </div>
+
+                    <!-- Update WOD -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Workout of the Day</h3>
+                        <input id="wodTitleInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Workout Title">
+                        <textarea id="wodExercisesInput" class="w-full p-3 border rounded-lg" rows="4" placeholder="Exercise list (one per line)"></textarea>
+                        <button id="updateWOD" class="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Update WOD</button>
+                    </div>
+
+                    <!-- Update Member Spotlight -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Member Spotlight</h3>
+                        <input id="memberNameInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Member Name">
+                        <input id="memberAchievementInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Achievement">
+                        <textarea id="memberQuoteInput" class="w-full p-3 border rounded-lg" rows="3" placeholder="Member Quote"></textarea>
+                        <button id="updateSpotlight" class="mt-2 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">Update Spotlight</button>
+                    </div>
+
+                    <!-- Update Motivation -->
+                    <div>
+                        <h3 class="font-semibold mb-2">Daily Motivation</h3>
+                        <input id="motivationQuoteInput" class="w-full p-3 border rounded-lg mb-2" placeholder="Motivational Quote">
+                        <textarea id="fitnessTipInput" class="w-full p-3 border rounded-lg" rows="2" placeholder="Fitness Tip"></textarea>
+                        <button id="updateMotivation" class="mt-2 bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">Update Motivation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentContentIndex = 0;
+        const contentSections = ['classes', 'announcements', 'wod', 'spotlight', 'motivation'];
+        let rotationInterval;
+
+        // Data structure to hold all gym display data
+        let gymData = {
+            media: [],
+            weekly_schedule: {},
+            announcements: [
+                {
+                    type: 'yellow',
+                    title: 'New Equipment Arrival!',
+                    message: 'Check out our new rowing machines on the 2nd floor'
+                },
+                {
+                    type: 'blue',
+                    title: 'Holiday Hours',
+                    message: 'We\'ll be open 6AM-8PM on Christmas Eve'
+                },
+                {
+                    type: 'green',
+                    title: 'Member Referral Program',
+                    message: 'Bring a friend and get 1 month free!'
+                }
+            ],
+            spotlight: {
+                name: 'Sarah Johnson',
+                achievement: 'Lost 30 lbs in 6 months!',
+                quote: 'The supportive community here made all the difference. I never thought I could love working out until I joined FitZone!'
+            }
+        };
+
+        let currentMediaIndex = 0;
+        let mediaRotationInterval;
+
+        // Content rotation
+        function rotateContent() {
+            const current = document.getElementById(`content-${contentSections[currentContentIndex]}`);
+            current.classList.add('slide-out');
+            
+            setTimeout(() => {
+                current.classList.add('hidden');
+                current.classList.remove('slide-out');
+                
+                currentContentIndex = (currentContentIndex + 1) % contentSections.length;
+                const next = document.getElementById(`content-${contentSections[currentContentIndex]}`);
+                
+                next.classList.remove('hidden');
+                next.classList.add('slide-in');
+                
+                setTimeout(() => {
+                    next.classList.remove('slide-in');
+                }, 500);
+            }, 500);
+        }
+
+        // Start content rotation
+        function startRotation() {
+            rotationInterval = setInterval(rotateContent, 10000); // 10 seconds
+        }
+
+        // Media rotation for main content
+        function rotateMedia() {
+            if (gymData.media && gymData.media.length > 0) {
+                const media = gymData.media[currentMediaIndex];
+                const mainContent = document.getElementById('mainContent');
+                
+                if (media.type === 'image') {
+                    mainContent.innerHTML = `
+                        <img src="${media.src}" 
+                             alt="Main content display" 
+                             class="max-w-full max-h-full object-contain"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'text-white text-center\\'><h2 class=\\'text-2xl mb-2\\'>❌ Media Failed to Load</h2></div>';">
+                    `;
+                } else if (media.type === 'video') {
+                    mainContent.innerHTML = `
+                        <video class="max-w-full max-h-full object-contain" autoplay muted loop>
+                            <source src="${media.src}" type="video/mp4">
+                            <div class="text-white text-center">
+                                <h2 class="text-2xl mb-2">❌ Video Not Supported</h2>
+                            </div>
+                        </video>
+                    `;
+                }
+                
+                currentMediaIndex = (currentMediaIndex + 1) % gymData.media.length;
+            }
+        }
+
+        function startMediaRotation() {
+            if (gymData.media && gymData.media.length > 0) {
+                rotateMedia(); // Show first media immediately
+                mediaRotationInterval = setInterval(rotateMedia, 8000); // 8 seconds per media
+            }
+        }
+
+        function stopMediaRotation() {
+            if (mediaRotationInterval) {
+                clearInterval(mediaRotationInterval);
+                mediaRotationInterval = null;
+            }
+        }
+
+        // Get current day's data
+        function getTodayData() {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const today = days[new Date().getDay()];
+            return gymData.weekly_schedule[today] || {
+                classes: [],
+                motivation: "Every workout is progress!",
+                tip: "Stay hydrated throughout your workout.",
+                wod: ["3 sets x 12 Push-ups", "3 sets x 15 Squats", "2 min Plank Hold"]
+            };
+        }
+
+        // Render functions to update display from data
+        function renderMainContent() {
+            const mainContent = document.getElementById('mainContent');
+            if (gymData.media && gymData.media.length > 0) {
+                stopMediaRotation();
+                startMediaRotation();
+            } else {
+                stopMediaRotation();
+                mainContent.innerHTML = `
+                    <div class="text-white text-center">
+                        <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
+                        <p class="text-xl opacity-75">Load JSON data to display media</p>
+                        <div class="mt-8 text-6xl">🖼️</div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderClasses() {
+            const classList = document.getElementById('classList');
+            const todayData = getTodayData();
+            
+            if (todayData.classes && todayData.classes.length > 0) {
+                classList.innerHTML = todayData.classes.map(cls => `
+                    <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                        <div class="font-semibold">${cls.event}</div>
+                        <div class="text-sm opacity-90">${cls.time}</div>
+                    </div>
+                `).join('');
+            } else {
+                classList.innerHTML = `
+                    <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
+                        <div class="font-semibold">No Classes Scheduled</div>
+                        <div class="text-sm opacity-90">Check back tomorrow!</div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderAnnouncements() {
+            const announcementsList = document.getElementById('announcementsList');
+            const colorMap = {
+                'yellow': 'bg-yellow-500 bg-opacity-20 border-l-4 border-yellow-500',
+                'blue': 'bg-blue-500 bg-opacity-20 border-l-4 border-blue-500',
+                'green': 'bg-green-500 bg-opacity-20 border-l-4 border-green-500',
+                'red': 'bg-red-500 bg-opacity-20 border-l-4 border-red-500'
+            };
+            
+            announcementsList.innerHTML = gymData.announcements.map(ann => `
+                <div class="${colorMap[ann.type] || colorMap.yellow} p-4 rounded">
+                    <div class="font-semibold">${ann.title}</div>
+                    <div class="text-sm mt-1">${ann.message}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderWOD() {
+            const todayData = getTodayData();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const today = days[new Date().getDay()];
+            
+            document.getElementById('wodTitle').textContent = `${today}'s Workout`;
+            document.getElementById('wodExercises').innerHTML = todayData.wod.map(ex => `<div>• ${ex}</div>`).join('');
+        }
+
+        function renderSpotlight() {
+            document.getElementById('memberName').textContent = gymData.spotlight.name;
+            document.getElementById('memberAchievement').textContent = gymData.spotlight.achievement;
+            document.getElementById('memberQuote').textContent = `"${gymData.spotlight.quote}"`;
+        }
+
+        function renderMotivation() {
+            const todayData = getTodayData();
+            document.getElementById('motivationalQuote').textContent = `"${todayData.motivation}"`;
+            document.getElementById('fitnesstip').textContent = todayData.tip;
+        }
+
+        function renderAll() {
+            renderMainContent();
+            renderClasses();
+            renderAnnouncements();
+            renderWOD();
+            renderSpotlight();
+            renderMotivation();
+        }
+
+        // Update time and date
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {weekday: 'long', month: 'short', day: 'numeric'});
+        }
+
+        // Admin panel functionality
+        document.getElementById('adminToggle').addEventListener('click', () => {
+            document.getElementById('adminPanel').classList.remove('hidden');
+        });
+
+        document.getElementById('closeAdmin').addEventListener('click', () => {
+            document.getElementById('adminPanel').classList.add('hidden');
+        });
+
+        // JSON Data Management
+        document.getElementById('loadFromUrl').addEventListener('click', async () => {
+            const url = document.getElementById('jsonUrl').value.trim();
+            if (url) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const newData = await response.json();
+                    gymData = { ...gymData, ...newData }; // Merge with existing data
+                    renderAll();
+                    alert('Data loaded successfully from URL!');
+                    document.getElementById('jsonUrl').value = '';
+                } catch (error) {
+                    alert(`Failed to load data from URL: ${error.message}`);
+                }
+            }
+        });
+
+        document.getElementById('exportData').addEventListener('click', () => {
+            const jsonString = JSON.stringify(gymData, null, 2);
+            document.getElementById('jsonData').value = jsonString;
+            
+            // Also copy to clipboard if possible
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(jsonString).then(() => {
+                    alert('JSON data copied to clipboard!');
+                }).catch(() => {
+                    alert('JSON data exported to text area below');
+                });
+            } else {
+                alert('JSON data exported to text area below');
+            }
+        });
+
+        document.getElementById('loadFromJson').addEventListener('click', () => {
+            const jsonString = document.getElementById('jsonData').value.trim();
+            if (jsonString) {
+                try {
+                    const newData = JSON.parse(jsonString);
+                    gymData = { ...gymData, ...newData }; // Merge with existing data
+                    renderAll();
+                    alert('Data loaded successfully!');
+                    document.getElementById('jsonData').value = '';
+                } catch (error) {
+                    alert('Invalid JSON format. Please check your data and try again.');
+                }
+            }
+        });
+
+        // Main content management (now handled by media array)
+        document.getElementById('setMainContent').addEventListener('click', () => {
+            const url = document.getElementById('contentUrl').value.trim();
+            if (url) {
+                // Add to media array
+                gymData.media.push({
+                    type: 'image',
+                    src: url
+                });
+                renderMainContent();
+                document.getElementById('contentUrl').value = '';
+            }
+        });
+
+        document.getElementById('clearMainContent').addEventListener('click', () => {
+            gymData.media = [];
+            renderMainContent();
+        });
+
+        // Add announcement
+        document.getElementById('addAnnouncement').addEventListener('click', () => {
+            const text = document.getElementById('quickAnnouncement').value.trim();
+            if (text) {
+                gymData.announcements.unshift({
+                    type: 'red',
+                    title: 'URGENT UPDATE',
+                    message: text
+                });
+                renderAnnouncements();
+                document.getElementById('quickAnnouncement').value = '';
+            }
+        });
+
+        // Add class to today's schedule
+        document.getElementById('addToSchedule').addEventListener('click', () => {
+            const className = document.getElementById('className').value.trim();
+            const classTime = document.getElementById('classTime').value.trim();
+            
+            if (className && classTime) {
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const today = days[new Date().getDay()];
+                
+                if (!gymData.weekly_schedule[today]) {
+                    gymData.weekly_schedule[today] = {
+                        classes: [],
+                        motivation: "Every workout is progress!",
+                        tip: "Stay hydrated throughout your workout.",
+                        wod: ["3 sets x 12 Push-ups", "3 sets x 15 Squats", "2 min Plank Hold"]
+                    };
+                }
+                
+                gymData.weekly_schedule[today].classes.push({
+                    time: classTime,
+                    event: className
+                });
+                renderClasses();
+                
+                // Clear inputs
+                document.getElementById('className').value = '';
+                document.getElementById('classTime').value = '';
+                document.getElementById('spotsLeft').value = '';
+            }
+        });
+
+        // Clear today's schedule
+        document.getElementById('clearSchedule').addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear today\'s classes?')) {
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const today = days[new Date().getDay()];
+                
+                if (gymData.weekly_schedule[today]) {
+                    gymData.weekly_schedule[today].classes = [];
+                }
+                renderClasses();
+            }
+        });
+
+        // Update today's WOD
+        document.getElementById('updateWOD').addEventListener('click', () => {
+            const exercises = document.getElementById('wodExercisesInput').value.trim();
+            
+            if (exercises) {
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const today = days[new Date().getDay()];
+                
+                if (!gymData.weekly_schedule[today]) {
+                    gymData.weekly_schedule[today] = {
+                        classes: [],
+                        motivation: "Every workout is progress!",
+                        tip: "Stay hydrated throughout your workout.",
+                        wod: []
+                    };
+                }
+                
+                gymData.weekly_schedule[today].wod = exercises.split('\n').map(ex => ex.trim()).filter(ex => ex);
+                renderWOD();
+            }
+            
+            document.getElementById('wodTitleInput').value = '';
+            document.getElementById('wodExercisesInput').value = '';
+        });
+
+        // Update Member Spotlight
+        document.getElementById('updateSpotlight').addEventListener('click', () => {
+            const name = document.getElementById('memberNameInput').value.trim();
+            const achievement = document.getElementById('memberAchievementInput').value.trim();
+            const quote = document.getElementById('memberQuoteInput').value.trim();
+            
+            if (name) gymData.spotlight.name = name;
+            if (achievement) gymData.spotlight.achievement = achievement;
+            if (quote) gymData.spotlight.quote = quote;
+            renderSpotlight();
+            
+            document.getElementById('memberNameInput').value = '';
+            document.getElementById('memberAchievementInput').value = '';
+            document.getElementById('memberQuoteInput').value = '';
+        });
+
+        // Update today's Motivation
+        document.getElementById('updateMotivation').addEventListener('click', () => {
+            const quote = document.getElementById('motivationQuoteInput').value.trim();
+            const tip = document.getElementById('fitnessTipInput').value.trim();
+            
+            if (quote || tip) {
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const today = days[new Date().getDay()];
+                
+                if (!gymData.weekly_schedule[today]) {
+                    gymData.weekly_schedule[today] = {
+                        classes: [],
+                        motivation: "Every workout is progress!",
+                        tip: "Stay hydrated throughout your workout.",
+                        wod: ["3 sets x 12 Push-ups", "3 sets x 15 Squats", "2 min Plank Hold"]
+                    };
+                }
+                
+                if (quote) gymData.weekly_schedule[today].motivation = quote;
+                if (tip) gymData.weekly_schedule[today].tip = tip;
+                renderMotivation();
+            }
+            
+            document.getElementById('motivationQuoteInput').value = '';
+            document.getElementById('fitnessTipInput').value = '';
+        });
+
+        // Initialize
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // Update every minute
+        renderAll(); // Initial render from data
+        startRotation();
+
+        // Close admin panel when clicking outside
+        document.getElementById('adminPanel').addEventListener('click', (e) => {
+            if (e.target.id === 'adminPanel') {
+                document.getElementById('adminPanel').classList.add('hidden');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c245bcb471cca3',t:'MTc2MDA1ODk4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
