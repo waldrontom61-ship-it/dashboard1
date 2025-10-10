@@ -619,7 +619,6 @@ function escapeHtml(s){if(!s&&s!==0)return'';return String(s).replace(/[&<>"'`=\
 // Expose globals for HTML buttons
 window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addClass;window.clearClassForm=clearClassForm;window.editClass=editClass;window.removeClass=removeClass;window.toggleClassCancellation=toggleClassCancellation;window.updateClass=updateClass;window.addAnnouncement=addAnnouncement;window.clearAnnouncementForm=clearAnnouncementForm;window.removeAnnouncement=removeAnnouncement;window.resetData=resetData;
 <!-- ---------- AUTO-SCALE SIDEBAR CONTENT (No Scroll TV) ---------- -->
-<script>
 function scaleSidebarContent() {
     const sidebar = document.querySelector('.sidebar-overlay');
     const header = document.querySelector('.sidebar-header');
@@ -661,3 +660,4 @@ renderAnnouncements = function() { origRenderAnnouncements(); scaleSidebarConten
 </script>
 </body>
 </html>
+
