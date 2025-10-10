@@ -3,78 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YMCA of Saskatoon TV</title>
+<title>Gym TV Display</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-    body { box-sizing: border-box; background-color: #000; font-family: sans-serif; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
-    @keyframes slideOut { from { transform: translateX(0); opacity:1; } to { transform: translateX(-100%); opacity:0; } }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    body { margin: 0; font-family: sans-serif; box-sizing: border-box; }
     .slide-in { animation: slideIn 0.5s ease-out; }
     .slide-out { animation: slideOut 0.5s ease-in; }
+    @keyframes slideIn { from {opacity:0; transform:translateX(100%);} to {opacity:1; transform:translateX(0);} }
+    @keyframes slideOut { from {opacity:1; transform:translateX(0);} to {opacity:0; transform:translateX(-100%);} }
     .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.7;} }
 </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="bg-black min-h-screen flex flex-col">
 
-<!-- Top Header -->
-<div class="bg-gray-900 bg-opacity-80 p-4 flex justify-between items-center text-white">
-    <div class="flex items-center gap-3">
-        <img src="https://ymcasaskatoon.org/wp-content/uploads/2025/09/YMCA-logo.png" alt="YMCA Logo" class="h-12">
-        <h1 class="text-2xl font-bold">YMCA of Saskatoon</h1>
-    </div>
-    <button id="adminToggle" class="bg-gray-800 bg-opacity-50 hover:bg-opacity-70 px-3 py-1 rounded">⚙️</button>
-</div>
-
-<!-- Main Content Area -->
-<div class="flex flex-1 overflow-hidden">
-    <!-- Media / Ads (70%) -->
-    <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden">
-        <div id="mainContent" class="w-full h-full flex items-center justify-center">
-            <div class="text-white text-center">
-                <h1 class="text-4xl font-bold mb-4">MAIN CONTENT AREA</h1>
-                <p class="text-xl opacity-75">Media rotation from JSON</p>
-                <div class="mt-8 text-6xl">🖼️</div>
-            </div>
+<div class="flex flex-1 h-screen">
+    <!-- Main Content 70% -->
+    <div class="w-3/5 bg-gray-900 flex items-center justify-center relative overflow-hidden" id="mainContentContainer">
+        <div id="mainContent" class="w-full h-full flex items-center justify-center text-white text-center">
+            <div class="text-4xl">🖼️</div>
         </div>
     </div>
 
-    <!-- Sidebar (30%) -->
+    <!-- Sidebar 30% -->
     <div class="w-2/5 bg-gradient-to-b from-red-600 to-red-800 text-white relative overflow-hidden">
-        <!-- Header in Sidebar -->
+        <!-- Header -->
         <div class="bg-black bg-opacity-30 p-4 text-center">
-            <div class="flex items-center justify-center gap-2">
-                <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot"></div>
+            <h2 class="text-2xl font-bold">💪 FitZone Gym</h2>
+            <div class="flex items-center justify-center mt-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full pulse-dot mr-2"></div>
                 <span class="text-sm">LIVE UPDATES</span>
             </div>
         </div>
 
-        <!-- Content Sections -->
-        <div class="h-full overflow-y-auto p-4">
-            <!-- Classes -->
-            <div id="content-classes" class="mb-6">
-                <h2 class="font-bold text-xl mb-3 border-b border-white border-opacity-30 pb-2">🕐 TODAY'S CLASSES</h2>
-                <div id="classList" class="space-y-2"></div>
-            </div>
+        <!-- Sidebar Content -->
+        <div class="h-full pb-32 relative p-6 overflow-y-auto" id="sidebarContent">
+            <h3 class="text-xl font-bold mb-4 border-b border-white border-opacity-30 pb-2">🕐 TODAY'S CLASSES</h3>
+            <div id="classList" class="space-y-3"></div>
 
-            <!-- Announcements -->
-            <div id="content-announcements" class="mb-6">
-                <h2 class="font-bold text-xl mb-3 border-b border-white border-opacity-30 pb-2">📢 ANNOUNCEMENTS</h2>
-                <div id="announcementsList" class="space-y-2"></div>
-            </div>
+            <h3 class="text-xl font-bold mt-6 mb-2 border-b border-white border-opacity-30 pb-2">🔥 WORKOUT OF THE DAY</h3>
+            <div class="bg-white bg-opacity-20 rounded-lg p-4 mb-4" id="wodContainer"></div>
 
-            <!-- Workout of the Day + Tip -->
-            <div id="content-wod" class="mb-6">
-                <h2 class="font-bold text-xl mb-3 border-b border-white border-opacity-30 pb-2">🔥 WORKOUT OF THE DAY</h2>
-                <div class="bg-white bg-opacity-20 rounded-lg p-3 mb-2">
-                    <h3 class="font-bold text-lg" id="wodTitle"></h3>
-                    <ul class="text-sm mt-2 list-disc list-inside" id="wodExercises"></ul>
-                </div>
-                <div class="bg-white bg-opacity-20 rounded-lg p-3">
-                    <h3 class="font-semibold text-sm mb-1">💡 Today's Tip</h3>
-                    <div class="text-sm" id="dailyTip"></div>
-                </div>
-            </div>
+            <h3 class="text-xl font-bold mt-4 mb-2 border-b border-white border-opacity-30 pb-2">💪 DAILY MOTIVATION</h3>
+            <div class="text-center mb-6" id="motivationContainer"></div>
         </div>
 
         <!-- Footer -->
@@ -91,8 +62,13 @@
     </div>
 </div>
 
+<!-- Admin Panel Toggle -->
+<button id="adminToggle" class="fixed top-4 right-4 bg-gray-800 bg-opacity-30 hover:bg-opacity-60 text-white text-xs px-2 py-1 rounded z-50">
+⚙️
+</button>
+
 <!-- Admin Panel -->
-<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden">
+<div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-screen overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
@@ -100,153 +76,57 @@
                 <button id="closeAdmin" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             </div>
 
-            <!-- Classes -->
-            <div class="mb-4">
-                <h3 class="font-semibold mb-2">Update Today's Classes</h3>
-                <input id="className" class="w-full p-2 border rounded mb-2" placeholder="Class Name">
-                <input id="classTime" class="w-full p-2 border rounded mb-2" placeholder="Time & Location">
-                <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
-                <button id="clearSchedule" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear All</button>
-            </div>
+            <!-- Only Classes & Announcements -->
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-semibold mb-2">Update Classes</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                        <input id="className" class="p-2 border rounded" placeholder="Class Name">
+                        <input id="classTime" class="p-2 border rounded" placeholder="Time & Location">
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="addToSchedule" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Class</button>
+                        <button id="clearSchedule" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Clear All</button>
+                    </div>
+                </div>
 
-            <!-- Announcements -->
-            <div class="mb-4">
-                <h3 class="font-semibold mb-2">Add Announcement</h3>
-                <textarea id="quickAnnouncement" class="w-full p-2 border rounded mb-2" placeholder="Enter announcement"></textarea>
-                <button id="addAnnouncement" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Add</button>
+                <div>
+                    <h3 class="font-semibold mb-2">Quick Announcement</h3>
+                    <textarea id="quickAnnouncement" class="w-full p-3 border rounded-lg" rows="3" placeholder="Enter urgent announcement..."></textarea>
+                    <button id="addAnnouncement" class="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Add Announcement</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// ------------------------
-// JSON Data
-// ------------------------
-let gymData = {
-  "media": [
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
-  ],
-  "quotes": [
-    "Welcome to the YMCA of Saskatoon",
-    "Join today",
-    "Fall programs start next week",
-    "Register online today!",
-    "Check out our swimming schedule",
-    "New fitness classes available"
-  ],
-  "weekly_schedule": {
-    "Monday": {
-      "classes": [
-        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle" },
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit" },
-        { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga" }
-      ],
-      "wod": { "title": "Full Body Blast", "exercises": ["3 sets x 12 Push-ups","3 sets x 10 Pull-ups","3 sets x 15 Dumbbell Rows"] },
-      "tip": "Stay hydrated and stretch before your first class."
-    },
-    "Tuesday": {
-      "classes":[
-        { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
-        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
-        { "time": "12:10 PM - 12:50 PM", "event": "Step" },
-        { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
-      ],
-      "wod": { "title": "Cardio Core", "exercises":["20 min cycling","15 min planks","10 min stretching"] },
-      "tip": "Focus on controlled breathing during your workout."
-    }
-    // Add rest of week here...
-  },
-  "announcements": []
-};
+/* Example: JS to pull from JSON and render */
+let jsonData = {}; // JSON will be fetched or embedded here
 
-// ------------------------
-// Functions
-// ------------------------
-let mediaIndex = 0;
-function rotateMedia() {
-    const main = document.getElementById('mainContent');
-    const item = gymData.media[mediaIndex];
-    if(item.type==='image'){
-        main.innerHTML=`<img src="${item.src}" class="max-w-full max-h-full object-contain" alt="Media">`;
-    }
-    mediaIndex = (mediaIndex+1)%gymData.media.length;
+// Dummy data: replace with your JSON
+jsonData = {}; // we will add your structured JSON here
+
+// Elements
+const classList = document.getElementById('classList');
+const wodContainer = document.getElementById('wodContainer');
+const motivationContainer = document.getElementById('motivationContainer');
+const mainContent = document.getElementById('mainContent');
+
+// Admin panel toggles
+document.getElementById('adminToggle').addEventListener('click', ()=>document.getElementById('adminPanel').classList.remove('hidden'));
+document.getElementById('closeAdmin').addEventListener('click', ()=>document.getElementById('adminPanel').classList.add('hidden'));
+
+// Update Time
+function updateDateTime(){
+    const now = new Date();
+    document.getElementById('currentTime').textContent = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', {weekday:'long', month:'short', day:'numeric'});
 }
-setInterval(rotateMedia,10000);
-rotateMedia();
+setInterval(updateDateTime,60000);
+updateDateTime();
 
-function renderClasses(){
-    const classList = document.getElementById('classList');
-    const today = new Date().toLocaleDateString('en-US',{weekday:'long'});
-    const data = gymData.weekly_schedule[today]?.classes || [];
-    if(data.length===0){
-        classList.innerHTML='<div>No Classes Today</div>';
-    } else {
-        classList.innerHTML = data.map(c=>`<div>${c.time} - ${c.event}</div>`).join('');
-    }
-}
-function renderWOD(){
-    const today = new Date().toLocaleDateString('en-US',{weekday:'long'});
-    const wod = gymData.weekly_schedule[today]?.wod;
-    const tip = gymData.weekly_schedule[today]?.tip;
-    if(wod){
-        document.getElementById('wodTitle').textContent=wod.title;
-        document.getElementById('wodExercises').innerHTML=wod.exercises.map(e=>`<li>${e}</li>`).join('');
-    }
-    if(tip) document.getElementById('dailyTip').textContent=tip;
-}
-function renderAnnouncements(){
-    const annDiv = document.getElementById('announcementsList');
-    annDiv.innerHTML = gymData.announcements.map(a=>`<div class="bg-white bg-opacity-20 p-2 rounded">${a}</div>`).join('');
-}
-
-// ------------------------
-// Admin Panel
-// ------------------------
-document.getElementById('adminToggle').addEventListener('click',()=>document.getElementById('adminPanel').classList.remove('hidden'));
-document.getElementById('closeAdmin').addEventListener('click',()=>document.getElementById('adminPanel').classList.add('hidden'));
-
-document.getElementById('addToSchedule').addEventListener('click',()=>{
-    const className=document.getElementById('className').value.trim();
-    const classTime=document.getElementById('classTime').value.trim();
-    if(className&&classTime){
-        const today=new Date().toLocaleDateString('en-US',{weekday:'long'});
-        gymData.weekly_schedule[today].classes.push({time:classTime,event:className});
-        renderClasses();
-    }
-});
-document.getElementById('clearSchedule').addEventListener('click',()=>{
-    const today=new Date().toLocaleDateString('en-US',{weekday:'long'});
-    gymData.weekly_schedule[today].classes=[];
-    renderClasses();
-});
-document.getElementById('addAnnouncement').addEventListener('click',()=>{
-    const ann=document.getElementById('quickAnnouncement').value.trim();
-    if(ann){gymData.announcements.push(ann); renderAnnouncements();}
-});
-
-// ------------------------
-// Clock + Date
-// ------------------------
-function updateTime(){
-    const now=new Date();
-    document.getElementById('currentTime').textContent=now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-    document.getElementById('currentDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
-}
-setInterval(updateTime,1000);
-updateTime();
-
-// ------------------------
-// Initial Render
-// ------------------------
-renderClasses();
-renderWOD();
-renderAnnouncements();
-
+// TODO: Populate classes, WOD, motivation, and slideshow from JSON
 </script>
 </body>
 </html>
