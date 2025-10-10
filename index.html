@@ -243,12 +243,13 @@
             <div id="success-message" style="display:none;" class="success-message">Changes saved successfully!</div>
         </div>
     </div>
- <script>
+<script>
 /******************************************************************
  * Simplified Dashboard Admin Script
  * - Keeps dashboard fully functional
  * - Admin panel now only has Classes & Announcements
  * - All edits are temporary (localStorage only)
+ * - Supports YouTube video rotation
  ******************************************************************/
 
 const JSON_URL = './dashboard-data.json';
@@ -295,7 +296,6 @@ async function loadJSONData() {
         dashboardData.classes = Array.isArray(json.classes) ? json.classes.slice() : [];
         dashboardData.announcements = Array.isArray(json.announcements) ? json.announcements.slice() : [];
 
-        // Update gym name display
         const gymDisplay = document.getElementById('gymNameDisplay');
         if (gymDisplay) gymDisplay.textContent = dashboardData.settings.gymName || '';
         console.log('Loaded JSON data from', JSON_URL);
@@ -400,7 +400,7 @@ function renderAll() {
     renderAdminTables();
 }
 
-// MEDIA
+// ---------- MEDIA ----------
 function renderMedia() {
     const container = document.getElementById('media-container');
     container.innerHTML = '';
@@ -410,34 +410,63 @@ function renderMedia() {
     }
     dashboardData.media.forEach((m, idx) => {
         const slide = document.createElement('div');
-        slide.className = 'media-slide' + (idx===0?' active':'');
+        slide.className = 'media-slide' + (idx === 0 ? ' active' : '');
         slide.dataset.index = idx;
+
         if (m.type === 'video') {
             const video = document.createElement('video');
             video.src = m.src;
-            video.setAttribute('playsinline','');
+            video.setAttribute('playsinline', '');
             video.muted = true;
+            video.autoplay = true;
+            video.loop = true;
             video.preload = 'metadata';
-            video.style.width='100%';
-            video.style.height='100%';
-            video.style.objectFit='cover';
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.objectFit = 'cover';
             slide.appendChild(video);
+        } else if (m.type === 'youtube') {
+            const iframe = document.createElement('iframe');
+            iframe.src = m.src + '?autoplay=1&mute=1&controls=0&modestbranding=1&loop=1&playlist=' + extractYouTubeID(m.src);
+            iframe.allow = 'autoplay; fullscreen';
+            iframe.frameBorder = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            slide.appendChild(iframe);
         } else {
             const img = document.createElement('img');
             img.src = m.src;
-            img.alt='Media';
-            img.onerror=()=>img.style.display='none';
+            img.alt = 'Media';
+            img.onerror = () => img.style.display = 'none';
             slide.appendChild(img);
         }
+
         container.appendChild(slide);
     });
 }
 
-function startMediaRotation() {
-    // rotation logic unchanged
+// Helper to extract YouTube video ID
+function extractYouTubeID(url) {
+    const match = url.match(/(?:\/embed\/|v=)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : '';
 }
 
-// ANNOUNCEMENTS
+function startMediaRotation() {
+    if (mediaInterval) clearInterval(mediaInterval);
+    const slides = document.querySelectorAll('.media-slide');
+    if (!slides || slides.length <= 1) return;
+
+    currentMedia = 0;
+    slides.forEach((s, i) => s.style.display = i === 0 ? 'block' : 'none');
+
+    mediaInterval = setInterval(() => {
+        slides[currentMedia].style.display = 'none';
+        currentMedia = (currentMedia + 1) % slides.length;
+        slides[currentMedia].style.display = 'block';
+    }, dashboardData.settings.mediaRotationSpeed * 1000);
+}
+
+// ---------- ANNOUNCEMENTS ----------
 function renderAnnouncements() {
     const container = document.getElementById('announcement-container');
     container.innerHTML = '';
@@ -446,11 +475,11 @@ function renderAnnouncements() {
         container.innerHTML = '<div class="info-card good-announcement"><div class="card-title">Welcome to YMCA!</div><div class="card-subtitle">Have a great workout today</div></div>';
         return;
     }
-    ann.forEach((a, idx)=>{
+    ann.forEach((a, idx) => {
         const div = document.createElement('div');
         const severity = a.severity || 'good';
-        div.className = `announcement-slide ${severity}-announcement ${idx===0?'active':''}`;
-        div.innerHTML = `<div class="card-title">${a.title||''}</div><div class="card-subtitle">${a.message||''}</div><div class="card-meta">${a.details||''}</div>`;
+        div.className = `announcement-slide ${severity}-announcement ${idx === 0 ? 'active' : ''}`;
+        div.innerHTML = `<div class="card-title">${a.title || ''}</div><div class="card-subtitle">${a.message || ''}</div><div class="card-meta">${a.details || ''}</div>`;
         container.appendChild(div);
     });
 }
@@ -469,7 +498,7 @@ function startAnnouncementRotation() {
     }, speed);
 }
 
-// CLASSES
+// ---------- CLASSES ----------
 function renderClasses() {
     const container = document.getElementById('classes-container');
     container.innerHTML = '';
@@ -490,7 +519,6 @@ function renderClasses() {
 
 // ---------- ADMIN PANEL ----------
 function renderAdminTables() {
-    // Classes table
     const classesTbl = document.getElementById('classes-table');
     classesTbl.innerHTML = '';
     (dashboardData.classes||[]).forEach(c=>{
@@ -503,7 +531,6 @@ function renderAdminTables() {
         classesTbl.appendChild(tr);
     });
 
-    // Announcements table
     const annTbl = document.getElementById('announcements-table');
     annTbl.innerHTML = '';
     (dashboardData.announcements||[]).forEach(a=>{
@@ -530,7 +557,6 @@ function addClass(e){e.preventDefault();
     clearClassForm();
     showSuccess();
 }
-
 function removeClass(id){dashboardData.classes=dashboardData.classes.filter(c=>c.id!==id);saveLocalData();renderClasses();renderAdminTables();showSuccess();}
 function toggleClassCancellation(id){const c=dashboardData.classes.find(x=>x.id===id);if(!c)return;c.cancelled=!c.cancelled;saveLocalData();renderClasses();renderAdminTables();showSuccess();}
 function editClass(id){const c=dashboardData.classes.find(x=>x.id===id);if(!c)return;document.getElementById('className').value=c.name;document.getElementById('classTime').value=c.time;document.getElementById('classLocation').value=c.location;document.getElementById('classInstructor').value=c.instructor;document.getElementById('classCancelled').checked=c.cancelled;const form=document.getElementById('class-form');form.onsubmit=function(ev){updateClass(ev,id);};form.querySelector('button[type="submit"]').textContent='Update Class';}
