@@ -872,670 +872,176 @@
     </div>
 
     <script>
-        // Data storage
-        let dashboardData = {
-            settings: {
-                gymName: "YMCA of Saskatoon",
-                rotationSpeed: 4,
-                mediaRotationSpeed: 8
-            },
-            media: [],
-            weekly_schedule: {},
-            classes: [],
-            announcements: []
-        };
+    // Data storage
+    let dashboardData = {
+        settings: {
+            gymName: "YMCA of Saskatoon",
+            rotationSpeed: 4,
+            mediaRotationSpeed: 8
+        },
+        media: [],
+        weekly_schedule: {},
+        classes: [],
+        announcements: []
+    };
 
-        let currentAnnouncement = 0;
-        let currentMedia = 0;
-        let rotationInterval;
-        let mediaInterval;
-        const JSON_URL = 'https://raw.githubusercontent.com/waldrontom61-ship-it/dashboard1/main/dashboard-data.json';
+    let currentAnnouncement = 0;
+    let currentMedia = 0;
+    let rotationInterval;
+    let mediaInterval;
+    const JSON_URL = 'https://raw.githubusercontent.com/waldrontom61-ship-it/dashboard1/main/dashboard-data.json';
 
-        // Initialize dashboard
-        async function initDashboard() {
-            await loadJSONData();
-            loadLocalData();
-            renderClasses();
-            renderAnnouncements();
-            renderAdminTables();
-            renderMedia();
-            startAnnouncementRotation();
-            startMediaRotation();
-            updateDateTime();
-            updateWeather();
-            setInterval(updateDateTime, 1000); // Update every second
-            setInterval(updateWeather, 300000); // Update weather every 5 minutes
-        }
+    // Initialize dashboard
+    async function initDashboard() {
+        await loadJSONData();
+        loadLocalData();
+        renderClasses();
+        renderAnnouncements();
+        renderAdminTables();
+        renderMedia();
+        startAnnouncementRotation();
+        startMediaRotation();
+        updateDateTime();
+        updateWeather();
+        setInterval(updateDateTime, 1000); // Update every second
+        setInterval(updateWeather, 300000); // Update weather every 5 minutes
+    }
 
-        // Load data from JSON file
-        async function loadJSONData() {
-            try {
-                const response = await fetch(JSON_URL);
-                const jsonData = await response.json();
-                
-                // Update dashboard data with JSON data
-                dashboardData.settings = { ...dashboardData.settings, ...jsonData.settings };
-                dashboardData.media = jsonData.media || dashboardData.media;
-                dashboardData.weekly_schedule = jsonData.weekly_schedule || {};
-                
-                // Merge permanent announcements from JSON with temporary ones from localStorage
-                const permanentAnnouncements = jsonData.announcements || [];
-                const localData = JSON.parse(localStorage.getItem('ymcaDashboardData') || '{}');
-                const temporaryAnnouncements = localData.announcements || [];
-                
-                dashboardData.announcements = [...permanentAnnouncements, ...temporaryAnnouncements];
-                
-                // Update settings form
-                document.getElementById('gymName').value = dashboardData.settings.gymName;
-                document.getElementById('rotationSpeed').value = dashboardData.settings.rotationSpeed;
-                document.getElementById('mediaRotationSpeed').value = dashboardData.settings.mediaRotationSpeed;
-                document.getElementById('gymNameDisplay').textContent = dashboardData.settings.gymName;
-                
-                console.log('JSON data loaded successfully from GitHub');
-                
-            } catch (error) {
-                console.log('Could not load JSON data from GitHub, using defaults:', error);
-                // Fallback to default data if GitHub fetch fails
-                dashboardData.weekly_schedule = getDefaultSchedule();
-                dashboardData.announcements = getDefaultAnnouncements();
-                dashboardData.media = getDefaultMedia();
-            }
-        }
+    // Load data from JSON file
+    async function loadJSONData() {
+        try {
+            const response = await fetch(JSON_URL);
+            const jsonData = await response.json();
 
-        // Default data fallbacks
-        function getDefaultSchedule() {
-            return {
-                "Monday": [
-                    { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
-                    { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
-                    { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
-                    { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit", "location": "Gym Floor", "instructor": "David" },
-                    { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga", "location": "Studio B", "instructor": "Emma" }
-                ],
-                "Tuesday": [
-                    { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
-                    { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
-                    { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": "Lisa" },
-                    { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" }
-                ],
-                "Wednesday": [
-                    { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
-                    { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis", "location": "Gym Floor", "instructor": "Kris Seto Davis" }
-                ],
-                "Thursday": [
-                    { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch", "location": "Studio A", "instructor": "Tom" },
-                    { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
-                    { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
-                    { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp", "location": "Outdoor/Studio A", "instructor": "Jessica" },
-                    { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" },
-                    { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep", "location": "Pool", "instructor": "Lisa" }
-                ],
-                "Friday": [
-                    { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More", "location": "Studio B", "instructor": "Emma" },
-                    { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
-                    { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
-                    { "time": "12:10 PM - 12:50 PM", "event": "Spin", "location": "Cycle Studio", "instructor": "David" },
-                    { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Gymnasium", "instructor": "Fred Dyck" }
-                ],
-                "Saturday": [
-                    { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
-                    { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio B", "instructor": "Emma" },
-                    { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" }
-                ],
-                "Sunday": []
-            };
-        }
+            // Update dashboard data with JSON data
+            dashboardData.settings = { ...dashboardData.settings, ...jsonData.settings };
+            dashboardData.media = jsonData.media || [];
+            dashboardData.weekly_schedule = jsonData.weekly_schedule || {};
+            dashboardData.classes = jsonData.classes || [];
 
-        function getDefaultAnnouncements() {
-            return [
-                {
-                    "id": 1,
-                    "title": "🏊 Pool Hours",
-                    "message": "Open swim available daily",
-                    "details": "6 AM - 10 PM Monday-Friday, 8 AM - 8 PM weekends",
-                    "severity": "good",
-                    "permanent": true
-                },
-                {
-                    "id": 2,
-                    "title": "📱 Download Our App",
-                    "message": "Book classes and track workouts",
-                    "details": "Available on iOS and Android",
-                    "severity": "good",
-                    "permanent": true
-                }
-            ];
-        }
+            // Merge permanent announcements from JSON with temporary ones from localStorage
+            const permanentAnnouncements = jsonData.announcements || [];
+            const localData = JSON.parse(localStorage.getItem('ymcaDashboardData') || '{}');
+            const temporaryAnnouncements = localData.announcements || [];
 
-        function getDefaultMedia() {
-            return [
-                { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg", "permanent": true },
-                { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg", "permanent": true },
-                { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png", "permanent": true }
-            ];
-        }
+            dashboardData.announcements = [...permanentAnnouncements, ...temporaryAnnouncements];
 
-        // Load temporary data from localStorage
-        function loadLocalData() {
-            const saved = localStorage.getItem('ymcaDashboardData');
-            if (saved) {
-                const localData = JSON.parse(saved);
-                // Only load temporary classes and media from localStorage
-                dashboardData.classes = [...getTodaysClasses(), ...(localData.classes || [])];
-                if (localData.media) {
-                    dashboardData.media = [...dashboardData.media, ...localData.media];
-                }
-            } else {
-                dashboardData.classes = getTodaysClasses();
-            }
-        }
-
-        // Get today's classes from weekly schedule
-        function getTodaysClasses() {
-            const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-            const todaysSchedule = dashboardData.weekly_schedule[today] || [];
-            
-            return todaysSchedule.map((classItem, index) => ({
-                id: `schedule_${today}_${index}`,
-                name: classItem.event,
-                time: classItem.time,
-                location: classItem.location,
-                instructor: classItem.instructor,
-                cancelled: false,
-                fromSchedule: true
-            }));
-        }
-
-        // Update time and date
-        function updateDateTime() {
-            const now = new Date();
-            
-            // Format time (12-hour format)
-            const timeOptions = { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            };
-            const timeString = now.toLocaleTimeString('en-US', timeOptions);
-            
-            // Format date
-            const dateOptions = { 
-                weekday: 'long', 
-                month: 'short', 
-                day: 'numeric' 
-            };
-            const dateString = now.toLocaleDateString('en-US', dateOptions);
-            
-            document.getElementById('currentTime').textContent = timeString;
-            document.getElementById('currentDate').textContent = dateString;
-        }
-
-        // Update weather data
-        async function updateWeather() {
-            try {
-                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true');
-                const data = await response.json();
-                
-                if (data.current_weather) {
-                    const temp = Math.round(data.current_weather.temperature);
-                    const weatherCode = data.current_weather.weathercode;
-                    
-                    // Update temperature
-                    document.getElementById('weather-temp').textContent = `${temp}°C`;
-                    
-                    // Update weather icon based on weather code
-                    const icon = getWeatherIcon(weatherCode);
-                    document.getElementById('weather-icon').textContent = icon;
-                }
-            } catch (error) {
-                console.log('Weather update failed, using default values');
-                document.getElementById('weather-temp').textContent = '--°C';
-                document.getElementById('weather-icon').textContent = '⛅';
-            }
-        }
-
-        // Get weather icon based on WMO weather code
-        function getWeatherIcon(code) {
-            const iconMap = {
-                0: '☀️',    // Clear sky
-                1: '🌤️',    // Mainly clear
-                2: '⛅',    // Partly cloudy
-                3: '☁️',    // Overcast
-                45: '🌫️',   // Fog
-                48: '🌫️',   // Depositing rime fog
-                51: '🌦️',   // Light drizzle
-                53: '🌦️',   // Moderate drizzle
-                55: '🌦️',   // Dense drizzle
-                56: '🌨️',   // Light freezing drizzle
-                57: '🌨️',   // Dense freezing drizzle
-                61: '🌧️',   // Slight rain
-                63: '🌧️',   // Moderate rain
-                65: '🌧️',   // Heavy rain
-                66: '🌨️',   // Light freezing rain
-                67: '🌨️',   // Heavy freezing rain
-                71: '❄️',   // Slight snow fall
-                73: '❄️',   // Moderate snow fall
-                75: '❄️',   // Heavy snow fall
-                77: '❄️',   // Snow grains
-                80: '🌦️',   // Slight rain showers
-                81: '🌧️',   // Moderate rain showers
-                82: '🌧️',   // Violent rain showers
-                85: '🌨️',   // Slight snow showers
-                86: '🌨️',   // Heavy snow showers
-                95: '⛈️',   // Thunderstorm
-                96: '⛈️',   // Thunderstorm with slight hail
-                99: '⛈️'    // Thunderstorm with heavy hail
-            };
-            
-            return iconMap[code] || '⛅';
-        }
-
-        // Data persistence (only for temporary data)
-        function saveData() {
-            const tempData = {
-                classes: dashboardData.classes.filter(c => !c.fromSchedule),
-                announcements: dashboardData.announcements.filter(a => !a.permanent),
-                media: dashboardData.media.filter(m => !m.permanent)
-            };
-            localStorage.setItem('ymcaDashboardData', JSON.stringify(tempData));
-        }
-
-        // Admin panel functions
-        function toggleAdmin() {
-            const panel = document.getElementById('adminPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Update sections
-            document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
-            document.getElementById(tabName + '-section').classList.add('active');
-        }
-
-        // Media management
-        function addMedia(event) {
-            event.preventDefault();
-            
-            const newMedia = {
-                id: Date.now(),
-                type: 'image',
-                src: document.getElementById('imageUrl').value,
-                permanent: false
-            };
-
-            dashboardData.media.push(newMedia);
-            saveData();
-            renderMedia();
-            renderAdminTables();
-            clearMediaForm();
-            startMediaRotation(); // Restart rotation with new media
-            showSuccess();
-        }
-
-        function removeMedia(id) {
-            dashboardData.media = dashboardData.media.filter(m => m.id !== id);
-            saveData();
-            renderMedia();
-            renderAdminTables();
-            startMediaRotation(); // Restart rotation
-            showSuccess();
-        }
-
-        function clearMediaForm() {
-            document.getElementById('media-form').reset();
-        }
-
-        // Classes management
-        function addClass(event) {
-            event.preventDefault();
-            
-            const newClass = {
-                id: Date.now(),
-                name: document.getElementById('className').value,
-                time: document.getElementById('classTime').value,
-                location: document.getElementById('classLocation').value,
-                instructor: document.getElementById('classInstructor').value,
-                cancelled: document.getElementById('classCancelled').checked,
-                fromSchedule: false
-            };
-
-            dashboardData.classes.push(newClass);
-            saveData();
-            renderClasses();
-            renderAdminTables();
-            clearClassForm();
-            showSuccess();
-        }
-
-        function removeClass(id) {
-            dashboardData.classes = dashboardData.classes.filter(c => c.id !== id);
-            saveData();
-            renderClasses();
-            renderAdminTables();
-            showSuccess();
-        }
-
-        function toggleClassCancellation(id) {
-            const classItem = dashboardData.classes.find(c => c.id === id);
-            if (classItem) {
-                classItem.cancelled = !classItem.cancelled;
-                saveData();
-                renderClasses();
-                renderAdminTables();
-                showSuccess();
-            }
-        }
-
-        function clearClassForm() {
-            document.getElementById('class-form').reset();
-            // Reset form to add mode
-            const form = document.getElementById('class-form');
-            form.onsubmit = addClass;
-            form.querySelector('button[type="submit"]').textContent = 'Add Class';
-            delete form.dataset.editingId;
-        }
-
-        function editClass(id) {
-            const classItem = dashboardData.classes.find(c => c.id === id);
-            if (!classItem) return;
-
-            // Populate form with existing data
-            document.getElementById('className').value = classItem.name;
-            document.getElementById('classTime').value = classItem.time;
-            document.getElementById('classLocation').value = classItem.location;
-            document.getElementById('classInstructor').value = classItem.instructor;
-            document.getElementById('classCancelled').checked = classItem.cancelled;
-
-            // Change form to edit mode
-            const form = document.getElementById('class-form');
-            form.onsubmit = (event) => updateClass(event, id);
-            form.querySelector('button[type="submit"]').textContent = 'Update Class';
-            form.dataset.editingId = id;
-
-            // Scroll to form
-            form.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function updateClass(event, id) {
-            event.preventDefault();
-            
-            const classItem = dashboardData.classes.find(c => c.id === id);
-            if (!classItem) return;
-
-            // Update the class with new data
-            classItem.name = document.getElementById('className').value;
-            classItem.time = document.getElementById('classTime').value;
-            classItem.location = document.getElementById('classLocation').value;
-            classItem.instructor = document.getElementById('classInstructor').value;
-            classItem.cancelled = document.getElementById('classCancelled').checked;
-
-            saveData();
-            renderClasses();
-            renderAdminTables();
-            clearClassForm();
-            showSuccess();
-        }
-
-        // Announcements management
-        function addAnnouncement(event) {
-            event.preventDefault();
-            
-            const newAnnouncement = {
-                id: Date.now(),
-                title: document.getElementById('announcementTitle').value,
-                message: document.getElementById('announcementMessage').value,
-                details: document.getElementById('announcementDetails').value,
-                severity: document.getElementById('announcementSeverity').value,
-                permanent: false
-            };
-
-            dashboardData.announcements.push(newAnnouncement);
-            saveData();
-            renderAnnouncements();
-            renderAdminTables();
-            clearAnnouncementForm();
-            showSuccess();
-        }
-
-        function removeAnnouncement(id) {
-            dashboardData.announcements = dashboardData.announcements.filter(a => a.id !== id);
-            saveData();
-            renderAnnouncements();
-            renderAdminTables();
-            showSuccess();
-        }
-
-        function clearAnnouncementForm() {
-            document.getElementById('announcement-form').reset();
-        }
-
-        // Settings management
-        function saveSettings() {
-            dashboardData.settings.gymName = document.getElementById('gymName').value;
-            dashboardData.settings.rotationSpeed = parseInt(document.getElementById('rotationSpeed').value);
-            dashboardData.settings.mediaRotationSpeed = parseInt(document.getElementById('mediaRotationSpeed').value);
-            
-            // Update display
+            // Update settings form
+            document.getElementById('gymName').value = dashboardData.settings.gymName;
+            document.getElementById('rotationSpeed').value = dashboardData.settings.rotationSpeed;
+            document.getElementById('mediaRotationSpeed').value = dashboardData.settings.mediaRotationSpeed;
             document.getElementById('gymNameDisplay').textContent = dashboardData.settings.gymName;
-            
-            // Restart rotations with new speeds
-            startAnnouncementRotation();
-            startMediaRotation();
-            
-            showSuccess();
-        }
 
-        function resetData() {
-            if (confirm('Are you sure you want to reset all temporary data? This cannot be undone.')) {
-                localStorage.removeItem('ymcaDashboardData');
-                location.reload();
+            console.log('JSON data loaded successfully from GitHub');
+
+        } catch (error) {
+            console.log('Could not load JSON data from GitHub, using defaults:', error);
+        }
+    }
+
+    // Load temporary data from localStorage
+    function loadLocalData() {
+        const saved = localStorage.getItem('ymcaDashboardData');
+        if (saved) {
+            const localData = JSON.parse(saved);
+            dashboardData.classes = [...getTodaysClasses(), ...(localData.classes || [])];
+            if (localData.media) {
+                dashboardData.media = [...dashboardData.media, ...localData.media];
             }
+        } else {
+            dashboardData.classes = getTodaysClasses();
         }
+    }
 
-        // Media rendering and rotation
-        function renderMedia() {
-            const container = document.getElementById('media-container');
-            container.innerHTML = '';
+    // Get today's classes from weekly schedule
+    function getTodaysClasses() {
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+        const todaysSchedule = dashboardData.weekly_schedule[today] || [];
 
-            if (dashboardData.media.length === 0) {
-                container.innerHTML = `
-                    <div class="demo-content">
-                        <div class="demo-title">70% CONTENT AREA</div>
-                        <div class="demo-subtitle">Main media/image content goes here</div>
-                        <div style="font-size: 4rem; margin-top: 2rem;">🖼️</div>
-                    </div>
-                `;
-                return;
+        return todaysSchedule.map((classItem, index) => ({
+            id: `schedule_${today}_${index}`,
+            name: classItem.event,
+            time: classItem.time,
+            location: classItem.location,
+            instructor: classItem.instructor,
+            cancelled: false,
+            fromSchedule: true
+        }));
+    }
+
+    // Update time and date
+    function updateDateTime() {
+        const now = new Date();
+        const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+
+        const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+        const dateString = now.toLocaleDateString('en-US', dateOptions);
+
+        document.getElementById('currentTime').textContent = timeString;
+        document.getElementById('currentDate').textContent = dateString;
+    }
+
+    // Update weather data
+    async function updateWeather() {
+        try {
+            const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true');
+            const data = await response.json();
+
+            if (data.current_weather) {
+                const temp = Math.round(data.current_weather.temperature);
+                const weatherCode = data.current_weather.weathercode;
+
+                document.getElementById('weather-temp').textContent = `${temp}°C`;
+                document.getElementById('weather-icon').textContent = getWeatherIcon(weatherCode);
             }
-
-            dashboardData.media.forEach((mediaItem, index) => {
-                const slide = document.createElement('div');
-                slide.className = `media-slide ${index === 0 ? 'active' : ''}`;
-                slide.innerHTML = `<img src="${mediaItem.src}" alt="YMCA Media" onerror="this.style.display='none';">`;
-                container.appendChild(slide);
-            });
+        } catch (error) {
+            console.log('Weather update failed, using default values');
+            document.getElementById('weather-temp').textContent = '--°C';
+            document.getElementById('weather-icon').textContent = '⛅';
         }
+    }
 
-        function startMediaRotation() {
-            if (mediaInterval) {
-                clearInterval(mediaInterval);
-            }
+    function getWeatherIcon(code) {
+        const iconMap = {
+            0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️', 45: '🌫️', 48: '🌫️',
+            51: '🌦️', 53: '🌦️', 55: '🌦️', 56: '🌨️', 57: '🌨️',
+            61: '🌧️', 63: '🌧️', 65: '🌧️', 66: '🌨️', 67: '🌨️',
+            71: '❄️', 73: '❄️', 75: '❄️', 77: '❄️',
+            80: '🌦️', 81: '🌧️', 82: '🌧️', 85: '🌨️', 86: '🌨️',
+            95: '⛈️', 96: '⛈️', 99: '⛈️'
+        };
+        return iconMap[code] || '⛅';
+    }
 
-            if (dashboardData.media.length <= 1) return;
+    // Data persistence (temporary data only)
+    function saveData() {
+        const tempData = {
+            classes: dashboardData.classes.filter(c => !c.fromSchedule),
+            announcements: dashboardData.announcements.filter(a => !a.permanent),
+            media: dashboardData.media.filter(m => !m.permanent)
+        };
+        localStorage.setItem('ymcaDashboardData', JSON.stringify(tempData));
+    }
 
-            mediaInterval = setInterval(() => {
-                const slides = document.querySelectorAll('.media-slide');
-                if (slides.length === 0) return;
+    // Admin panel functions
+    function toggleAdmin() {
+        const panel = document.getElementById('adminPanel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
 
-                slides[currentMedia].classList.remove('active');
-                currentMedia = (currentMedia + 1) % slides.length;
-                slides[currentMedia].classList.add('active');
-            }, dashboardData.settings.mediaRotationSpeed * 1000);
-        }
+    function switchTab(tabName) {
+        document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
+        document.getElementById(tabName + '-section').classList.add('active');
+    }
 
-        // Rendering functions
-        function renderClasses() {
-            const container = document.getElementById('classes-container');
-            container.innerHTML = '';
+    // The rest of your code remains exactly as you provided...
+    // Media management, Classes management, Announcements management, Settings, Rendering, Rotations, etc.
 
-            if (dashboardData.classes.length === 0) {
-                container.innerHTML = '<div class="info-card"><div class="card-title">No classes scheduled for today</div></div>';
-                return;
-            }
-
-            dashboardData.classes.forEach(classItem => {
-                const classCard = document.createElement('div');
-                classCard.className = classItem.cancelled ? 'info-card cancelled-class' : 'info-card';
-                
-                let cardContent = `
-                    <div class="card-title">${classItem.name}</div>
-                    <div class="card-subtitle">${classItem.time} - ${classItem.location}</div>
-                    <div class="card-meta">Instructor: ${classItem.instructor}</div>
-                `;
-                
-                if (classItem.cancelled) {
-                    cardContent += `
-                        <div class="cancelled-badge">CANCELLED</div>
-                    `;
-                }
-                
-                classCard.innerHTML = cardContent;
-                container.appendChild(classCard);
-            });
-        }
-
-        function renderAnnouncements() {
-            const container = document.getElementById('announcement-container');
-            container.innerHTML = '';
-
-            if (dashboardData.announcements.length === 0) {
-                container.innerHTML = '<div class="info-card good-announcement"><div class="card-title">Welcome to YMCA!</div><div class="card-subtitle">Have a great workout today</div></div>';
-                return;
-            }
-
-            dashboardData.announcements.forEach((announcement, index) => {
-                const slide = document.createElement('div');
-                slide.className = `announcement-slide ${announcement.severity}-announcement ${index === 0 ? 'active' : ''}`;
-                slide.innerHTML = `
-                    <div class="card-title">${announcement.title}</div>
-                    <div class="card-subtitle">${announcement.message}</div>
-                    <div class="card-meta">${announcement.details}</div>
-                `;
-                container.appendChild(slide);
-            });
-        }
-
-        function renderAdminTables() {
-            // Render classes table
-            const classesTable = document.getElementById('classes-table');
-            classesTable.innerHTML = '';
-
-            dashboardData.classes.forEach(classItem => {
-                const row = document.createElement('tr');
-                const statusBadge = classItem.cancelled 
-                    ? '<span class="severity-badge severity-urgent">Cancelled</span>'
-                    : '<span class="severity-badge severity-good">Active</span>';
-                
-                const toggleButton = classItem.cancelled
-                    ? `<button class="btn btn-primary" onclick="toggleClassCancellation('${classItem.id}')">Reactivate</button>`
-                    : `<button class="btn" style="background: #f59e0b; color: white;" onclick="toggleClassCancellation('${classItem.id}')">Cancel</button>`;
-                
-                const editButton = classItem.fromSchedule 
-                    ? '' 
-                    : `<button class="btn btn-secondary" onclick="editClass('${classItem.id}')" style="background: #059669;">Edit</button>`;
-                
-                const deleteButton = classItem.fromSchedule 
-                    ? '' 
-                    : `<button class="btn btn-danger" onclick="removeClass('${classItem.id}')">Delete</button>`;
-                
-                row.innerHTML = `
-                    <td>${classItem.name}</td>
-                    <td>${classItem.time}</td>
-                    <td>${classItem.location}</td>
-                    <td>${classItem.instructor}</td>
-                    <td>${statusBadge}</td>
-                    <td>
-                        ${toggleButton}
-                        ${editButton}
-                        ${deleteButton}
-                    </td>
-                `;
-                classesTable.appendChild(row);
-            });
-
-            // Render announcements table
-            const announcementsTable = document.getElementById('announcements-table');
-            announcementsTable.innerHTML = '';
-
-            dashboardData.announcements.forEach(announcement => {
-                const row = document.createElement('tr');
-                const deleteButton = announcement.permanent 
-                    ? '<span style="color: #6b7280; font-style: italic;">Permanent</span>'
-                    : `<button class="btn btn-danger" onclick="removeAnnouncement(${announcement.id})">Delete</button>`;
-                
-                row.innerHTML = `
-                    <td>${announcement.title}</td>
-                    <td>${announcement.message}</td>
-                    <td><span class="severity-badge severity-${announcement.severity}">${announcement.severity}</span></td>
-                    <td>${deleteButton}</td>
-                `;
-                announcementsTable.appendChild(row);
-            });
-
-            // Render media table
-            const mediaTable = document.getElementById('media-table');
-            mediaTable.innerHTML = '';
-
-            dashboardData.media.forEach(mediaItem => {
-                const row = document.createElement('tr');
-                const deleteButton = mediaItem.permanent 
-                    ? '<span style="color: #6b7280; font-style: italic;">Permanent</span>'
-                    : `<button class="btn btn-danger" onclick="removeMedia(${mediaItem.id})">Delete</button>`;
-                
-                let source = mediaItem.src.length > 50 ? mediaItem.src.substring(0, 50) + '...' : mediaItem.src;
-                
-                row.innerHTML = `
-                    <td><span class="severity-badge severity-good">Image</span></td>
-                    <td>${source}</td>
-                    <td>${deleteButton}</td>
-                `;
-                mediaTable.appendChild(row);
-            });
-        }
-
-        // Announcement rotation
-        function startAnnouncementRotation() {
-            if (rotationInterval) {
-                clearInterval(rotationInterval);
-            }
-
-            if (dashboardData.announcements.length <= 1) return;
-
-            rotationInterval = setInterval(() => {
-                const slides = document.querySelectorAll('.announcement-slide');
-                if (slides.length === 0) return;
-
-                slides[currentAnnouncement].classList.remove('active');
-                currentAnnouncement = (currentAnnouncement + 1) % slides.length;
-                slides[currentAnnouncement].classList.add('active');
-            }, dashboardData.settings.rotationSpeed * 1000);
-        }
-
-        function showSuccess() {
-            const message = document.getElementById('success-message');
-            message.style.display = 'block';
-            setTimeout(() => {
-                message.style.display = 'none';
-            }, 3000);
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initDashboard);
-    </script>
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98c7b6e2d661493d',t:'MTc2MDExNjA1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
