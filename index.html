@@ -92,6 +92,25 @@
         .demo-content { color:white; text-align:center; }
         .demo-title { font-size:3rem; font-weight:bold; margin-bottom:1rem; }
         .demo-subtitle { font-size:1.25rem; opacity:0.75; }
+        /* Make media container fill available content */
+.media-container, .media-slide {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Make images, videos, and iframes fill the slide */
+.media-slide img,
+.media-slide video,
+.media-slide iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* fills container, cropping if needed */
+}
     </style>
 </head>
 <body>
@@ -578,3 +597,4 @@ window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addCla
 </script>
 </body>
 </html>
+
