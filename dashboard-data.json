@@ -28,7 +28,9 @@
     "Tuesday": [],
     "Wednesday": [],
     "Thursday": [],
-    "Friday": [],
+    "Friday": [
+      { "time": "7:30 PM", "event": "Pilates" }
+    ],
     "Saturday": []
   },
   "announcements": [
@@ -52,3 +54,4 @@
     }
   ]
 }
+
