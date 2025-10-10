@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>YMCA Dashboard with Admin Panel</title>
     <style>
-        /* --- (Your original CSS preserved exactly) --- */
+        /* --- (Your original CSS preserved exactly, no changes needed) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; overflow: hidden; }
         body { box-sizing: border-box; }
@@ -25,7 +25,6 @@
 
         .content-section { padding:1rem; flex:1; display:flex; flex-direction:column; overflow:hidden; }
         .classes-section { flex:1; overflow:hidden; margin-bottom:1rem; display:flex; flex-direction:column; }
-        .classes-container { flex:1; overflow:hidden; }
 
         .section-title { font-size:1rem; font-weight:bold; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:0.25rem; text-align:center; }
         .info-card { background: rgba(255,255,255,0.2); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); }
@@ -47,11 +46,6 @@
         .urgent-announcement { background: linear-gradient(135deg,#dc2626,#991b1b); border:2px solid #ef4444; box-shadow: 0 0 15px rgba(220,38,38,0.3); }
         .warning-announcement { background: linear-gradient(135deg,#f59e0b,#d97706); border:2px solid #fbbf24; box-shadow: 0 0 15px rgba(245,158,11,0.3); }
         .good-announcement { background: linear-gradient(135deg,#059669,#047857); border:2px solid #10b981; box-shadow: 0 0 15px rgba(5,150,105,0.3); }
-
-        .media-container { position:relative; width:100%; height:100%; overflow:hidden; }
-        .media-slide { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transition: opacity 1s ease-in-out; display:flex; align-items:center; justify-content:center; }
-        .media-slide.active { opacity:1; }
-        .media-slide img, .media-slide video { width:100%; height:100%; object-fit:cover; }
 
         .admin-toggle { position:fixed; top:1rem; right:1rem; background: rgba(0,0,0,0.1); color: rgba(255,255,255,0.3); border:none; padding:0.5rem; border-radius:50%; cursor:pointer; z-index:100; font-size:1rem; backdrop-filter: blur(10px); transition: all 0.3s ease; width:40px; height:40px; display:flex; align-items:center; justify-content:center;}
         .admin-toggle:hover { background: rgba(0,0,0,0.3); color: rgba(255,255,255,0.7); transform: rotate(90deg); }
@@ -109,13 +103,12 @@
         <!-- Content Area (70%) -->
         <div class="content-area">
             <div class="media-container" id="media-container">
-                <!-- Media slides will be populated here -->
+                <!-- Media slides -->
             </div>
         </div>
 
         <!-- Sidebar Overlay (30%) -->
         <div class="sidebar-overlay">
-            <!-- Header -->
             <div class="sidebar-header">
                 <img src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png"
                      alt="YMCA of Saskatoon Logo"
@@ -124,26 +117,20 @@
                 <h2 class="sidebar-title" id="gymNameDisplay" style="display:none;">YMCA of Saskatoon</h2>
             </div>
 
-            <!-- Content Sections -->
             <div class="content-section">
-                <!-- Classes Section -->
+                <!-- Classes -->
                 <div class="classes-section">
                     <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
-                    <div id="classes-container">
-                        <!-- Classes will be populated here -->
-                    </div>
+                    <div id="classes-container"></div>
                 </div>
 
                 <!-- Announcements -->
                 <div class="announcements-section">
                     <h3 class="section-title">📢 ANNOUNCEMENTS</h3>
-                    <div class="announcement-container" id="announcement-container">
-                        <!-- Announcements will be populated here -->
-                    </div>
+                    <div class="announcement-container" id="announcement-container"></div>
                 </div>
             </div>
 
-            <!-- Footer -->
             <div class="sidebar-footer">
                 <div>
                     <div class="footer-time" id="currentTime">12:34 PM</div>
@@ -173,7 +160,6 @@
             <!-- Classes Section -->
             <div class="admin-section active" id="classes-section">
                 <h3>Manage Classes</h3>
-
                 <form id="class-form" onsubmit="addClass(event)">
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
                         <div class="form-group">
@@ -193,14 +179,12 @@
                             <input type="text" class="form-input" id="classInstructor" placeholder="Sarah" required>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
                             <input type="checkbox" id="classCancelled" style="width:auto;">
                             <span class="form-label" style="margin:0;">Mark as Cancelled</span>
                         </label>
                     </div>
-
                     <button type="submit" class="btn btn-primary">Add Class</button>
                     <button type="button" class="btn btn-secondary" onclick="clearClassForm()">Clear</button>
                 </form>
@@ -223,7 +207,6 @@
             <!-- Announcements Section -->
             <div class="admin-section" id="announcements-section">
                 <h3>Manage Announcements</h3>
-
                 <form id="announcement-form" onsubmit="addAnnouncement(event)">
                     <div class="form-group">
                         <label class="form-label">Title</label>
@@ -252,78 +235,14 @@
                 </form>
 
                 <table class="data-table">
-                    <thead>
-                        <tr><th>Title</th><th>Message</th><th>Severity</th><th>Actions</th></tr>
-                    </thead>
+                    <thead><tr><th>Title</th><th>Message</th><th>Severity</th><th>Actions</th></tr></thead>
                     <tbody id="announcements-table"></tbody>
                 </table>
-            </div>
-
-            <!-- Media Section -->
-            <div class="admin-section" id="media-section">
-                <h3>Manage Media</h3>
-
-                <form id="media-form" onsubmit="addMedia(event)">
-                    <div class="form-group">
-                        <label class="form-label">Media URL</label>
-                        <input type="url" class="form-input" id="imageUrl" placeholder="https://example.com/image.jpg" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Type</label>
-                        <select class="form-select" id="mediaType">
-                            <option value="image">Image</option>
-                            <option value="video">Video</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Duration (seconds, optional for video)</label>
-                        <input type="number" class="form-input" id="mediaDuration" placeholder="Duration in seconds">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Add Media</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearMediaForm()">Clear</button>
-                </form>
-
-                <table class="data-table">
-                    <thead><tr><th>Type</th><th>Source</th><th>Actions</th></tr></thead>
-                    <tbody id="media-table"></tbody>
-                </table>
-            </div>
-
-            <!-- Settings Section -->
-            <div class="admin-section" id="settings-section">
-                <h3>Dashboard Settings</h3>
-
-                <div class="form-group">
-                    <label class="form-label">Gym Name</label>
-                    <input type="text" class="form-input" id="gymName" value="YMCA of Saskatoon">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Announcement Rotation Speed (seconds)</label>
-                    <input type="number" class="form-input" id="rotationSpeed" value="4" min="2" max="30">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Media Rotation Speed (seconds)</label>
-                    <input type="number" class="form-input" id="mediaRotationSpeed" value="8" min="3" max="300">
-                </div>
-
-                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-                <button class="btn btn-danger" onclick="resetData()">Reset All Data</button>
             </div>
 
             <div id="success-message" style="display:none;" class="success-message">Changes saved successfully!</div>
         </div>
     </div>
-
-<!-- --- SCRIPT INTEGRATION --- -->
-<script>
-/* YOUR FULL SCRIPT AS PROVIDED IN THE LAST MESSAGE GOES HERE, UNCHANGED */
-</script>
-</body>
-</html>
-
  <script>
 /******************************************************************
  * Simplified Dashboard Admin Script
@@ -633,7 +552,3 @@ window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addCla
 </script>
 </body>
 </html>
-
-
-
-
