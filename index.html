@@ -618,21 +618,46 @@ function escapeHtml(s){if(!s&&s!==0)return'';return String(s).replace(/[&<>"'`=\
 
 // Expose globals for HTML buttons
 window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addClass;window.clearClassForm=clearClassForm;window.editClass=editClass;window.removeClass=removeClass;window.toggleClassCancellation=toggleClassCancellation;window.updateClass=updateClass;window.addAnnouncement=addAnnouncement;window.clearAnnouncementForm=clearAnnouncementForm;window.removeAnnouncement=removeAnnouncement;window.resetData=resetData;
-// ---------- AUTO-SCALE SCHEDULE ----------
-function scaleSchedule() {
-    const contentArea = document.querySelector('.content-area');
-    const schedule = document.querySelector('.classes-section');
-    if (!contentArea || !schedule) return;
+<!-- ---------- AUTO-SCALE SIDEBAR CONTENT (No Scroll TV) ---------- -->
+<script>
+function scaleSidebarContent() {
+    const sidebar = document.querySelector('.sidebar-overlay');
+    const header = document.querySelector('.sidebar-header');
+    const footer = document.querySelector('.sidebar-footer');
+    const content = document.querySelector('.content-section');
 
-    const contentHeight = contentArea.clientHeight;
-    const scheduleHeight = schedule.scrollHeight;
+    if (!sidebar || !header || !footer || !content) return;
 
-    const scale = contentHeight / scheduleHeight;
-    schedule.style.transformOrigin = 'top left';
-    schedule.style.transform = scale < 1 ? `scale(${scale})` : 'none';
+    const availableHeight = sidebar.clientHeight - header.offsetHeight - footer.offsetHeight - 10; // 10px buffer
+    const contentHeight = content.scrollHeight;
+
+    const scale = Math.min(1, availableHeight / contentHeight);
+
+    content.style.transformOrigin = 'top';
+    content.style.transform = `scale(${scale})`;
 }
-window.addEventListener('load', scaleSchedule);
-window.addEventListener('resize', scaleSchedule);
+
+// Run on load and resize
+window.addEventListener('load', scaleSidebarContent);
+window.addEventListener('resize', scaleSidebarContent);
+
+// Re-run whenever classes or announcements are updated
+function renderAllAndScale() {
+    renderAll();
+    scaleSidebarContent();
+}
+
+// Replace old render calls with new function
+document.addEventListener('DOMContentLoaded', () => {
+    initDashboard().then(() => scaleSidebarContent());
+});
+
+// Override renderClasses and renderAnnouncements calls in admin actions
+const origRenderClasses = renderClasses;
+renderClasses = function() { origRenderClasses(); scaleSidebarContent(); };
+
+const origRenderAnnouncements = renderAnnouncements;
+renderAnnouncements = function() { origRenderAnnouncements(); scaleSidebarContent(); };
 </script>
 </body>
 </html>
