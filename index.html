@@ -1,474 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Version 18 Style Guide Demo</title>
-    <style>
-        /* === GYM TV SIDEBAR OVERLAY - VERSION 18 STYLE GUIDE (70/30 LAYOUT - SIMPLIFIED) === */
-
-        body {
-            box-sizing: border-box;
-        }
-
-        /* === LAYOUT STRUCTURE (70/30 SPLIT) === */
-        .main-layout {
-            display: flex;
-            height: 100vh;
-            background: black;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        .content-area {
-            width: 70%;
-            background: #111827; /* gray-900 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar-overlay {
-            width: 30%;
-            height: 100vh;
-            background: linear-gradient(to bottom, #dc2626, #991b1b); /* red-600 to red-800 */
-            color: white;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* === SIDEBAR COMPONENTS === */
-        .sidebar-header {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 1rem;
-            text-align: center;
-        }
-
-        .sidebar-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 0.5rem;
-        }
-
-        .status-dot {
-            width: 0.5rem;
-            height: 0.5rem;
-            background: #4ade80; /* green-400 */
-            border-radius: 50%;
-            margin-right: 0.5rem;
-        }
-
-        .status-text {
-            font-size: 0.875rem;
-        }
-
-        /* === CONTENT SECTIONS === */
-        .content-section {
-            padding: 1.5rem;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 0.5rem;
-        }
-
-        /* === CARD STYLES === */
-        .info-card {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 0.75rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .card-subtitle {
-            font-size: 0.875rem;
-            opacity: 0.9;
-        }
-
-        .card-meta {
-            font-size: 0.75rem;
-            opacity: 0.7;
-            margin-top: 0.25rem;
-        }
-
-        /* === WEATHER STYLES === */
-        .weather-display {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 0.75rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .weather-icon {
-            font-size: 2rem;
-        }
-
-        .weather-temp {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .weather-condition {
-            font-size: 0.875rem;
-            opacity: 0.9;
-        }
-
-        /* === NOTIFICATION STYLES === */
-        .notification-badge {
-            background: #ef4444; /* red-500 */
-            color: white;
-            border-radius: 50%;
-            width: 1.5rem;
-            height: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        /* === ANNOUNCEMENT STYLES === */
-        .announcement-container {
-            position: relative;
-            height: 120px;
-            overflow: hidden;
-            border-radius: 0.5rem;
-        }
-
-        .announcement-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease-in-out;
-        }
-
-        .announcement-slide.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .urgent-announcement {
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            border: 2px solid #ef4444;
-            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
-        }
-
-        .warning-announcement {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            border: 2px solid #fbbf24;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
-        }
-
-        .good-announcement {
-            background: linear-gradient(135deg, #059669, #047857);
-            border: 2px solid #10b981;
-            box-shadow: 0 0 15px rgba(5, 150, 105, 0.3);
-        }
-
-        /* === ADMIN CONTROLS === */
-        .admin-toggle {
-            position: fixed;
-            top: 1rem;
-            left: 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            z-index: 100;
-            font-size: 0.75rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .admin-panel {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 200;
-            display: none;
-            overflow-y: auto;
-        }
-
-        .admin-content {
-            background: white;
-            margin: 1.25rem;
-            padding: 1.25rem;
-            border-radius: 0.5rem;
-            max-width: 50rem;
-            margin: 1.25rem auto;
-        }
-
-        /* === UTILITY CLASSES === */
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .gradient-text {
-            background: linear-gradient(45deg, #fbbf24, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .shadow-glow {
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .border-glow {
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Demo specific styles */
-        .demo-content {
-            color: white;
-            text-align: center;
-        }
-
-        .demo-title {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .demo-subtitle {
-            font-size: 1.25rem;
-            opacity: 0.75;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Version 18 Style Guide Demo</title>
+<style>
+/* === Existing CSS from your file (unchanged) === */
+body{box-sizing:border-box;}
+.main-layout{display:flex;height:100vh;background:black;font-family:system-ui,-apple-system,sans-serif;}
+.content-area{width:70%;background:#111827;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.sidebar-overlay{width:30%;height:100vh;background:linear-gradient(to bottom,#dc2626,#991b1b);color:white;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.sidebar-header{background:rgba(0,0,0,0.3);padding:1rem;text-align:center;}
+.sidebar-title{font-size:1.5rem;font-weight:bold;margin-bottom:0.5rem;}
+.live-indicator{display:flex;align-items:center;justify-content:center;margin-top:0.5rem;}
+.status-dot{width:.5rem;height:.5rem;background:#4ade80;border-radius:50%;margin-right:.5rem;}
+.status-text{font-size:.875rem;}
+.content-section{padding:1.5rem;flex:1;overflow-y:auto;}
+.section-title{font-size:1.25rem;font-weight:bold;margin-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:.5rem;}
+.info-card{background:rgba(255,255,255,.2);border-radius:.5rem;padding:.75rem;margin-bottom:.75rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);}
+.card-title{font-weight:600;margin-bottom:.25rem;}
+.card-subtitle{font-size:.875rem;opacity:.9;}
+.card-meta{font-size:.75rem;opacity:.7;margin-top:.25rem;}
+.weather-display{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.15);border-radius:.75rem;padding:1rem;margin-bottom:1rem;}
+.weather-icon{font-size:2rem;}
+.weather-temp{font-size:1.5rem;font-weight:bold;}
+.weather-condition{font-size:.875rem;opacity:.9;}
+.notification-badge{background:#ef4444;color:white;border-radius:50%;width:1.5rem;height:1.5rem;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:bold;}
+.announcement-container{position:relative;height:120px;overflow:hidden;border-radius:.5rem;}
+.announcement-slide{position:absolute;top:0;left:0;width:100%;padding:.75rem;border-radius:.5rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);opacity:0;transform:translateY(20px);transition:all .5s ease-in-out;}
+.announcement-slide.active{opacity:1;transform:translateY(0);}
+.urgent-announcement{background:linear-gradient(135deg,#dc2626,#991b1b);border:2px solid #ef4444;box-shadow:0 0 15px rgba(220,38,38,.3);}
+.warning-announcement{background:linear-gradient(135deg,#f59e0b,#d97706);border:2px solid #fbbf24;box-shadow:0 0 15px rgba(245,158,11,.3);}
+.good-announcement{background:linear-gradient(135deg,#059669,#047857);border:2px solid #10b981;box-shadow:0 0 15px rgba(5,150,105,.3);}
+.admin-toggle{position:fixed;top:1rem;left:1rem;background:rgba(0,0,0,.7);color:white;border:none;padding:.5rem .75rem;border-radius:.25rem;cursor:pointer;z-index:100;font-size:.75rem;backdrop-filter:blur(10px);}
+.admin-panel{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:200;display:none;overflow-y:auto;}
+.admin-content{background:white;margin:1.25rem;padding:1.25rem;border-radius:.5rem;max-width:50rem;margin:1.25rem auto;}
+.glass-effect{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);}
+.gradient-text{background:linear-gradient(45deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.shadow-glow{box-shadow:0 0 20px rgba(255,255,255,.1);}
+.border-glow{border:1px solid rgba(255,255,255,.3);box-shadow:0 0 10px rgba(255,255,255,.1);}
+.demo-content{color:white;text-align:center;}
+.demo-title{font-size:3rem;font-weight:bold;margin-bottom:1rem;}
+.demo-subtitle{font-size:1.25rem;opacity:.75;}
+</style>
 </head>
 <body>
-    <!-- Admin Toggle -->
-    <button class="admin-toggle" onclick="toggleAdmin()">⚙️ Admin</button>
+<button class="admin-toggle" onclick="toggleAdmin()">⚙️ Admin</button>
+<div class="main-layout">
+<div class="content-area">
+<div class="demo-content">
+<div class="demo-title">70% CONTENT AREA</div>
+<div class="demo-subtitle">Main media/video content goes here</div>
+<div style="font-size:4rem;margin-top:2rem;">🖼️</div>
+</div>
+</div>
+<div class="sidebar-overlay">
+<div class="sidebar-header">
+<h2 class="sidebar-title">💪 FitZone Gym</h2>
+<div class="live-indicator">
+<div class="status-dot"></div>
+<span class="status-text">LIVE UPDATES</span>
+</div>
+</div>
+<div class="content-section">
+<div class="weather-display">
+<div><div class="weather-temp">22°C</div><div class="weather-condition">Partly Cloudy</div></div>
+<div class="weather-icon">⛅</div>
+</div>
+<h3 class="section-title">🕐 TODAY'S CLASSES</h3>
+<ul id="schedule"></ul>
+<h3 class="section-title">📢 ANNOUNCEMENTS</h3>
+<div class="announcement-container"></div>
+</div>
+</div>
+</div>
+<div class="admin-panel" id="adminPanel">
+<div class="admin-content">
+<h2 style="color:#333;">Version 18 Style Guide Demo</h2>
+<p style="color:#666;">This demonstrates the clean, modern design with:</p>
+<ul style="color:#666;">
+<li>70/30 layout split</li>
+<li>Glassmorphism effects</li>
+<li>Red gradient sidebar</li>
+<li>Clean card designs</li>
+<li>Progress bars and notifications</li>
+<li>No animations (static design)</li>
+</ul>
+<button onclick="toggleAdmin()" style="background:#dc2626;color:white;border:none;padding:10px 20px;border-radius:5px;cursor:pointer;">Close Demo</button>
+</div>
+</div>
 
-    <!-- Main Layout -->
-    <div class="main-layout">
-        <!-- Content Area (70%) -->
-        <div class="content-area">
-            <div class="demo-content">
-                <div class="demo-title">70% CONTENT AREA</div>
-                <div class="demo-subtitle">Main media/video content goes here</div>
-                <div style="font-size: 4rem; margin-top: 2rem;">🖼️</div>
-            </div>
-        </div>
+<script>
+function toggleAdmin(){const panel=document.getElementById('adminPanel');panel.style.display=panel.style.display==='none'?'block':'none';}
 
-        <!-- Sidebar Overlay (30%) -->
-        <div class="sidebar-overlay">
-            <!-- Header -->
-            <div class="sidebar-header">
-                <h2 class="sidebar-title">💪 FitZone Gym</h2>
-                <div class="live-indicator">
-                    <div class="status-dot"></div>
-                    <span class="status-text">LIVE UPDATES</span>
-                </div>
-            </div>
+// Announcement rotation
+let currentAnnouncement=0;
+function rotateAnnouncements(){const announcements=document.querySelectorAll('.announcement-slide');if(!announcements.length)return;announcements.forEach(a=>a.classList.remove('active'));currentAnnouncement=(currentAnnouncement+1)%announcements.length;announcements[currentAnnouncement].classList.add('active');}
+setInterval(rotateAnnouncements,4000);
 
-            <!-- Content Sections -->
-            <div class="content-section">
-                <!-- Weather Display -->
-                <div class="weather-display">
-                    <div>
-                        <div class="weather-temp">22°C</div>
-                        <div class="weather-condition">Partly Cloudy</div>
-                    </div>
-                    <div class="weather-icon">⛅</div>
-                </div>
+// Media slideshow
+const mediaContainer=document.querySelector('.content-area');let mediaSlides=[];let currentSlideIndex=0;
+function createMediaSlide(item){const slide=document.createElement('div');slide.classList.add('media-slide');if(item.type==='image'){const img=document.createElement('img');img.src=item.src;img.style.width='100%';img.style.height='100%';img.style.objectFit='cover';slide.appendChild(img);}else if(item.type==='video'){const iframe=document.createElement('iframe');iframe.src=item.src+"?autoplay=1&mute=1&loop=1&playlist="+item.src.split('/').pop();iframe.allow="autoplay; fullscreen";iframe.allowFullscreen=true;iframe.style.width='100%';iframe.style.height='100%';slide.appendChild(iframe);}slide.style.position='absolute';slide.style.top='0';slide.style.left='0';slide.style.width='100%';slide.style.height='100%';slide.style.opacity='0';slide.style.transition='opacity 1s ease-in-out';mediaContainer.appendChild(slide);return slide;}
+function showSlide(index){mediaSlides.forEach((s,i)=>s.style.opacity=(i===index?'1':'0'));}
+function rotateSlides(){if(!mediaSlides.length)return;showSlide(currentSlideIndex);let duration=mediaData[currentSlideIndex].duration||10000;currentSlideIndex=(currentSlideIndex+1)%mediaData.length;setTimeout(rotateSlides,duration);}
 
-                <!-- Classes Section -->
-                <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
-                <ul id="schedule"></ul>
+let mediaData=[];
 
-                <!-- Announcements -->
-                <h3 class="section-title">📢 ANNOUNCEMENTS</h3>
-                <div class="announcement-container">
-                    <div class="announcement-slide urgent-announcement active">
-                        <div class="card-title">🚨 Pool Maintenance</div>
-                        <div class="card-subtitle">Closed until 3:00 PM today</div>
-                        <div class="card-meta">Emergency repairs in progress</div>
-                    </div>
-                    <div class="announcement-slide warning-announcement">
-                        <div class="card-title">⚠️ Locker Room Update</div>
-                        <div class="card-subtitle">Men's locker room cleaning at 2 PM</div>
-                        <div class="card-meta">Please use alternate facilities</div>
-                    </div>
-                    <div class="announcement-slide good-announcement">
-                        <div class="card-title">🎉 New Equipment Arrival!</div>
-                        <div class="card-subtitle">Check out our new rowing machines</div>
-                        <div class="card-meta">Available in the cardio section</div>
-                    </div>
-                    <div class="announcement-slide warning-announcement">
-                        <div class="card-title">📅 Class Schedule Change</div>
-                        <div class="card-subtitle">Zumba moved to 7:00 PM tonight</div>
-                        <div class="card-meta">Studio B instead of Studio A</div>
-                    </div>
-                    <div class="announcement-slide good-announcement">
-                        <div class="card-title">💪 Member Appreciation Week</div>
-                        <div class="card-subtitle">Free smoothies at the juice bar!</div>
-                        <div class="card-meta">Monday through Friday</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+// --- Fetch JSON ---
+fetch('dashboard-data.json')
+.then(res=>res.json())
+.then(data=>{
+    mediaData=data.media||[];
+    mediaSlides=mediaData.map(createMediaSlide);
+    if(mediaSlides.length) rotateSlides();
 
-    <!-- Admin Panel -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-content">
-            <h2 style="color: #333;">Version 18 Style Guide Demo</h2>
-            <p style="color: #666;">This demonstrates the clean, modern design with:</p>
-            <ul style="color: #666;">
-                <li>70/30 layout split</li>
-                <li>Glassmorphism effects</li>
-                <li>Red gradient sidebar</li>
-                <li>Clean card designs</li>
-                <li>Progress bars and notifications</li>
-                <li>No animations (static design)</li>
-            </ul>
-            <button onclick="toggleAdmin()" style="background: #dc2626; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Close Demo</button>
-        </div>
-    </div>
+    // Schedule for today with forced local timezone
+    const now=new Date();
+    const today=new Intl.DateTimeFormat('en-CA',{weekday:'long',timeZone:'America/Regina'}).format(now);
+    console.log('Today is:', today);
+    const todaySchedule=data.weekly_schedule[today]||[];
+    const scheduleList=document.getElementById('schedule');
+    if(scheduleList){
+        scheduleList.innerHTML='';
+        todaySchedule.forEach(item=>{
+            const li=document.createElement('li');
+            li.textContent=item.time+' - '+item.event;
+            scheduleList.appendChild(li);
+        });
+    }
 
-    <script>
-        function toggleAdmin() {
-            const panel = document.getElementById('adminPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Announcement rotation
-        let currentAnnouncement = 0;
-        const announcements = document.querySelectorAll('.announcement-slide');
-
-        function rotateAnnouncements() {
-            announcements[currentAnnouncement].classList.remove('active');
-            currentAnnouncement = (currentAnnouncement + 1) % announcements.length;
-            announcements[currentAnnouncement].classList.add('active');
-        }
-
-        setInterval(rotateAnnouncements, 4000);
-
-        // --- Media slideshow + JSON ---
-        const mediaContainer = document.querySelector('.content-area');
-        let mediaSlides = [];
-        let currentSlideIndex = 0;
-
-        function createMediaSlide(item) {
-            const slide = document.createElement('div');
-            slide.classList.add('media-slide');
-            if(item.type === 'image'){
-                const img = document.createElement('img');
-                img.src = item.src;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-                slide.appendChild(img);
-            } else if(item.type === 'video'){
-                const iframe = document.createElement('iframe');
-                iframe.src = item.src + "?autoplay=1&mute=1&loop=1&playlist=" + item.src.split('/').pop();
-                iframe.allow = "autoplay; fullscreen";
-                iframe.allowFullscreen = true;
-                iframe.style.width = '100%';
-                iframe.style.height = '100%';
-                slide.appendChild(iframe);
-            }
-            slide.style.position = 'absolute';
-            slide.style.top = '0';
-            slide.style.left = '0';
-            slide.style.width = '100%';
-            slide.style.height = '100%';
-            slide.style.opacity = '0';
-            slide.style.transition = 'opacity 1s ease-in-out';
-            mediaContainer.appendChild(slide);
-            return slide;
-        }
-
-        function showSlide(index){
-            mediaSlides.forEach((s, i) => s.style.opacity = (i === index ? '1' : '0'));
-        }
-
-        function rotateSlides(){
-            if(mediaSlides.length === 0) return;
-            showSlide(currentSlideIndex);
-            let duration = mediaData[currentSlideIndex].duration || 10000;
-            currentSlideIndex = (currentSlideIndex + 1) % mediaData.length;
-            setTimeout(rotateSlides, duration);
-        }
-
-        let mediaData = [];
-        fetch('dashboard-data.json')
-        .then(res => res.json())
-        .then(data => {
-            mediaData = data.media || [];
-            mediaSlides = mediaData.map(createMediaSlide);
-            if(mediaSlides.length) rotateSlides();
-
-            // Schedule for today
-            const now = new Date();
-            const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-            const todaySchedule = data.weekly_schedule[days[now.getDay()]] || [];
-            const scheduleList = document.getElementById('schedule');
-            if(scheduleList){
-                scheduleList.innerHTML = '';
-                todaySchedule.forEach(item=>{
-                    const li = document.createElement('li');
-                    li.textContent = item.time + " - " + item.event;
-                    scheduleList.appendChild(li);
-                });
-            }
-
-            // Announcements
-            const announcementContainer = document.querySelector('.announcement-container');
-            if(announcementContainer){
-                announcementContainer.innerHTML = '';
-                (data.announcements || []).forEach((a, i)=>{
-                    const div = document.createElement('div');
-                    div.classList.add('announcement-slide', a.type+'-announcement');
-                    if(i===0) div.classList.add('active');
-                    div.innerHTML = '<div class="card-title">'+a.title+'</div>'+
-                                    '<div class="card-subtitle">'+a.subtitle+'</div>'+
-                                    '<div class="card-meta">'+a.meta+'</div>';
-                    announcementContainer.appendChild(div);
-                });
-            }
-        })
-        .catch(err => console.error('Dashboard fetch error:', err));
-    </script>
+    // Announcements
+    const announcementContainer=document.querySelector('.announcement-container');
+    if(announcementContainer){
+        announcementContainer.innerHTML='';
+        (data.announcements||[]).forEach((a,i)=>{
+            const div=document.createElement('div');
+            div.classList.add('announcement-slide',a.type+'-announcement');
+            if(i===0) div.classList.add('active');
+            div.innerHTML='<div class="card-title">'+a.title+'</div><div class="card-subtitle">'+a.subtitle+'</div><div class="card-meta">'+a.meta+'</div>';
+            announcementContainer.appendChild(div);
+        });
+    }
+})
+.catch(err=>console.error('Dashboard fetch error:',err));
+</script>
 </body>
 </html>
