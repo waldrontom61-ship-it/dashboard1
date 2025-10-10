@@ -618,11 +618,21 @@ function escapeHtml(s){if(!s&&s!==0)return'';return String(s).replace(/[&<>"'`=\
 
 // Expose globals for HTML buttons
 window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addClass;window.clearClassForm=clearClassForm;window.editClass=editClass;window.removeClass=removeClass;window.toggleClassCancellation=toggleClassCancellation;window.updateClass=updateClass;window.addAnnouncement=addAnnouncement;window.clearAnnouncementForm=clearAnnouncementForm;window.removeAnnouncement=removeAnnouncement;window.resetData=resetData;
+// ---------- AUTO-SCALE SCHEDULE ----------
+function scaleSchedule() {
+    const contentArea = document.querySelector('.content-area');
+    const schedule = document.querySelector('.classes-section');
+    if (!contentArea || !schedule) return;
+
+    const contentHeight = contentArea.clientHeight;
+    const scheduleHeight = schedule.scrollHeight;
+
+    const scale = contentHeight / scheduleHeight;
+    schedule.style.transformOrigin = 'top left';
+    schedule.style.transform = scale < 1 ? `scale(${scale})` : 'none';
+}
+window.addEventListener('load', scaleSchedule);
+window.addEventListener('resize', scaleSchedule);
 </script>
 </body>
 </html>
-
-
-
-
-
