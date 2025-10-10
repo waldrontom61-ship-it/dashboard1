@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>YMCA Dashboard with Admin Panel</title>
     <style>
-        /* --- (Your original CSS preserved exactly) --- */
+        /* --- Original CSS preserved --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; overflow: hidden; }
         body { box-sizing: border-box; }
@@ -174,13 +174,81 @@
             <!-- Classes Section -->
             <div class="admin-section active" id="classes-section">
                 <h3>Manage Classes</h3>
-                <!-- class form and table as before -->
+                <div class="form-group">
+                    <label class="form-label" for="class-name">Class Name</label>
+                    <input type="text" id="class-name" class="form-input" placeholder="Yoga, Spin, etc.">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="class-time">Time</label>
+                    <input type="time" id="class-time" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="class-status">Status</label>
+                    <select id="class-status" class="form-select">
+                        <option value="scheduled">Scheduled</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary">Add / Update Class</button>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Yoga</td>
+                            <td>10:00 AM</td>
+                            <td><span class="severity-badge severity-good">Scheduled</span></td>
+                        </tr>
+                        <tr>
+                            <td>Spin</td>
+                            <td>11:30 AM</td>
+                            <td><span class="severity-badge severity-urgent">Cancelled</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Announcements Section -->
             <div class="admin-section" id="announcements-section">
                 <h3>Manage Announcements</h3>
-                <!-- announcement form and table as before -->
+                <div class="form-group">
+                    <label class="form-label" for="announcement-text">Announcement Text</label>
+                    <input type="text" id="announcement-text" class="form-input" placeholder="Enter announcement">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="announcement-severity">Severity</label>
+                    <select id="announcement-severity" class="form-select">
+                        <option value="good">Good</option>
+                        <option value="warning">Warning</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary">Add / Update Announcement</button>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Announcement</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Pool closed for maintenance</td>
+                            <td><span class="severity-badge severity-warning">Warning</span></td>
+                        </tr>
+                        <tr>
+                            <td>New Yoga class added</td>
+                            <td><span class="severity-badge severity-good">Good</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div id="success-message" style="display:none;" class="success-message">Changes saved successfully!</div>
@@ -495,3 +563,4 @@ window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addCla
 </script>
 </body>
 </html>
+
