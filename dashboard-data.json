@@ -2,34 +2,25 @@
   "media": [
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
+    { "type": "video", "src": "https://ymcasaskatoon.org/videos/sample-room-tour.mp4" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
-  ],
-  "quotes": [
-    "Welcome to the YMCA of Saskatoon",
-    "Join today",
-    "Fall programs start next week",
-    "Register online today!",
-    "Check out our swimming schedule",
-    "New fitness classes available"
   ],
   "weekly_schedule": {
     "Monday": {
       "classes": [
-        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle" },
+        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20 Y-Cycle" },
         { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
         { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
         { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit" },
         { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga" }
       ],
-      "wod": {
-        "title": "Full Body Blast",
-        "exercises": [
-          "3 sets x 12 Push-ups",
-          "3 sets x 10 Pull-ups",
-          "3 sets x 15 Dumbbell Rows"
-        ]
-      },
-      "tip": "Stay hydrated and stretch before your first class."
+      "motivation": "Push yourself, because no one else is going to do it for you!",
+      "tip": "Drink a glass of water before starting your workout.",
+      "wod": [
+        "3 sets x 12 Push-ups",
+        "3 sets x 15 Squats",
+        "3 sets x 10 Pull-ups"
+      ]
     },
     "Tuesday": {
       "classes": [
@@ -38,17 +29,81 @@
         { "time": "12:10 PM - 12:50 PM", "event": "Step" },
         { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
       ],
-      "wod": {
-        "title": "Cardio Core",
-        "exercises": [
-          "20 min cycling",
-          "15 min planks",
-          "10 min stretching"
-        ]
-      },
-      "tip": "Focus on controlled breathing during your workout."
+      "motivation": "Every workout is progress, no matter how small.",
+      "tip": "Stretch your arms and legs before starting.",
+      "wod": [
+        "3 sets x 10 Lunges",
+        "3 sets x 15 Sit-ups",
+        "2 min Plank Hold"
+      ]
+    },
+    "Wednesday": {
+      "classes": [
+        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+        { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis" }
+      ],
+      "motivation": "Consistency is key — show up even when you don’t feel like it.",
+      "tip": "Focus on your breathing during exercises.",
+      "wod": [
+        "3 sets x 12 Push-ups",
+        "3 sets x 15 Dumbbell Rows",
+        "3 sets x 20 Jumping Jacks"
+      ]
+    },
+    "Thursday": {
+      "classes": [
+        { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch" },
+        { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
+        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+        { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp" },
+        { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" },
+        { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep" }
+      ],
+      "motivation": "You don’t have to be great to start, but you have to start to be great.",
+      "tip": "Warm up for at least 5 minutes.",
+      "wod": [
+        "3 sets x 15 Squats",
+        "3 sets x 12 Shoulder Press",
+        "2 min Plank Hold"
+      ]
+    },
+    "Friday": {
+      "classes": [
+        { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More" },
+        { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+        { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
+        { "time": "12:10 PM - 12:50 PM", "event": "Spin" },
+        { "time": "12:00 PM - 1:30 PM", "event": "Pickleball" }
+      ],
+      "motivation": "Sweat now, shine later.",
+      "tip": "Hydrate during breaks in your workout.",
+      "wod": [
+        "3 sets x 12 Push-ups",
+        "3 sets x 10 Pull-ups",
+        "3 sets x 20 Mountain Climbers"
+      ]
+    },
+    "Saturday": {
+      "classes": [
+        { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle" },
+        { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga" },
+        { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
+      ],
+      "motivation": "Rest, recover, and come back stronger.",
+      "tip": "Take deep breaths between exercises.",
+      "wod": [
+        "3 sets x 12 Lunges",
+        "3 sets x 15 Sit-ups",
+        "3 sets x 10 Burpees"
+      ]
+    },
+    "Sunday": {
+      "classes": [
+        { "time": "", "event": "NO CLASS" }
+      ],
+      "motivation": "A day of rest is a day of progress too.",
+      "tip": "Use today to stretch and relax.",
+      "wod": []
     }
-    // …repeat for all days
   }
 }
-
