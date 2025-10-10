@@ -2,7 +2,7 @@
   "media": [
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
+     { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
   ],
   "quotes": [
     "Welcome to the YMCA of Saskatoon",
@@ -12,63 +12,46 @@
     "Check out our swimming schedule",
     "New fitness classes available"
   ],
-  "announcements": [
-    {
-      "type": "blue",
-      "title": "YMCA Update",
-      "message": "Welcome to the YMCA of Saskatoon"
-    },
-    {
-      "type": "green",
-      "title": "Join Today!",
-      "message": "Fall programs start next week - Register online today!"
-    },
-    {
-      "type": "yellow",
-      "title": "Swimming Schedule",
-      "message": "Check out our swimming schedule and new fitness classes available"
-    }
-  ],
   "weekly_schedule": {
     "Monday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle", "status": "active" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "status": "active" },
-      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "status": "active" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit", "status": "active" },
-      { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga", "status": "active" }
+      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit" },
+      { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga" }
     ],
     "Tuesday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "status": "active" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "status": "active" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Step", "status": "active" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "status": "active" }
+      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Step" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
     ],
     "Wednesday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "status": "active" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis", "status": "active" }
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Full Body with Kris Seto Davis" }
     ],
     "Thursday": [
-      { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch", "status": "active" },
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "status": "active" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "status": "active" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp", "status": "active" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "status": "active" },
-      { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep", "status": "active" }
+      { "time": "6:15 AM - 7:00 AM", "event": "Strength, Sweat & Stretch" },
+      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Bootcamp" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" },
+      { "time": "7:00 PM - 7:45 PM", "event": "OCT 16 Aquastep" }
     ],
     "Friday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More", "status": "active" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "status": "active" },
-      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "status": "active" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Spin", "status": "active" },
-      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "status": "active" }
+      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 24 Core & More" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit" },
+      { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Spin" },
+      { "time": "12:00 PM - 1:30 PM", "event": "Pickleball" }
     ],
     "Saturday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "status": "active" },
-      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "status": "active" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "status": "active" }
+      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle" },
+      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit" }
     ],
     "Sunday": [
-      { "time": "", "event": "NO CLASS", "status": "cancelled" }
+      { "time": "", "event": "NO CLASS" }
     ]
   }
 }
