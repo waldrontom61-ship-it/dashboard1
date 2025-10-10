@@ -54,7 +54,7 @@
       "title": "🏊 Pool Hours",
       "message": "Open swim available daily",
       "details": "6 AM - 10 PM Monday-Friday, 8 AM - 8 PM weekends",
-      "severity": "good",
+      "severity": "warning",
       "permanent": true
     },
     {
@@ -67,9 +67,3 @@
     }
   ]
 }
-
-
-
-
-
-
