@@ -5,9 +5,7 @@
     "mediaRotationSpeed": 8
   },
   "media": [
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/09/20250610-YMCA-STILLS_10339-scaled.jpg" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/08/YMCA-3July25_-69-scaled.jpg" },
-    { "type": "image", "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Pixyl-Test.png" }
+    { "type": "video", "src": "https://drive.google.com/uc?export=download&id=1kW5HyV6pcuiRAv1byuyZGMvnbXilekqT", "duration": 163, "permanent": true}
   ],
   "weekly_schedule": {
     "Monday": [
@@ -69,5 +67,6 @@
     }
   ]
 }
+
 
 
