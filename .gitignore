@@ -1,7 +1,0 @@
-# Ignore local config with GitHub token
-config.js
-
-# Optional: ignore OS or editor files
-.DS_Store
-Thumbs.db
-*.log
