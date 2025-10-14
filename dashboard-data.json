@@ -16,10 +16,10 @@
       { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga", "location": "Studio B", "instructor": "Emma" }
     ],
     "Tuesday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "Studio A", "instructor": "Fred Dyck" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": "Lisa" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "Sarah" }
+      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "", "instructor": "Fred Dyck" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "" },
+      { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": "" },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "" }
     ],
     "Wednesday": [
       { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
@@ -59,5 +59,6 @@
     }
   ]
 }
+
 
 
