@@ -1,25 +1,30 @@
-{
+ "version": "2025-10-14-01",
   "settings": {
     "gymName": "YMCA of Saskatoon",
     "rotationSpeed": 4,
-    "mediaRotationSpeed": 8
+    "mediaRotationSpeed": 8,
+    "timezone": "America/Regina"
   },
   "media": [
-    { "type": "youtube", "src": "https://www.youtube.com/embed/IVvYR7_wKAo", "duration": 0 }
+    {
+      "type": "youtube",
+      "src": "https://www.youtube.com/embed/IVvYR7_wKAo?autoplay=1&mute=1&controls=0&rel=0&playlist=IVvYR7_wKAo&loop=1",
+      "duration": 60
+    }
   ],
   "weekly_schedule": {
     "Monday": [
-      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
+      { "time": "9:00 AM - 9:45 AM", "event": "NEW CLASS OCT 20 Y-Cycle", "location": "Cycle Studio", "instructor": "Sarah" },
       { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
       { "time": "10:00 AM - 10:45 AM", "event": "NEW CLASS OCT 20 Tabata Blast", "location": "Studio A", "instructor": "Jessica" },
       { "time": "12:10 PM - 12:50 PM", "event": "Y-Fit Circuit", "location": "Gym Floor", "instructor": "David" },
       { "time": "6:15 PM - 7:30 PM", "event": "Beginner Yoga", "location": "Studio B", "instructor": "Emma" }
     ],
     "Tuesday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": "", "instructor": "Fred Dyck" },
-      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "" },
-      { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": "" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "" }
+      { "time": "8:00 AM - 8:45 AM", "event": "Active Aging with Fred Dyck", "location": null, "instructor": "Fred Dyck" },
+      { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": null },
+      { "time": "12:10 PM - 12:50 PM", "event": "Step", "location": "Studio A", "instructor": null },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": null }
     ],
     "Wednesday": [
       { "time": "9:00 AM - 9:45 AM", "event": "Aquafit", "location": "Pool", "instructor": "Mike" },
@@ -41,9 +46,9 @@
       { "time": "12:00 PM - 1:30 PM", "event": "Pickleball", "location": "Gymnasium", "instructor": "Fred" }
     ],
     "Saturday": [
-      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Studio", "instructor": "" },
-      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio ", "instructor": "" },
-      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": "" }
+      { "time": "8:00 AM - 8:45 AM", "event": "NEW CLASS OCT 25 Y-Cycle", "location": "Studio", "instructor": null },
+      { "time": "10:00 AM - 11:00 AM", "event": "Energizing Yoga", "location": "Studio", "instructor": null },
+      { "time": "1:30 PM - 2:15 PM", "event": "Aquafit", "location": "Pool", "instructor": null }
     ],
     "Sunday": []
   },
@@ -59,6 +64,3 @@
     }
   ]
 }
-
-
-
