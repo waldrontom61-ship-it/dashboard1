@@ -10,7 +10,7 @@
 const GITHUB_OWNER = 'waldrontom61-ship-it';
 const GITHUB_REPO = 'dashboard1';
 const FILE_PATH = 'dashboard-data.json';
-const GITHUB_TOKEN = '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'; // keep secret
+const GITHUB_TOKEN = ''; // keep secret
 
 let dashboardData = {
     settings: { gymName: "YMCA of Saskatoon", rotationSpeed: 4, mediaRotationSpeed: 8 },
