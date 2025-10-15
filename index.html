@@ -1,377 +1,364 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>YMCA Dashboard with Admin Panel</title>
-    <style>
-        /* --- (Your original CSS preserved exactly, no changes needed) --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; overflow: hidden; }
-        body { box-sizing: border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YMCA Dashboard with Admin Panel</title>
+  <style>
+    /* --- Your original CSS (consolidated, unchanged in look) --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow: hidden; }
+    body { box-sizing: border-box; }
 
-        .main-layout { display:flex; height:100vh; background:black; font-family: system-ui, -apple-system, sans-serif; }
-        .content-area { width:70%; background:#111827; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
-        .sidebar-overlay { width:30%; height:100vh; background: linear-gradient(to bottom, #dc2626, #991b1b); color:white; position:relative; overflow:hidden; display:flex; flex-direction:column; }
-        .sidebar-footer { background:#7f1d1d; padding:1rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.2); }
-        .footer-time { font-size:0.875rem; font-weight:600; }
-        .footer-date { font-size:0.75rem; opacity:0.8; margin-top:0.25rem; }
-        .footer-weather { display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; }
-        .footer-weather-icon { font-size:1.25rem; }
+    .main-layout { display:flex; height:100vh; background:black; font-family: system-ui, -apple-system, sans-serif; }
+    .content-area { width:70%; background:#111827; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+    .sidebar-overlay { width:30%; height:100vh; background: linear-gradient(to bottom, #dc2626, #991b1b); color:white; position:relative; overflow:hidden; display:flex; flex-direction:column; }
+    .sidebar-footer { background:#7f1d1d; padding:1rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,0.2); }
+    .footer-time { font-size:0.875rem; font-weight:600; }
+    .footer-date { font-size:0.75rem; opacity:0.8; margin-top:0.25rem; }
+    .footer-weather { display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; }
+    .footer-weather-icon { font-size:1.25rem; }
 
-        .sidebar-header { background: rgba(0,0,0,0.3); padding:1rem; text-align:center; }
-        .sidebar-logo { max-width:200px; height:auto; margin-bottom:0.5rem; }
-        .sidebar-title { font-size:1.5rem; font-weight:bold; margin-bottom:0.5rem; }
+    .sidebar-header { background: rgba(0,0,0,0.3); padding:1rem; text-align:center; }
+    .sidebar-logo { max-width:200px; height:auto; margin-bottom:0.5rem; }
+    .sidebar-title { font-size:1.5rem; font-weight:bold; margin-bottom:0.5rem; }
 
-        .content-section { padding:1rem; flex:1; display:flex; flex-direction:column; overflow:hidden; }
-        .classes-section { flex:1; overflow:hidden; margin-bottom:1rem; display:flex; flex-direction:column; }
+    .content-section { padding:1rem; flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .classes-section { flex:1; overflow:hidden; margin-bottom:1rem; display:flex; flex-direction:column; }
 
-        .section-title { font-size:1rem; font-weight:bold; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:0.25rem; text-align:center; }
-        .info-card { background: rgba(255,255,255,0.2); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); }
-        .card-title { font-weight:600; margin-bottom:0.125rem; font-size:0.95rem; }
-        .card-subtitle { font-size:0.85rem; opacity:0.9; }
-        .card-meta { font-size:0.725rem; opacity:0.7; margin-top:0.125rem; }
+    .section-title { font-size:1rem; font-weight:bold; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:0.25rem; text-align:center; }
+    .info-card { background: rgba(255,255,255,0.2); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); }
+    .card-title { font-weight:600; margin-bottom:0.125rem; font-size:0.95rem; }
+    .card-subtitle { font-size:0.85rem; opacity:0.9; }
+    .card-meta { font-size:0.725rem; opacity:0.7; margin-top:0.125rem; }
 
-        .cancelled-class { background: rgba(239,68,68,0.3) !important; border:2px solid #ef4444 !important; position:relative; }
-        .cancelled-badge { background:#ef4444; color:white; padding:0.25rem 0.5rem; border-radius:0.25rem; font-size:0.75rem; font-weight:bold; margin-top:0.5rem; display:inline-block; }
+    .cancelled-class { background: rgba(239,68,68,0.3) !important; border:2px solid #ef4444 !important; position:relative; }
+    .cancelled-badge { background:#ef4444; color:white; padding:0.25rem 0.5rem; border-radius:0.25rem; font-size:0.75rem; font-weight:bold; margin-top:0.5rem; display:inline-block; }
 
-        .weather-display { display:flex; align-items:center; justify-content:space-between; background: rgba(255,255,255,0.15); border-radius:0.75rem; padding:1rem; margin-bottom:1rem; }
-        .weather-icon { font-size:2rem; }
-        .weather-temp { font-size:1.5rem; font-weight:bold; }
-        .weather-condition { font-size:0.875rem; opacity:0.9; }
+    .weather-display { display:flex; align-items:center; justify-content:space-between; background: rgba(255,255,255,0.15); border-radius:0.75rem; padding:1rem; margin-bottom:1rem; }
+    .weather-icon { font-size:2rem; }
+    .weather-temp { font-size:1.5rem; font-weight:bold; }
+    .weather-condition { font-size:0.875rem; opacity:0.9; }
 
-        .announcement-container { position:relative; height:80px; overflow:hidden; border-radius:0.5rem; }
-        .announcement-slide { position:absolute; top:0; left:0; width:100%; padding:0.75rem; border-radius:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); opacity:0; transform: translateY(20px); transition: all 0.5s ease-in-out; }
-        .announcement-slide.active { opacity:1; transform: translateY(0); }
-        .urgent-announcement { background: linear-gradient(135deg,#dc2626,#991b1b); border:2px solid #ef4444; box-shadow: 0 0 15px rgba(220,38,38,0.3); }
-        .warning-announcement { background: linear-gradient(135deg,#f59e0b,#d97706); border:2px solid #fbbf24; box-shadow: 0 0 15px rgba(245,158,11,0.3); }
-        .good-announcement { background: linear-gradient(135deg,#059669,#047857); border:2px solid #10b981; box-shadow: 0 0 15px rgba(5,150,105,0.3); }
+    .announcement-container { position:relative; height:80px; overflow:hidden; border-radius:0.5rem; }
+    .announcement-slide { position:absolute; top:0; left:0; width:100%; padding:0.75rem; border-radius:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); opacity:0; transform: translateY(20px); transition: all 0.5s ease-in-out; }
+    .announcement-slide.active { opacity:1; transform: translateY(0); }
+    .urgent-announcement { background: linear-gradient(135deg,#dc2626,#991b1b); border:2px solid #ef4444; box-shadow: 0 0 15px rgba(220,38,38,0.3); }
+    .warning-announcement { background: linear-gradient(135deg,#f59e0b,#d97706); border:2px solid #fbbf24; box-shadow: 0 0 15px rgba(245,158,11,0.3); }
+    .good-announcement { background: linear-gradient(135deg,#059669,#047857); border:2px solid #10b981; box-shadow: 0 0 15px rgba(5,150,105,0.3); }
 
-        .admin-toggle { position:fixed; top:1rem; right:1rem; background: rgba(0,0,0,0.1); color: rgba(255,255,255,0.3); border:none; padding:0.5rem; border-radius:50%; cursor:pointer; z-index:100; font-size:1rem; backdrop-filter: blur(10px); transition: all 0.3s ease; width:40px; height:40px; display:flex; align-items:center; justify-content:center;}
-        .admin-toggle:hover { background: rgba(0,0,0,0.3); color: rgba(255,255,255,0.7); transform: rotate(90deg); }
+    .admin-toggle { position:fixed; top:1rem; right:1rem; background: rgba(0,0,0,0.1); color: rgba(255,255,255,0.3); border:none; padding:0.5rem; border-radius:50%; cursor:pointer; z-index:100; font-size:1rem; backdrop-filter: blur(10px); transition: all 0.3s ease; width:40px; height:40px; display:flex; align-items:center; justify-content:center;}
+    .admin-toggle:hover { background: rgba(0,0,0,0.3); color: rgba(255,255,255,0.7); transform: rotate(90deg); }
 
-        .admin-panel { position:fixed; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg,#1f2937,#111827); z-index:200; display:none; overflow-y:auto; }
-        .admin-content { background: linear-gradient(135deg,#1e293b,#0f172a); margin:1rem; padding:2rem; border-radius:1rem; max-width:70rem; margin:1rem auto; box-shadow: 0 25px 50px rgba(0,0,0,0.7); color:white; border:2px solid #334155; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
-        .admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:3px solid #dc2626; background: linear-gradient(135deg,#dc2626,#b91c1c); margin:-2rem -2rem 2rem -2rem; padding:2rem 2rem 1.5rem 2rem; border-radius:1rem 1rem 0 0; box-shadow: 0 4px 20px rgba(220,38,38,0.3); }
-        .admin-title { font-size:2.5rem; font-weight:800; color:white; margin:0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); letter-spacing: -0.025em; }
+    .admin-panel { position:fixed; top:0; left:0; width:100%; height:100%; background: linear-gradient(135deg,#1f2937,#111827); z-index:200; display:none; overflow-y:auto; }
+    .admin-content { background: linear-gradient(135deg,#1e293b,#0f172a); margin:1rem; padding:2rem; border-radius:1rem; max-width:70rem; margin:1rem auto; box-shadow: 0 25px 50px rgba(0,0,0,0.7); color:white; border:2px solid #334155; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+    .admin-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:3px solid #dc2626; background: linear-gradient(135deg,#dc2626,#b91c1c); margin:-2rem -2rem 2rem -2rem; padding:2rem 2rem 1.5rem 2rem; border-radius:1rem 1rem 0 0; box-shadow: 0 4px 20px rgba(220,38,38,0.3); }
+    .admin-title { font-size:2.5rem; font-weight:800; color:white; margin:0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); letter-spacing: -0.025em; }
 
-        .admin-tabs { display:flex; gap:0.5rem; margin-bottom:2rem; background: rgba(30,41,59,0.5); padding:0.5rem; border-radius:0.75rem; border:1px solid #475569; }
-        .admin-tab { padding:1rem 2rem; background:transparent; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; font-size:1rem; color:#94a3b8; transition: all 0.3s ease; font-family:inherit; }
-        .admin-tab.active { background: linear-gradient(135deg,#dc2626,#b91c1c); color:white; box-shadow: 0 4px 12px rgba(220,38,38,0.4); transform: translateY(-1px); }
-        .admin-tab:hover { background: rgba(220,38,38,0.1); color:#f1f5f9; }
+    .admin-tabs { display:flex; gap:0.5rem; margin-bottom:2rem; background: rgba(30,41,59,0.5); padding:0.5rem; border-radius:0.75rem; border:1px solid #475569; }
+    .admin-tab { padding:1rem 2rem; background:transparent; border:none; border-radius:0.5rem; cursor:pointer; font-weight:600; font-size:1rem; color:#94a3b8; transition: all 0.3s ease; font-family:inherit; }
+    .admin-tab.active { background: linear-gradient(135deg,#dc2626,#b91c1c); color:white; box-shadow: 0 4px 12px rgba(220,38,38,0.4); transform: translateY(-1px); }
+    .admin-tab:hover { background: rgba(220,38,38,0.1); color:#f1f5f9; }
 
-        .admin-section { display:none; }
-        .admin-section.active { display:block; }
-        .form-group { margin-bottom:1.5rem; }
-        .form-label { display:block; font-weight:700; color:#f8fafc; margin-bottom:0.75rem; font-size:1rem; letter-spacing:0.025em; }
-        .form-input, .form-select { width:100%; padding:1rem 1.25rem; border:2px solid #475569; border-radius:0.75rem; font-size:1rem; font-weight:500; transition: all 0.3s ease; box-sizing:border-box; background:#334155; color:#f8fafc; font-family:inherit; }
-        .form-input:focus, .form-select:focus { outline:none; border-color:#dc2626; background:#475569; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
-        .form-input::placeholder { color:#94a3b8; font-weight:400; }
+    .admin-section { display:none; }
+    .admin-section.active { display:block; }
+    .form-group { margin-bottom:1.5rem; }
+    .form-label { display:block; font-weight:700; color:#f8fafc; margin-bottom:0.75rem; font-size:1rem; letter-spacing:0.025em; }
+    .form-input, .form-select { width:100%; padding:1rem 1.25rem; border:2px solid #475569; border-radius:0.75rem; font-size:1rem; font-weight:500; transition: all 0.3s ease; box-sizing:border-box; background:#334155; color:#f8fafc; font-family:inherit; }
+    .form-input:focus, .form-select:focus { outline:none; border-color:#dc2626; background:#475569; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+    .form-input::placeholder { color:#94a3b8; font-weight:400; }
 
-        .btn { padding:1rem 2rem; border:none; border-radius:0.75rem; font-weight:700; font-size:1rem; cursor:pointer; transition: all 0.3s ease; margin-right:0.75rem; margin-bottom:0.5rem; font-family:inherit; letter-spacing:0.025em; }
-        .btn-primary { background: linear-gradient(135deg,#dc2626,#b91c1c); color:white; border:2px solid #dc2626; box-shadow: 0 4px 12px rgba(220,38,38,0.3); }
-        .btn-secondary { background: linear-gradient(135deg,#475569,#334155); color:white; border:2px solid #475569; box-shadow: 0 4px 12px rgba(71,85,105,0.3); }
-        .btn-danger { background: linear-gradient(135deg,#ef4444,#dc2626); color:white; border:2px solid #ef4444; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+    .btn { padding:1rem 2rem; border:none; border-radius:0.75rem; font-weight:700; font-size:1rem; cursor:pointer; transition: all 0.3s ease; margin-right:0.75rem; margin-bottom:0.5rem; font-family:inherit; letter-spacing:0.025em; }
+    .btn-primary { background: linear-gradient(135deg,#dc2626,#b91c1c); color:white; border:2px solid #dc2626; box-shadow: 0 4px 12px rgba(220,38,38,0.3); }
+    .btn-secondary { background: linear-gradient(135deg,#475569,#334155); color:white; border:2px solid #475569; box-shadow: 0 4px 12px rgba(71,85,105,0.3); }
+    .btn-danger { background: linear-gradient(135deg,#ef4444,#dc2626); color:white; border:2px solid #ef4444; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
 
-        .data-table { width:100%; border-collapse:collapse; margin-top:1.5rem; background:#1e293b; border-radius:1rem; overflow:hidden; border:2px solid #334155; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-        .data-table th, .data-table td { padding:1.25rem 1rem; text-align:left; border-bottom:1px solid #334155; font-weight:500; }
-        .data-table th { background: linear-gradient(135deg,#dc2626,#b91c1c); font-weight:700; color:white; font-size:1rem; letter-spacing:0.025em; text-transform:uppercase; }
-        .data-table td { color:#f1f5f9; background:#334155; }
-        .data-table tr:hover td { background:#475569; }
+    .data-table { width:100%; border-collapse:collapse; margin-top:1.5rem; background:#1e293b; border-radius:1rem; overflow:hidden; border:2px solid #334155; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+    .data-table th, .data-table td { padding:1.25rem 1rem; text-align:left; border-bottom:1px solid #334155; font-weight:500; }
+    .data-table th { background: linear-gradient(135deg,#dc2626,#b91c1c); font-weight:700; color:white; font-size:1rem; letter-spacing:0.025em; text-transform:uppercase; }
+    .data-table td { color:#f1f5f9; background:#334155; }
+    .data-table tr:hover td { background:#475569; }
 
-        .severity-badge { padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:600; text-transform:uppercase; }
-        .severity-urgent { background:#fee2e2; color:#991b1b; }
-        .severity-warning { background:#fef3c7; color:#92400e; }
-        .severity-good { background:#d1fae5; color:#065f46; }
+    .severity-badge { padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:600; text-transform:uppercase; }
+    .severity-urgent { background:#fee2e2; color:#991b1b; }
+    .severity-warning { background:#fef3c7; color:#92400e; }
+    .severity-good { background:#d1fae5; color:#065f46; }
 
-        .close-btn { background: rgba(255,255,255,0.1); border:2px solid rgba(255,255,255,0.3); font-size:1.5rem; cursor:pointer; color:white; padding:0.75rem; border-radius:0.5rem; transition: all 0.3s ease; font-weight:bold; }
-        .close-btn:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg) scale(1.1); border-color: rgba(255,255,255,0.5); }
+    .close-btn { background: rgba(255,255,255,0.1); border:2px solid rgba(255,255,255,0.3); font-size:1.5rem; cursor:pointer; color:white; padding:0.75rem; border-radius:0.5rem; transition: all 0.3s ease; font-weight:bold; }
+    .close-btn:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg) scale(1.1); border-color: rgba(255,255,255,0.5); }
 
-        .success-message { background: linear-gradient(135deg,#10b981,#059669); color:white; padding:1.25rem; border-radius:0.75rem; margin-bottom:1.5rem; border:2px solid #34d399; font-weight:600; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
-        .admin-section h3 { color:#f8fafc; margin-bottom:1.5rem; font-size:1.75rem; font-weight:800; letter-spacing:-0.025em; border-bottom:3px solid #dc2626; padding-bottom:0.75rem; }
-        .demo-content { color:white; text-align:center; }
-        .demo-title { font-size:3rem; font-weight:bold; margin-bottom:1rem; }
-        .demo-subtitle { font-size:1.25rem; opacity:0.75; }
-        /* Make media container fill available content */
-.media-container, .media-slide {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-}
+    .success-message { background: linear-gradient(135deg,#10b981,#059669); color:white; padding:1.25rem; border-radius:0.75rem; margin-bottom:1.5rem; border:2px solid #34d399; font-weight:600; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+    .admin-section h3 { color:#f8fafc; margin-bottom:1.5rem; font-size:1.75rem; font-weight:800; letter-spacing:-0.025em; border-bottom:3px solid #dc2626; padding-bottom:0.75rem; }
 
-/* Make images, videos, and iframes fill the slide */
-.media-slide img,
-.media-slide video,
-.media-slide iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* fills container, cropping if needed */
-}
-        /* --- TV fit: force everything inside viewport, no scroll --- */
-html, body {
-    overflow: hidden !important;
-    height: 100% !important;
-    width: 100% !important;
-}
+    .demo-content { color:white; text-align:center; }
+    .demo-title { font-size:3rem; font-weight:bold; margin-bottom:1rem; }
+    .demo-subtitle { font-size:1.25rem; opacity:0.75; }
 
-.main-layout {
-    height: 100vh !important;
-    width: 100vw !important;
-}
+    /* Media fills */
+    .media-container, .media-slide { width: 100%; height: 100%; position: relative; overflow: hidden; }
+    .media-slide img, .media-slide video, .media-slide iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 
-.content-area,
-.sidebar-overlay {
-    height: 100% !important;
-}
+    /* Force viewport, no scroll */
+    html, body { overflow: hidden !important; height: 100% !important; width: 100% !important; }
+    .main-layout { height: 100vh !important; width: 100vw !important; }
+    .content-area, .sidebar-overlay { height: 100% !important; }
+    .content-section, .classes-section, .sidebar-footer, .sidebar-header { max-height: 100%; overflow: hidden !important; }
 
-.content-section,
-.classes-section,
-.sidebar-footer,
-.sidebar-header {
-    max-height: 100%;
-    overflow: hidden !important;
-}
-        /* --- Shrink schedule / classes fonts slightly for sidebar fit --- */
-#classes-container .info-card {
-    font-size: 0.8rem; /* smaller overall text */
-    line-height: 1.1;  /* tighter spacing */
-    padding: 0.4rem;   /* reduce padding */
-    margin-bottom: 0.4rem;
-}
+    /* Sidebar fit tweaks */
+    #classes-container .info-card { font-size: 0.8rem; line-height: 1.1; padding: 0.4rem; margin-bottom: 0.4rem; }
+    #classes-container .info-card .card-title { font-size: 0.9rem; margin-bottom: 0.1rem; }
+    #classes-container .info-card .card-subtitle { font-size: 0.75rem; }
+    #classes-container .info-card .card-meta { font-size: 0.65rem; }
 
-#classes-container .info-card .card-title {
-    font-size: 0.9rem; /* slightly smaller than before */
-    margin-bottom: 0.1rem;
-}
-
-#classes-container .info-card .card-subtitle {
-    font-size: 0.75rem;
-}
-
-#classes-container .info-card .card-meta {
-    font-size: 0.65rem;
-}
-
-/* --- Shrink announcements fonts to match --- */
-#announcement-container .announcement-slide {
-    font-size: 0.8rem;
-    line-height: 1.1;
-    padding: 0.4rem;
-    margin-bottom: 0.4rem;
-}
-
-#announcement-container .announcement-slide .card-title {
-    font-size: 0.9rem;
-    margin-bottom: 0.1rem;
-}
-
-#announcement-container .announcement-slide .card-subtitle {
-    font-size: 0.75rem;
-}
-
-#announcement-container .announcement-slide .card-meta {
-    font-size: 0.65rem;
-}
-</style>
+    #announcement-container .announcement-slide { font-size: 0.8rem; line-height: 1.1; padding: 0.4rem; margin-bottom: 0.4rem; }
+    #announcement-container .announcement-slide .card-title { font-size: 0.9rem; margin-bottom: 0.1rem; }
+    #announcement-container .announcement-slide .card-subtitle { font-size: 0.75rem; }
+    #announcement-container .announcement-slide .card-meta { font-size: 0.65rem; }
+  </style>
 </head>
 <body>
-    <!-- Admin Toggle -->
-    <button class="admin-toggle" onclick="toggleAdmin()">⚙️</button>
+  <!-- Admin Toggle -->
+  <button class="admin-toggle" onclick="toggleAdmin()">⚙️</button>
 
-    <!-- Main Layout -->
-    <div class="main-layout">
-        <!-- Content Area (70%) -->
-        <div class="content-area">
-            <div class="media-container" id="media-container">
-                <!-- Media slides -->
-            </div>
-        </div>
-
-        <!-- Sidebar Overlay (30%) -->
-        <div class="sidebar-overlay">
-            <div class="sidebar-header">
-                <img src="https://ymcasaskatoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png"
-                     alt="YMCA of Saskatoon Logo"
-                     class="sidebar-logo"
-                     onerror="this.style.display='none'; document.getElementById('gymNameDisplay').style.display='block';">
-                <h2 class="sidebar-title" id="gymNameDisplay" style="display:none;">YMCA of Saskatoon</h2>
-            </div>
-
-            <div class="content-section">
-                <!-- Classes -->
-                <div class="classes-section">
-                    <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
-                    <div id="classes-container"></div>
-                </div>
-
-                <!-- Announcements -->
-                <div class="announcements-section">
-                    <h3 class="section-title">📢 ANNOUNCEMENTS</h3>
-                    <div class="announcement-container" id="announcement-container"></div>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <div>
-                    <div class="footer-time" id="currentTime">12:34 PM</div>
-                    <div class="footer-date" id="currentDate">Monday, Dec 16</div>
-                </div>
-                <div class="footer-weather" id="weather-display">
-                    <span class="footer-weather-icon" id="weather-icon">⛅</span>
-                    <span id="weather-temp">--°C</span>
-                </div>
-            </div>
-        </div>
+  <!-- Main Layout -->
+  <div class="main-layout">
+    <!-- Content Area (70%) -->
+    <div class="content-area">
+      <div class="media-container" id="media-container"><!-- Media slides --></div>
     </div>
 
-    <!-- Admin Panel -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-content">
-            <div class="admin-header">
-                <h1 class="admin-title">🏋️ YMCA Dashboard Admin</h1>
-                <button class="close-btn" onclick="toggleAdmin()">✕</button>
-            </div>
+    <!-- Sidebar Overlay (30%) -->
+    <div class="sidebar-overlay">
+      <div class="sidebar-header">
+        <img
+          srcoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png
+        <h2 class="sidebar-title" id="gymNameDisplay" style="display:none;">YMCA of Saskatoon</h2>
+      </div>
 
-            <div class="admin-tabs">
-                <button class="admin-tab active" onclick="switchTab('classes')">Classes</button>
-                <button class="admin-tab" onclick="switchTab('announcements')">Announcements</button>
-            </div>
-
-            <!-- Classes Section -->
-            <div class="admin-section active" id="classes-section">
-                <h3>Manage Classes</h3>
-                <form id="class-form" onsubmit="addClass(event)">
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-                        <div class="form-group">
-                            <label class="form-label">Class Name</label>
-                            <input type="text" class="form-input" id="className" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Time</label>
-                            <input type="text" class="form-input" id="classTime" placeholder="6:00 PM" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Location</label>
-                            <input type="text" class="form-input" id="classLocation" placeholder="Studio A" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Instructor</label>
-                            <input type="text" class="form-input" id="classInstructor" placeholder="Sarah" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
-                            <input type="checkbox" id="classCancelled" style="width:auto;">
-                            <span class="form-label" style="margin:0;">Mark as Cancelled</span>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Class</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearClassForm()">Clear</button>
-                </form>
-
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Class Name</th>
-                            <th>Time</th>
-                            <th>Location</th>
-                            <th>Instructor</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="classes-table"></tbody>
-                </table>
-            </div>
-
-            <!-- Announcements Section -->
-            <div class="admin-section" id="announcements-section">
-                <h3>Manage Announcements</h3>
-                <form id="announcement-form" onsubmit="addAnnouncement(event)">
-                    <div class="form-group">
-                        <label class="form-label">Title</label>
-                        <input type="text" class="form-input" id="announcementTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Message</label>
-                        <input type="text" class="form-input" id="announcementMessage" required>
-                    </div>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                        <div class="form-group">
-                            <label class="form-label">Details</label>
-                            <input type="text" class="form-input" id="announcementDetails" placeholder="Additional information">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Severity</label>
-                            <select class="form-select" id="announcementSeverity" required>
-                                <option value="good">Good News (Green)</option>
-                                <option value="warning">Warning (Yellow)</option>
-                                <option value="urgent">Urgent (Red)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Announcement</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearAnnouncementForm()">Clear</button>
-                </form>
-
-                <table class="data-table">
-                    <thead><tr><th>Title</th><th>Message</th><th>Severity</th><th>Actions</th></tr></thead>
-                    <tbody id="announcements-table"></tbody>
-                </table>
-            </div>
-
-            <div id="success-message" style="display:none;" class="success-message">Changes saved successfully!</div>
+      <div class="content-section">
+        <!-- Classes -->
+        <div class="classes-section">
+          <h3 class="section-title">🕐 TODAY'S CLASSES</h3>
+          <div id="classes-container"></div>
         </div>
+
+        <!-- Announcements -->
+        <div class="announcements-section">
+          <h3 class="section-title">📢 ANNOUNCEMENTS</h3>
+          <div class="announcement-container" id="announcement-container"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div>
+          <div class="footer-time" id="currentTime">12:34 PM</div>
+          <div class="footer-date" id="currentDate">Monday, Dec 16</div>
+        </div>
+        <div class="footer-weather" id="weather-display">
+          <span class="footer-weather-icon" id="weather-icon">⛅</span>
+          <span id="weather-temp">--°C</span>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div class="admin-panel" id="adminPanel">
+    <div class="admin-content">
+      <div class="admin-header">
+        <h1 class="admin-title">🏋️ YMCA Dashboard Admin</h1>
+        <div style="display:flex; gap:.5rem; align-items:center;">
+          <button class="btn btn-secondary" onclick="openGitHubSettings()">GitHub Settings</button>
+          <button class="btn btn-primary" id="publishBtn" onclick="publishJson()">Publish JSON</button>
+          <button class="btn btn-secondary" onclick="exportDashboardJson()">Export JSON</button>
+          <button class="close-btn" onclick="toggleAdmin()">✕</button>
+        </div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('classes', event)">Classes</button>
+        <button class="admin-tab" onclick="switchTab('announcements', event)">Announcements</button>
+      </div>
+
+      <!-- Classes Section -->
+      <div class="admin-section active" id="classes-section">
+        <h3>Manage Classes</h3>
+        <form id="class-form" onsubmit="addClass(event)">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div class="form-group">
+              <label class="form-label">Class Name</label>
+              <input type="text" class="form-input" id="className" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time</label>
+              <input type="text" class="form-input" id="classTime" placeholder="6:00 PM" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <input type="text" class="form-input" id="classLocation" placeholder="Studio A" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Instructor</label>
+              <input type="text" class="form-input" id="classInstructor" placeholder="Sarah" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+              <input type="checkbox" id="classCancelled" style="width:auto;">
+              <span class="form-label" style="margin:0;">Mark as Cancelled</span>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Class</button>
+          <button type="button" class="btn btn-secondary" onclick="clearClassForm()">Clear</button>
+        </form>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Class Name</th>
+              <th>Time</th>
+              <th>Location</th>
+              <th>Instructor</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="classes-table"></tbody>
+        </table>
+      </div>
+
+      <!-- Announcements Section -->
+      <div class="admin-section" id="announcements-section">
+        <h3>Manage Announcements</h3>
+        <form id="announcement-form" onsubmit="addAnnouncement(event)">
+          <div class="form-group">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-input" id="announcementTitle" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <input type="text" class="form-input" id="announcementMessage" required>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="form-group">
+              <label class="form-label">Details</label>
+              <input type="text" class="form-input" id="announcementDetails" placeholder="Additional information">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Severity</label>
+              <select class="form-select" id="announcementSeverity" required>
+                <option value="good">Good News (Green)</option>
+                <option value="warning">Warning (Yellow)</option>
+                <option value="urgent">Urgent (Red)</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Announcement</button>
+          <button type="button" class="btn btn-secondary" onclick="clearAnnouncementForm()">Clear</button>
+        </form>
+
+        <table class="data-table">
+          <thead><tr><th>Title</th><th>Message</th><th>Severity</th><th>Actions</th></tr></thead>
+          <tbody id="announcements-table"></tbody>
+        </table>
+      </div>
+
+      <div id="success-message" style="display:none;" class="success-message">Changes saved successfully!</div>
+    </div>
+  </div>
+
+  <!-- GitHub Settings Modal -->
+  <div id="gh-modal" class="admin-panel" style="display:none; z-index: 300;">
+    <div class="admin-content">
+      <div class="admin-header">
+        <h1 class="admin-title">🔐 GitHub Settings</h1>
+        <button class="close-btn" onclick="closeGitHubSettings()">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Owner (user/org)</label>
+        <input type="text" class="form-input" id="ghOwner" placeholder="e.g., waldrontom61">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Repository</label>
+        <input type="text" class="form-input" id="ghRepo" placeholder="e.g., dashboard1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Branch</label>
+        <input type="text" class="form-input" id="ghBranch" placeholder="main" value="main">
+      </div>
+      <div class="form-group">
+        <label class="form-label">JSON path (in repo)</label>
+        <input type="text" class="form-input" id="ghPath" placeholder="dashboard-data.json" value="dashboard-data.json">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Personal Access Token (fine‑grained)</label>
+        <input type="password" class="form-input" id="ghToken" placeholder="github_pat_...">
+        <label class="form-label" style="display:flex;gap:.5rem;align-items:center;margin-top:.4rem;font-weight:500;color:#94a3b8;">
+          <input id="rememberToken" type="checkbox" style="width:auto;"> Remember token on this browser (don’t use on TVs)
+        </label>
+        <div style="font-size:0.85rem; color:#94a3b8; margin-top:0.25rem;">
+          Token stays only in this browser’s localStorage. Keep it off public devices.
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveGitHubSettings()">Save</button>
+      <button class="btn btn-secondary" onclick="clearGitHubSettings()">Clear</button>
+    </div>
+  </div>
 <script>
-/******************************************************************
- * Simplified Dashboard Admin Script
- * - Keeps dashboard fully functional
- * - Admin panel now only has Classes & Announcements
- * - All edits are temporary (localStorage only)
- * - Supports YouTube video rotation
- ******************************************************************/
+    /******************************************************************
+     * Dashboard Script (cleaned, no layout changes)
+     * - Keeps time strings & severity values as-is
+     * - Fetches JSON with cache-busting (TV-friendly)
+     * - Safer announcement rendering; robust YouTube embed
+     * - Single init only (no duplicate timers)
+     * - Export JSON + GitHub publish (modal added later in Part 4)
+     ******************************************************************/
 
-const JSON_URL = './dashboard-data.json';
+    // ---------- CONFIG ----------
+    const JSON_URL = './dashboard-data.json';
 
-let dashboardData = {
-    settings: { gymName: "YMCA of Saskatoon", rotationSpeed: 4, mediaRotationSpeed: 8 },
-    media: [],
-    weekly_schedule: {},
-    classes: [],
-    announcements: []
-};
+    let dashboardData = {
+      settings: { gymName: "YMCA of Saskatoon", rotationSpeed: 4, mediaRotationSpeed: 8 },
+      media: [],
+      weekly_schedule: {},
+      classes: [],
+      announcements: []
+    };
 
-let currentAnnouncement = 0;
-let currentMedia = 0;
-let rotationInterval = null;
-let mediaInterval = null;
-let videoTimer = null;
+    let currentAnnouncement = 0;
+    let currentMedia = 0;
+    let rotationInterval = null;
+    let mediaInterval = null;
 
-// ---------- INIT ----------
-document.addEventListener('DOMContentLoaded', initDashboard);
+    // ---------- INIT (only once) ----------
+    document.addEventListener('DOMContentLoaded', () => {
+      initDashboard().then(() => {
+        scaleSidebarContent();
+      });
+    });
 
-async function initDashboard() {
-    await loadJSONData();
-    loadLocalData();
-    renderAll();
-    startAnnouncementRotation();
-    startMediaRotation();
-    updateDateTime();
-    updateWeather();
-    setInterval(updateDateTime, 1000);
-    setInterval(updateWeather, 300_000); // 5 min
-}
+    async function initDashboard() {
+      await loadJSONData();
+      loadLocalData();
+      renderAll();
+      startAnnouncementRotation();
+      startMediaRotation();
+      updateDateTime();
+      updateWeather();
+      setInterval(updateDateTime, 1000);
+      setInterval(updateWeather, 300_000); // 5 min
+    }
 
-// ---------- JSON LOADING ----------
-async function loadJSONData() {
-    try {
-        const res = await fetch(JSON_URL, { cache: "no-store" });
+    // ---------- JSON LOADING ----------
+    async function loadJSONData() {
+      try {
+        // Strong cache-busting so TVs see updates quickly
+        const res = await fetch(
+          JSON_URL + (JSON_URL.includes('?') ? '&' : '?') + 'v=' + Date.now(),
+          { cache: "no-store" }
+        );
         if (!res.ok) throw new Error('Fetch failed: ' + res.status);
         const json = await res.json();
 
@@ -384,48 +371,49 @@ async function loadJSONData() {
         const gymDisplay = document.getElementById('gymNameDisplay');
         if (gymDisplay) gymDisplay.textContent = dashboardData.settings.gymName || '';
         console.log('Loaded JSON data from', JSON_URL);
-    } catch (err) {
+      } catch (err) {
         console.error('Error loading JSON:', err);
+      }
     }
-}
 
-// ---------- LOCAL STORAGE (temporary edits) ----------
-function loadLocalData() {
-    const saved = localStorage.getItem('ymcaDashboardData');
-    if (!saved) {
+    // ---------- LOCAL STORAGE (temporary edits) ----------
+    function loadLocalData() {
+      const saved = localStorage.getItem('ymcaDashboardData');
+      if (!saved) {
         dashboardData.classes = getTodaysClasses();
         return;
-    }
-    try {
+      }
+      try {
         const parsed = JSON.parse(saved);
         dashboardData.classes = [...getTodaysClasses(), ...(parsed.classes || [])];
-        if (Array.isArray(parsed.announcements)) dashboardData.announcements = [...dashboardData.announcements, ...parsed.announcements];
-    } catch (e) {
+        if (Array.isArray(parsed.announcements))
+          dashboardData.announcements = [...dashboardData.announcements, ...parsed.announcements];
+      } catch (e) {
         console.warn('Invalid localStorage data:', e);
         dashboardData.classes = getTodaysClasses();
+      }
     }
-}
 
-function saveLocalData() {
-    const payload = {
+    function saveLocalData() {
+      const payload = {
         classes: dashboardData.classes.filter(c => !c.fromSchedule),
         announcements: dashboardData.announcements.filter(a => !a.permanent)
-    };
-    localStorage.setItem('ymcaDashboardData', JSON.stringify(payload));
-}
+      };
+      localStorage.setItem('ymcaDashboardData', JSON.stringify(payload));
+    }
 
-function resetData() {
-    if (!confirm('Are you sure you want to reset temporary data?')) return;
-    localStorage.removeItem('ymcaDashboardData');
-    location.reload();
-}
+    function resetData() {
+      if (!confirm('Are you sure you want to reset temporary data?')) return;
+      localStorage.removeItem('ymcaDashboardData');
+      location.reload();
+    }
 
-// ---------- TODAY'S CLASSES ----------
-function getTodaysClasses() {
-    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Regina' }));
-    const weekday = now.toLocaleDateString('en-US', { weekday: 'long' });
-    const todaysSchedule = dashboardData.weekly_schedule[weekday] || [];
-    return todaysSchedule.map((item, idx) => ({
+    // ---------- TODAY'S CLASSES ----------
+    function getTodaysClasses() {
+      const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Regina' }));
+      const weekday = now.toLocaleDateString('en-US', { weekday: 'long' });
+      const todaysSchedule = dashboardData.weekly_schedule[weekday] || [];
+      return todaysSchedule.map((item, idx) => ({
         id: `schedule_${weekday}_${idx}`,
         name: item.event || '',
         time: item.time || '',
@@ -433,272 +421,563 @@ function getTodaysClasses() {
         instructor: item.instructor || '',
         cancelled: false,
         fromSchedule: true
-    }));
-}
+      }));
+    }
 
-// ---------- DATE / TIME ----------
-function updateDateTime() {
-    const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Regina' }));
-    const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
-    const timeString = now.toLocaleTimeString('en-US', timeOptions);
-    const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
-    const dateString = now.toLocaleDateString('en-US', dateOptions);
+    // ---------- DATE / TIME ----------
+    function updateDateTime() {
+      const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Regina' }));
+      const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+      const timeString = now.toLocaleTimeString('en-US', timeOptions);
+      const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+      const dateString = now.toLocaleDateString('en-US', dateOptions);
 
-    document.getElementById('currentTime').textContent = timeString;
-    document.getElementById('currentDate').textContent = dateString;
-}
+      document.getElementById('currentTime').textContent = timeString;
+      document.getElementById('currentDate').textContent = dateString;
+    }
 
-// ---------- WEATHER ----------
-async function updateWeather() {
-    try {
+    // ---------- WEATHER ----------
+    async function updateWeather() {
+      try {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=52.1332&longitude=-106.6700&current_weather=true';
         const res = await fetch(url);
         if (!res.ok) throw new Error('Weather fetch failed ' + res.status);
         const data = await res.json();
         if (data && data.current_weather) {
-            const temp = Math.round(data.current_weather.temperature);
-            const code = data.current_weather.weathercode;
-            document.getElementById('weather-temp').textContent = `${temp}°C`;
-            document.getElementById('weather-icon').textContent = getWeatherIcon(code);
+          const temp = Math.round(data.current_weather.temperature);
+          const code = data.current_weather.weathercode;
+          document.getElementById('weather-temp').textContent = `${temp}°C`;
+          document.getElementById('weather-icon').textContent = getWeatherIcon(code);
         } else {
-            throw new Error('No current_weather in response');
+          throw new Error('No current_weather in response');
         }
-    } catch (e) {
+      } catch (e) {
         console.warn('Weather error:', e);
         document.getElementById('weather-temp').textContent = '--°C';
         document.getElementById('weather-icon').textContent = '⛅';
+      }
     }
-}
 
-function getWeatherIcon(code) {
-    const map = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',56:'🌨️',57:'🌨️',
-                 61:'🌧️',63:'🌧️',65:'🌧️',66:'🌨️',67:'🌨️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',
-                 80:'🌦️',81:'🌧️',82:'🌧️',85:'🌨️',86:'🌨️',95:'⛈️',96:'⛈️',99:'⛈️'};
-    return map[code] || '⛅';
-}
+    function getWeatherIcon(code) {
+      const map = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',56:'🌨️',57:'🌨️',
+                   61:'🌧️',63:'🌧️',65:'🌧️',66:'🌨️',67:'🌨️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',
+                   80:'🌦️',81:'🌧️',82:'🌧️',85:'🌨️',86:'🌨️',95:'⛈️',96:'⛈️',99:'⛈️'};
+      return map[code] || '⛅';
+    }
 
-// ---------- RENDER ----------
-function renderAll() {
-    renderMedia();
-    renderClasses();
-    renderAnnouncements();
-    renderAdminTables();
-}
+    // ---------- RENDER ----------
+    function renderAll() {
+      renderMedia();
+      renderClasses();
+      renderAnnouncements();
+      renderAdminTables();
+      scaleSidebarContent();
+    }
 
-// ---------- MEDIA ----------
-function renderMedia() {
-    const container = document.getElementById('media-container');
-    container.innerHTML = '';
-    if (!Array.isArray(dashboardData.media) || dashboardData.media.length === 0) {
+    // ---------- MEDIA ----------
+    function renderMedia() {
+      const container = document.getElementById('media-container');
+      container.innerHTML = '';
+      if (!Array.isArray(dashboardData.media) || dashboardData.media.length === 0) {
         container.innerHTML = `<div class="demo-content"><div class="demo-title">70% CONTENT AREA</div><div class="demo-subtitle">Main media/image content goes here</div><div style="font-size:4rem;margin-top:2rem;">🖼️</div></div>`;
         return;
-    }
-    dashboardData.media.forEach((m, idx) => {
+      }
+      dashboardData.media.forEach((m, idx) => {
         const slide = document.createElement('div');
         slide.className = 'media-slide' + (idx === 0 ? ' active' : '');
         slide.dataset.index = idx;
 
         if (m.type === 'video') {
-            const video = document.createElement('video');
-            video.src = m.src;
-            video.setAttribute('playsinline', '');
-            video.muted = true;
-            video.autoplay = true;
-            video.loop = true;
-            video.preload = 'metadata';
-            video.style.width = '100%';
-            video.style.height = '100%';
-            video.style.objectFit = 'cover';
-            slide.appendChild(video);
+          const video = document.createElement('video');
+          video.src = m.src;
+          video.setAttribute('playsinline', '');
+          video.muted = true;
+          video.autoplay = true;
+          video.loop = true;
+          video.preload = 'metadata';
+          video.style.width = '100%';
+          video.style.height = '100%';
+          video.style.objectFit = 'cover';
+          slide.appendChild(video);
         } else if (m.type === 'youtube') {
-            const iframe = document.createElement('iframe');
-            iframe.src = m.src + '?autoplay=1&mute=1&controls=0&modestbranding=1&loop=1&playlist=' + extractYouTubeID(m.src);
-            iframe.allow = 'autoplay; fullscreen';
-            iframe.frameBorder = '0';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            slide.appendChild(iframe);
+          const iframe = document.createElement('iframe');
+          const sep = m.src.includes('?') ? '&' : '?';
+          const ytId = extractYouTubeID(m.src);
+          iframe.src = `${m.src}${sep}autoplay=1&mute=1&controls=0&modestbranding=1&loop=1&playlist=${ytId}`;
+          iframe.allow = 'autoplay; encrypted-media; fullscreen';
+          iframe.frameBorder = '0';
+          iframe.style.width = '100%';
+          iframe.style.height = '100%';
+          slide.appendChild(iframe);
         } else {
-            const img = document.createElement('img');
-            img.src = m.src;
-            img.alt = 'Media';
-            img.onerror = () => img.style.display = 'none';
-            slide.appendChild(img);
+          const img = document.createElement('img');
+          img.src = m.src;
+          img.alt = 'Media';
+          img.onerror = () => (img.style.display = 'none');
+          slide.appendChild(img);
         }
 
         container.appendChild(slide);
-    });
-}
+      });
+    }
 
-// Helper to extract YouTube video ID
-function extractYouTubeID(url) {
-    const match = url.match(/(?:\/embed\/|v=)([a-zA-Z0-9_-]{11})/);
-    return match ? match[1] : '';
-}
+    // Helper to extract YouTube video ID
+    function extractYouTubeID(url) {
+      const match = url.match(/(?:\/embed\/|v=)([a-zA-Z0-9_-]{11})/);
+      return match ? match[1] : '';
+    }
 
-function startMediaRotation() {
-    if (mediaInterval) clearInterval(mediaInterval);
-    const slides = document.querySelectorAll('.media-slide');
-    if (!slides || slides.length <= 1) return;
+    function startMediaRotation() {
+      if (mediaInterval) clearInterval(mediaInterval);
+      const slides = document.querySelectorAll('.media-slide');
+      if (!slides || slides.length <= 1) {
+        slides.forEach((s, i) => s.style.display = i === 0 ? 'block' : 'none');
+        return;
+      }
+      currentMedia = 0;
+      slides.forEach((s, i) => s.style.display = i === 0 ? 'block' : 'none');
 
-    currentMedia = 0;
-    slides.forEach((s, i) => s.style.display = i === 0 ? 'block' : 'none');
-
-    mediaInterval = setInterval(() => {
+      mediaInterval = setInterval(() => {
         slides[currentMedia].style.display = 'none';
         currentMedia = (currentMedia + 1) % slides.length;
         slides[currentMedia].style.display = 'block';
-    }, dashboardData.settings.mediaRotationSpeed * 1000);
-}
-
-// ---------- ANNOUNCEMENTS ----------
-function renderAnnouncements() {
-    const container = document.getElementById('announcement-container');
-    container.innerHTML = '';
-    const ann = Array.isArray(dashboardData.announcements) ? dashboardData.announcements : [];
-    if (ann.length === 0) {
-        container.innerHTML = '<div class="info-card good-announcement"><div class="card-title">Welcome to YMCA!</div><div class="card-subtitle">Have a great workout today</div></div>';
-        return;
+      }, dashboardData.settings.mediaRotationSpeed * 1000);
     }
-    ann.forEach((a, idx) => {
+// ---------- ANNOUNCEMENTS ----------
+    function renderAnnouncements() {
+      const container = document.getElementById('announcement-container');
+      container.innerHTML = '';
+      const ann = Array.isArray(dashboardData.announcements) ? dashboardData.announcements : [];
+      if (ann.length === 0) {
+        container.innerHTML =
+          '<div class="info-card good-announcement"><div class="card-title">Welcome to YMCA!</div><div class="card-subtitle">Have a great workout today</div></div>';
+        return;
+      }
+      ann.forEach((a, idx) => {
         const div = document.createElement('div');
         const severity = a.severity || 'good';
         div.className = `announcement-slide ${severity}-announcement ${idx === 0 ? 'active' : ''}`;
-        div.innerHTML = `<div class="card-title">${a.title || ''}</div><div class="card-subtitle">${a.message || ''}</div><div class="card-meta">${a.details || ''}</div>`;
+        // Escape user-provided text to prevent injection
+        div.innerHTML =
+          `<div class="card-title">${escapeHtml(a.title || '')}</div>` +
+          `<div class="card-subtitle">${escapeHtml(a.message || '')}</div>` +
+          `<div class="card-meta">${escapeHtml(a.details || '')}</div>`;
         container.appendChild(div);
-    });
-}
+      });
+    }
 
-function startAnnouncementRotation() {
-    if(rotationInterval) clearInterval(rotationInterval);
-    const slides = document.querySelectorAll('.announcement-slide');
-    if(!slides || slides.length<=1) return;
-    currentAnnouncement=0;
-    const speed = 4000;
-    rotationInterval = setInterval(()=>{
+    function startAnnouncementRotation() {
+      if (rotationInterval) clearInterval(rotationInterval);
+      const slides = document.querySelectorAll('.announcement-slide');
+      if (!slides || slides.length <= 1) return;
+      currentAnnouncement = 0;
+      const speed = 4000;
+      rotationInterval = setInterval(() => {
         const slidesNow = document.querySelectorAll('.announcement-slide');
         slidesNow[currentAnnouncement].classList.remove('active');
-        currentAnnouncement=(currentAnnouncement+1)%slidesNow.length;
+        currentAnnouncement = (currentAnnouncement + 1) % slidesNow.length;
         slidesNow[currentAnnouncement].classList.add('active');
-    }, speed);
-}
-
-// ---------- CLASSES ----------
-function renderClasses() {
-    const container = document.getElementById('classes-container');
-    container.innerHTML = '';
-    const classes = Array.isArray(dashboardData.classes)?dashboardData.classes:[];
-    if(classes.length===0){
-        container.innerHTML='<div class="info-card"><div class="card-title">No classes scheduled for today</div></div>';
-        return;
+      }, speed);
     }
-    classes.forEach(c=>{
-        const card=document.createElement('div');
-        card.className=c.cancelled?'info-card cancelled-class':'info-card';
-        let inner=`<div class="card-title">${escapeHtml(c.name)}</div><div class="card-subtitle">${escapeHtml(c.time)} - ${escapeHtml(c.location||'')}</div><div class="card-meta">Instructor: ${escapeHtml(c.instructor||'')}</div>`;
-        if(c.cancelled) inner+=`<div class="cancelled-badge">CANCELLED</div>`;
-        card.innerHTML=inner;
+
+    // ---------- CLASSES ----------
+    function renderClasses() {
+      const container = document.getElementById('classes-container');
+      container.innerHTML = '';
+      const classes = Array.isArray(dashboardData.classes) ? dashboardData.classes : [];
+      if (classes.length === 0) {
+        container.innerHTML = '<div class="info-card"><div class="card-title">No classes scheduled for today</div></div>';
+        return;
+      }
+      classes.forEach(c => {
+        const card = document.createElement('div');
+        card.className = c.cancelled ? 'info-card cancelled-class' : 'info-card';
+        let inner =
+          `<div class="card-title">${escapeHtml(c.name)}</div>` +
+          `<div class="card-subtitle">${escapeHtml(c.time)} - ${escapeHtml(c.location || '')}</div>` +
+          `<div class="card-meta">Instructor: ${escapeHtml(c.instructor || '')}</div>`;
+        if (c.cancelled) inner += `<div class="cancelled-badge">CANCELLED</div>`;
+        card.innerHTML = inner;
         container.appendChild(card);
-    });
-}
+      });
+    }
 
-// ---------- ADMIN PANEL ----------
-function renderAdminTables() {
-    const classesTbl = document.getElementById('classes-table');
-    classesTbl.innerHTML = '';
-    (dashboardData.classes||[]).forEach(c=>{
-        const tr=document.createElement('tr');
-        const statusBadge=c.cancelled?'<span class="severity-badge severity-urgent">Cancelled</span>':'<span class="severity-badge severity-good">Active</span>';
-        const toggleBtn=`<button class="btn" style="background:#f59e0b;color:white;" onclick="toggleClassCancellation('${c.id}')">${c.cancelled?'Reactivate':'Cancel'}</button>`;
-        const editBtn=c.fromSchedule?'':`<button class="btn btn-secondary" style="background:#059669;" onclick="editClass('${c.id}')">Edit</button>`;
-        const deleteBtn=c.fromSchedule?'':`<button class="btn btn-danger" onclick="removeClass('${c.id}')">Delete</button>`;
-        tr.innerHTML=`<td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.time)}</td><td>${escapeHtml(c.location||'')}</td><td>${escapeHtml(c.instructor||'')}</td><td>${statusBadge}</td><td>${toggleBtn} ${editBtn} ${deleteBtn}</td>`;
+    // ---------- ADMIN TABLES ----------
+    function renderAdminTables() {
+      const classesTbl = document.getElementById('classes-table');
+      classesTbl.innerHTML = '';
+      (dashboardData.classes || []).forEach(c => {
+        const tr = document.createElement('tr');
+        const statusBadge = c.cancelled
+          ? '<span class="severity-badge severity-urgent">Cancelled</span>'
+          : '<span class="severity-badge severity-good">Active</span>';
+        const toggleBtn = `<button class="btn" style="background:#f59e0b;color:white;" onclick="toggleClassCancellation('${c.id}')">${c.cancelled ? 'Reactivate' : 'Cancel'}</button>`;
+        const editBtn = c.fromSchedule ? '' : `<button class="btn btn-secondary" style="background:#059669;" onclick="editClass('${c.id}')">Edit</button>`;
+        const deleteBtn = c.fromSchedule ? '' : `<button class="btn btn-danger" onclick="removeClass('${c.id}')">Delete</button>`;
+        tr.innerHTML =
+          `<td>${escapeHtml(c.name)}</td>` +
+          `<td>${escapeHtml(c.time)}</td>` +
+          `<td>${escapeHtml(c.location || '')}</td>` +
+          `<td>${escapeHtml(c.instructor || '')}</td>` +
+          `<td>${statusBadge}</td>` +
+          `<td>${toggleBtn} ${editBtn} ${deleteBtn}</td>`;
         classesTbl.appendChild(tr);
-    });
+      });
 
-    const annTbl = document.getElementById('announcements-table');
-    annTbl.innerHTML = '';
-    (dashboardData.announcements||[]).forEach(a=>{
-        const tr=document.createElement('tr');
-        const deleteBtn=a.permanent?'<span style="color:#6b7280;font-style:italic;">Permanent</span>':`<button class="btn btn-danger" onclick="removeAnnouncement(${a.id})">Delete</button>`;
-        tr.innerHTML=`<td>${escapeHtml(a.title||'')}</td><td>${escapeHtml(a.message||'')}</td><td><span class="severity-badge severity-${a.severity||'good'}">${escapeHtml(a.severity||'')}</span></td><td>${deleteBtn}</td>`;
+      const annTbl = document.getElementById('announcements-table');
+      annTbl.innerHTML = '';
+      (dashboardData.announcements || []).forEach(a => {
+        const tr = document.createElement('tr');
+        const deleteBtn = a.permanent
+          ? '<span style="color:#6b7280;font-style:italic;">Permanent</span>'
+          : `<button class="btn btn-danger" onclick="removeAnnouncement(${a.id})">Delete</button>`;
+        tr.innerHTML =
+          `<td>${escapeHtml(a.title || '')}</td>` +
+          `<td>${escapeHtml(a.message || '')}</td>` +
+          `<td><span class="severity-badge severity-${a.severity || 'good'}">${escapeHtml(a.severity || '')}</span></td>` +
+          `<td>${deleteBtn}</td>`;
         annTbl.appendChild(tr);
-    });
-}
+      });
+    }
 
-// ---------- ADMIN ACTIONS ----------
-function addClass(e){e.preventDefault();
-    const name=document.getElementById('className').value.trim();
-    const time=document.getElementById('classTime').value.trim();
-    const location=document.getElementById('classLocation').value.trim();
-    const instructor=document.getElementById('classInstructor').value.trim();
-    const cancelled=document.getElementById('classCancelled').checked;
-    if(!name) return alert('Enter class name');
-    const newClass={id:Date.now().toString(),name,time,location,instructor,cancelled,fromSchedule:false};
-    dashboardData.classes.push(newClass);
-    saveLocalData();
-    renderClasses();
-    renderAdminTables();
-    clearClassForm();
-    showSuccess();
-}
-function removeClass(id){dashboardData.classes=dashboardData.classes.filter(c=>c.id!==id);saveLocalData();renderClasses();renderAdminTables();showSuccess();}
-function toggleClassCancellation(id){const c=dashboardData.classes.find(x=>x.id===id);if(!c)return;c.cancelled=!c.cancelled;saveLocalData();renderClasses();renderAdminTables();showSuccess();}
-function editClass(id){const c=dashboardData.classes.find(x=>x.id===id);if(!c)return;document.getElementById('className').value=c.name;document.getElementById('classTime').value=c.time;document.getElementById('classLocation').value=c.location;document.getElementById('classInstructor').value=c.instructor;document.getElementById('classCancelled').checked=c.cancelled;const form=document.getElementById('class-form');form.onsubmit=function(ev){updateClass(ev,id);};form.querySelector('button[type="submit"]').textContent='Update Class';}
-function updateClass(e,id){e.preventDefault();const c=dashboardData.classes.find(x=>x.id===id);if(!c)return;c.name=document.getElementById('className').value.trim();c.time=document.getElementById('classTime').value.trim();c.location=document.getElementById('classLocation').value.trim();c.instructor=document.getElementById('classInstructor').value.trim();c.cancelled=document.getElementById('classCancelled').checked;saveLocalData();renderClasses();renderAdminTables();clearClassForm();showSuccess();}
-function clearClassForm(){const form=document.getElementById('class-form');form.reset();form.onsubmit=addClass;form.querySelector('button[type="submit"]').textContent='Add Class';}
+    // ---------- ADMIN ACTIONS ----------
+    function addClass(e){
+      e.preventDefault();
+      const name = document.getElementById('className').value.trim();
+      const time = document.getElementById('classTime').value.trim();
+      const location = document.getElementById('classLocation').value.trim();
+      const instructor = document.getElementById('classInstructor').value.trim();
+      const cancelled = document.getElementById('classCancelled').checked;
+      if(!name) return alert('Enter class name');
+      const newClass = { id: Date.now().toString(), name, time, location, instructor, cancelled, fromSchedule:false };
+      dashboardData.classes.push(newClass);
+      saveLocalData();
+      renderClasses(); renderAdminTables(); scaleSidebarContent(); showSuccess();
+      clearClassForm();
+    }
 
-function addAnnouncement(e){e.preventDefault();const title=document.getElementById('announcementTitle').value.trim();const message=document.getElementById('announcementMessage').value.trim();const details=document.getElementById('announcementDetails').value.trim();const severity=document.getElementById('announcementSeverity').value;if(!title||!message) return alert('Title and message required');const ann={id:Date.now(),title,message,details,severity,permanent:false};dashboardData.announcements.push(ann);saveLocalData();renderAnnouncements();renderAdminTables();clearAnnouncementForm();startAnnouncementRotation();showSuccess();}
-function removeAnnouncement(id){const ann=dashboardData.announcements.find(a=>a.id===id);if(!ann)return;if(ann.permanent)return alert('Cannot delete permanent announcement from admin (edit JSON instead).');dashboardData.announcements=dashboardData.announcements.filter(a=>a.id!==id);saveLocalData();renderAnnouncements();renderAdminTables();startAnnouncementRotation();showSuccess();}
-function clearAnnouncementForm(){document.getElementById('announcement-form').reset();}
+    function removeClass(id){
+      dashboardData.classes = dashboardData.classes.filter(c => c.id !== id);
+      saveLocalData();
+      renderClasses(); renderAdminTables(); scaleSidebarContent(); showSuccess();
+    }
 
-// ---------- Admin UI helpers ----------
-function toggleAdmin(){const panel=document.getElementById('adminPanel');panel.style.display=(panel.style.display==='block')?'none':'block';}
-function switchTab(name){document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));event.target.classList.add('active');document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));const el=document.getElementById(name+'-section');if(el)el.classList.add('active');}
-function showSuccess(){const el=document.getElementById('success-message');if(!el)return;el.style.display='block';setTimeout(()=>el.style.display='none',2500);}
-function escapeHtml(s){if(!s&&s!==0)return'';return String(s).replace(/[&<>"'`=\/]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'}[c]));}
+    function toggleClassCancellation(id){
+      const c = dashboardData.classes.find(x => x.id === id); if(!c) return;
+      c.cancelled = !c.cancelled;
+      saveLocalData();
+      renderClasses(); renderAdminTables(); scaleSidebarContent(); showSuccess();
+    }
 
-// Expose globals for HTML buttons
-window.toggleAdmin=toggleAdmin;window.switchTab=switchTab;window.addClass=addClass;window.clearClassForm=clearClassForm;window.editClass=editClass;window.removeClass=removeClass;window.toggleClassCancellation=toggleClassCancellation;window.updateClass=updateClass;window.addAnnouncement=addAnnouncement;window.clearAnnouncementForm=clearAnnouncementForm;window.removeAnnouncement=removeAnnouncement;window.resetData=resetData;
-<!-- ---------- AUTO-SCALE SIDEBAR CONTENT (No Scroll TV) ---------- -->
-function scaleSidebarContent() {
-    const sidebar = document.querySelector('.sidebar-overlay');
-    const header = document.querySelector('.sidebar-header');
-    const footer = document.querySelector('.sidebar-footer');
-    const content = document.querySelector('.content-section');
+    function editClass(id){
+      const c = dashboardData.classes.find(x => x.id === id); if(!c) return;
+      document.getElementById('className').value = c.name;
+      document.getElementById('classTime').value = c.time;
+      document.getElementById('classLocation').value = c.location;
+      document.getElementById('classInstructor').value = c.instructor;
+      document.getElementById('classCancelled').checked = c.cancelled;
+      const form = document.getElementById('class-form');
+      form.onsubmit = function(ev){ updateClass(ev, id); };
+      form.querySelector('button[type="submit"]').textContent = 'Update Class';
+    }
 
-    if (!sidebar || !header || !footer || !content) return;
+    function updateClass(e,id){
+      e.preventDefault();
+      const c = dashboardData.classes.find(x => x.id === id); if(!c) return;
+      c.name = document.getElementById('className').value.trim();
+      c.time = document.getElementById('classTime').value.trim();
+      c.location = document.getElementById('classLocation').value.trim();
+      c.instructor = document.getElementById('classInstructor').value.trim();
+      c.cancelled = document.getElementById('classCancelled').checked;
+      saveLocalData();
+      renderClasses(); renderAdminTables(); scaleSidebarContent(); showSuccess();
+      clearClassForm();
+    }
 
-    const availableHeight = sidebar.clientHeight - header.offsetHeight - footer.offsetHeight - 10; // 10px buffer
-    const contentHeight = content.scrollHeight;
+    function clearClassForm(){
+      const form = document.getElementById('class-form');
+      form.reset();
+      form.onsubmit = addClass;
+      form.querySelector('button[type="submit"]').textContent = 'Add Class';
+    }
 
-    const scale = Math.min(1, availableHeight / contentHeight);
+    function addAnnouncement(e){
+      e.preventDefault();
+      const title = document.getElementById('announcementTitle').value.trim();
+      const message = document.getElementById('announcementMessage').value.trim();
+      const details = document.getElementById('announcementDetails').value.trim();
+      const severity = document.getElementById('announcementSeverity').value;
+      if(!title || !message) return alert('Title and message required');
+      const ann = { id: Date.now(), title, message, details, severity, permanent:false };
+      dashboardData.announcements.push(ann);
+      saveLocalData();
+      renderAnnouncements(); renderAdminTables(); scaleSidebarContent();
+      startAnnouncementRotation(); showSuccess();
+      clearAnnouncementForm();
+    }
 
-    content.style.transformOrigin = 'top';
-    content.style.transform = `scale(${scale})`;
-}
+    function removeAnnouncement(id){
+      const ann = dashboardData.announcements.find(a => a.id === id);
+      if(!ann) return;
+      if(ann.permanent) return alert('Cannot delete permanent announcement from admin (edit JSON instead).');
+      dashboardData.announcements = dashboardData.announcements.filter(a => a.id !== id);
+      saveLocalData();
+      renderAnnouncements(); renderAdminTables(); scaleSidebarContent();
+      startAnnouncementRotation(); showSuccess();
+    }
 
-// Run on load and resize
-window.addEventListener('load', scaleSidebarContent);
-window.addEventListener('resize', scaleSidebarContent);
+    function clearAnnouncementForm(){
+      document.getElementById('announcement-form').reset();
+    }
 
-// Re-run whenever classes or announcements are updated
-function renderAllAndScale() {
-    renderAll();
-    scaleSidebarContent();
-}
+    // ---------- Admin UI helpers ----------
+    function toggleAdmin(){
+      const panel = document.getElementById('adminPanel');
+      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    }
 
-// Replace old render calls with new function
-document.addEventListener('DOMContentLoaded', () => {
-    initDashboard().then(() => scaleSidebarContent());
-});
+    function switchTab(name, ev){
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+      if (ev && ev.currentTarget) ev.currentTarget.classList.add('active');
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(name + '-section');
+      if (el) el.classList.add('active');
+    }
 
-// Override renderClasses and renderAnnouncements calls in admin actions
-const origRenderClasses = renderClasses;
-renderClasses = function() { origRenderClasses(); scaleSidebarContent(); };
+    function showSuccess(){
+      const el = document.getElementById('success-message'); if(!el) return;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 2500);
+    }
 
-const origRenderAnnouncements = renderAnnouncements;
-renderAnnouncements = function() { origRenderAnnouncements(); scaleSidebarContent(); };
-</script>
+    function escapeHtml(s){
+      if(!s && s !== 0) return '';
+      return String(s).replace(/[&<>\"'`=\/]/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'
+      }[c]));
+    }
+
+    // Expose globals for HTML buttons
+    window.toggleAdmin = toggleAdmin;
+    window.switchTab = switchTab;
+    window.addClass = addClass;
+    window.clearClassForm = clearClassForm;
+    window.editClass = editClass;
+    window.removeClass = removeClass;
+    window.toggleClassCancellation = toggleClassCancellation;
+    window.updateClass = updateClass;
+    window.addAnnouncement = addAnnouncement;
+    window.clearAnnouncementForm = clearAnnouncementForm;
+    window.removeAnnouncement = removeAnnouncement;
+    window.resetData = resetData;
+
+    /* ---------- AUTO-SCALE SIDEBAR CONTENT (No Scroll TV) ---------- */
+    function scaleSidebarContent() {
+      const sidebar = document.querySelector('.sidebar-overlay');
+      const header = document.querySelector('.sidebar-header');
+      const footer = document.querySelector('.sidebar-footer');
+      const content = document.querySelector('.content-section');
+      if (!sidebar || !header || !footer || !content) return;
+
+      const availableHeight = sidebar.clientHeight - header.offsetHeight - footer.offsetHeight - 10; // buffer
+      const contentHeight = content.scrollHeight;
+      const scale = Math.min(1, availableHeight / contentHeight);
+
+      content.style.transformOrigin = 'top';
+      content.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', scaleSidebarContent);
+
+    /* ---------- SAFE: Export JSON for manual GitHub commit ---------- */
+    function exportDashboardJson() {
+      // Only persist manual classes (not schedule-derived)
+      const manualClasses = (dashboardData.classes || [])
+        .filter(c => !c.fromSchedule)
+        .map(c => ({
+          id: c.id, name: c.name, time: c.time,
+          location: c.location || null,
+          instructor: c.instructor || null,
+          cancelled: !!c.cancelled
+        }));
+
+      const anns = (dashboardData.announcements || []).map(a => ({
+        id: a.id, title: a.title, message: a.message,
+        details: a.details || '', severity: a.severity || 'good',
+        permanent: !!a.permanent
+      }));
+
+      const version = new Date().toISOString().replace(/[-:.TZ]/g, '');
+      const out = {
+        version,
+        settings: dashboardData.settings || {},
+        media: Array.isArray(dashboardData.media) ? dashboardData.media : [],
+        weekly_schedule: dashboardData.weekly_schedule || {},
+        classes: manualClasses,
+        announcements: anns
+      };
+
+      const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'dashboard-data.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showSuccess();
+    }
+    window.exportDashboardJson = exportDashboardJson;
+// ==============================
+    // GitHub Publish Add‑On (Contents API)
+    // ==============================
+
+    // Pre-fill defaults for your repo:
+    const GH_DEFAULT_OWNER  = 'waldrontom61';
+    const GH_DEFAULT_REPO   = 'dashboard1';
+    const GH_DEFAULT_BRANCH = 'main';
+    const GH_DEFAULT_PATH   = 'dashboard-data.json';
+
+    /* ---------- Modal UI ---------- */
+    function openGitHubSettings() {
+      const modal = document.getElementById('gh-modal');
+      document.getElementById('ghOwner').value  = localStorage.getItem('ghOwner')  || GH_DEFAULT_OWNER;
+      document.getElementById('ghRepo').value   = localStorage.getItem('ghRepo')   || GH_DEFAULT_REPO;
+      document.getElementById('ghBranch').value = localStorage.getItem('ghBranch') || GH_DEFAULT_BRANCH;
+      document.getElementById('ghPath').value   = localStorage.getItem('ghPath')   || GH_DEFAULT_PATH;
+      document.getElementById('ghToken').value  = localStorage.getItem('ghToken')  || '';
+      document.getElementById('rememberToken').checked = !!localStorage.getItem('ghToken');
+      modal.style.display = 'block';
+    }
+    function closeGitHubSettings() { document.getElementById('gh-modal').style.display = 'none'; }
+    function saveGitHubSettings() {
+      localStorage.setItem('ghOwner',  document.getElementById('ghOwner').value.trim());
+      localStorage.setItem('ghRepo',   document.getElementById('ghRepo').value.trim());
+      localStorage.setItem('ghBranch', document.getElementById('ghBranch').value.trim() || 'main');
+      localStorage.setItem('ghPath',   document.getElementById('ghPath').value.trim() || 'dashboard-data.json');
+
+      const tok = document.getElementById('ghToken').value.trim();
+      const remember = document.getElementById('rememberToken').checked;
+      if (remember && tok) localStorage.setItem('ghToken', tok);
+      if (!remember) localStorage.removeItem('ghToken');
+
+      closeGitHubSettings();
+      alert('GitHub settings saved.');
+    }
+    function clearGitHubSettings() {
+      ['ghOwner','ghRepo','ghBranch','ghPath','ghToken'].forEach(k => localStorage.removeItem(k));
+      alert('GitHub settings cleared.');
+    }
+
+    /* ---------- Helpers for Contents API ---------- */
+    function utf8ToBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
+
+    function getGhCfg() {
+      const owner  = localStorage.getItem('ghOwner')  || GH_DEFAULT_OWNER;
+      const repo   = localStorage.getItem('ghRepo')   || GH_DEFAULT_REPO;
+      const branch = localStorage.getItem('ghBranch') || GH_DEFAULT_BRANCH;
+      const path   = localStorage.getItem('ghPath')   || GH_DEFAULT_PATH;
+      const token  = localStorage.getItem('ghToken')  || '';
+      if (!owner || !repo || !branch || !path || !token) {
+        throw new Error('Missing settings. Open GitHub Settings and fill Owner/Repo/Branch/Path/Token.');
+      }
+      return { owner, repo, branch, path, token };
+    }
+
+    // GET current file SHA (required when updating)
+    async function ghGetFileSha({owner, repo, path, branch, token}) {
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(branch)}`;
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      });
+      if (res.status === 404) return null; // file doesn't exist yet
+      if (!res.ok) throw new Error(`Get content failed: ${res.status}`);
+      const data = await res.json();
+      return data.sha || null;
+    }
+
+    // PUT create/update contents (Base64 body; include sha when updating)
+    async function ghPutFile({owner, repo, path, branch, token, message, contentB64, sha}) {
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+      const body = { message, content: contentB64, branch };
+      if (sha) body.sha = sha;
+
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`Publish failed: ${res.status} ${txt}`);
+      }
+      return res.json();
+    }
+
+    /* ---------- Build payload (same as Export JSON) ---------- */
+    function buildPublishPayload() {
+      const manualClasses = (dashboardData.classes || [])
+        .filter(c => !c.fromSchedule)
+        .map(c => ({
+          id: c.id, name: c.name, time: c.time,
+          location: c.location || null,
+          instructor: c.instructor || null,
+          cancelled: !!c.cancelled
+        }));
+
+      const anns = (dashboardData.announcements || []).map(a => ({
+        id: a.id, title: a.title, message: a.message,
+        details: a.details || '', severity: a.severity || 'good',
+        permanent: !!a.permanent
+      }));
+
+      const version = new Date().toISOString().replace(/[-:.TZ]/g, '');
+      return {
+        version,
+        settings: dashboardData.settings || {},
+        media: Array.isArray(dashboardData.media) ? dashboardData.media : [],
+        weekly_schedule: dashboardData.weekly_schedule || {},
+        classes: manualClasses,
+        announcements: anns
+      };
+    }
+
+    /* ---------- Publish button ---------- */
+    async function publishJson() {
+      let btn = document.getElementById('publishBtn');
+      try {
+        const cfg = getGhCfg();
+        const payload = buildPublishPayload();
+        const contentB64 = utf8ToBase64(JSON.stringify(payload, null, 2));
+        if (btn) { btn.disabled = true; btn.textContent = 'Publishing…'; }
+
+        const sha = await ghGetFileSha(cfg);
+        const message = `Update ${cfg.path} via dashboard (version ${payload.version})`;
+        const result = await ghPutFile({ ...cfg, message, contentB64, sha });
+
+        console.log('Published:', result);
+        alert('Published successfully! TVs will refresh within ~1 minute.');
+      } catch (e) {
+        console.error(e);
+        alert(e.message || 'Publish failed. See console for details.');
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Publish JSON'; }
+      }
+    }
+
+    // Expose for onclick
+    window.openGitHubSettings = openGitHubSettings;
+    window.closeGitHubSettings = closeGitHubSettings;
+    window.saveGitHubSettings = saveGitHubSettings;
+    window.clearGitHubSettings = clearGitHubSettings;
+    window.publishJson = publishJson;
+  </script>
 </body>
 </html>
+``
