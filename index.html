@@ -28,6 +28,7 @@
 
     .section-title { font-size:1rem; font-weight:bold; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:0.25rem; text-align:center; }
     .info-card { background: rgba(255,255,255,0.2); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); }
+
     .card-title { font-weight:600; margin-bottom:0.125rem; font-size:0.95rem; }
     .card-subtitle { font-size:0.85rem; opacity:0.9; }
     .card-meta { font-size:0.725rem; opacity:0.7; margin-top:0.125rem; }
@@ -130,8 +131,10 @@
     <!-- Sidebar Overlay (30%) -->
     <div class="sidebar-overlay">
       <div class="sidebar-header">
+        <!-- Leaving this block as-is (no design changes requested) -->
         <img
           srcoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png
+        >
         <h2 class="sidebar-title" id="gymNameDisplay" style="display:none;">YMCA of Saskatoon</h2>
       </div>
 
@@ -306,20 +309,24 @@
       <button class="btn btn-secondary" onclick="clearGitHubSettings()">Clear</button>
     </div>
   </div>
-<script>
+
+  <script>
     /******************************************************************
      * Dashboard Script (cleaned, no layout changes)
      * - Keeps time strings & severity values as-is
      * - Fetches JSON with cache-busting (TV-friendly)
      * - Safer announcement rendering; robust YouTube embed
      * - Single init only (no duplicate timers)
-     * - Export JSON + GitHub publish (modal added later in Part 4)
+     * - Export JSON + GitHub publish
+     * - ✅ FIX #1: Preserve JSON manual classes (merge instead of overwrite)
+     * - ✅ FIX #2: Auto-refresh TVs when JSON version changes
      ******************************************************************/
 
     // ---------- CONFIG ----------
     const JSON_URL = './dashboard-data.json';
 
     let dashboardData = {
+      version: null, // ✅ track JSON version for TV refresh
       settings: { gymName: "YMCA of Saskatoon", rotationSpeed: 4, mediaRotationSpeed: 8 },
       media: [],
       weekly_schedule: {},
@@ -341,7 +348,7 @@
 
     async function initDashboard() {
       await loadJSONData();
-      loadLocalData();
+      loadLocalData();            // ✅ will merge schedule + JSON manual + local manual
       renderAll();
       startAnnouncementRotation();
       startMediaRotation();
@@ -349,6 +356,8 @@
       updateWeather();
       setInterval(updateDateTime, 1000);
       setInterval(updateWeather, 300_000); // 5 min
+
+      startVersionWatcher();      // ✅ TVs pick up new version automatically
     }
 
     // ---------- JSON LOADING ----------
@@ -362,10 +371,12 @@
         if (!res.ok) throw new Error('Fetch failed: ' + res.status);
         const json = await res.json();
 
+        // ✅ Keep what came from JSON (including manual classes) + record version
+        dashboardData.version = json.version || null;
         dashboardData.settings = { ...dashboardData.settings, ...(json.settings || {}) };
         dashboardData.media = Array.isArray(json.media) ? json.media.slice() : [];
         dashboardData.weekly_schedule = json.weekly_schedule || {};
-        dashboardData.classes = Array.isArray(json.classes) ? json.classes.slice() : [];
+        dashboardData.classes = Array.isArray(json.classes) ? json.classes.slice() : []; // keep manual classes from JSON
         dashboardData.announcements = Array.isArray(json.announcements) ? json.announcements.slice() : [];
 
         const gymDisplay = document.getElementById('gymNameDisplay');
@@ -379,19 +390,33 @@
     // ---------- LOCAL STORAGE (temporary edits) ----------
     function loadLocalData() {
       const saved = localStorage.getItem('ymcaDashboardData');
-      if (!saved) {
-        dashboardData.classes = getTodaysClasses();
-        return;
+
+      // Base layers:
+      const fromSchedule = getTodaysClasses(); // today's schedule (tagged fromSchedule: true)
+      const fromJsonManual = Array.isArray(dashboardData.classes) ? dashboardData.classes : []; // manual classes from JSON
+      let fromLocalManual = [];
+
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          fromLocalManual = Array.isArray(parsed.classes) ? parsed.classes : [];
+
+          // Append non-permanent announcements from local on top of JSON
+          if (Array.isArray(parsed.announcements)) {
+            dashboardData.announcements = [...dashboardData.announcements, ...parsed.announcements];
+          }
+        } catch (e) {
+          console.warn('Invalid localStorage data:', e);
+        }
       }
-      try {
-        const parsed = JSON.parse(saved);
-        dashboardData.classes = [...getTodaysClasses(), ...(parsed.classes || [])];
-        if (Array.isArray(parsed.announcements))
-          dashboardData.announcements = [...dashboardData.announcements, ...parsed.announcements];
-      } catch (e) {
-        console.warn('Invalid localStorage data:', e);
-        dashboardData.classes = getTodaysClasses();
-      }
+
+      // ✅ Merge order: schedule → JSON manual → local manual
+      const merged = [...fromSchedule, ...fromJsonManual, ...fromLocalManual];
+
+      // Optional: dedupe by id (last one wins)
+      const byId = new Map();
+      for (const c of merged) byId.set(c.id, c);
+      dashboardData.classes = Array.from(byId.values());
     }
 
     function saveLocalData() {
@@ -543,7 +568,8 @@
         slides[currentMedia].style.display = 'block';
       }, dashboardData.settings.mediaRotationSpeed * 1000);
     }
-// ---------- ANNOUNCEMENTS ----------
+
+    // ---------- ANNOUNCEMENTS ----------
     function renderAnnouncements() {
       const container = document.getElementById('announcement-container');
       container.innerHTML = '';
@@ -553,6 +579,7 @@
           '<div class="info-card good-announcement"><div class="card-title">Welcome to YMCA!</div><div class="card-subtitle">Have a great workout today</div></div>';
         return;
       }
+
       ann.forEach((a, idx) => {
         const div = document.createElement('div');
         const severity = a.severity || 'good';
@@ -824,8 +851,10 @@
       URL.revokeObjectURL(a.href);
       showSuccess();
     }
+
     window.exportDashboardJson = exportDashboardJson;
-// ==============================
+
+    // ==============================
     // GitHub Publish Add‑On (Contents API)
     // ==============================
 
@@ -969,6 +998,28 @@
       } finally {
         if (btn) { btn.disabled = false; btn.textContent = 'Publish JSON'; }
       }
+    }
+
+    // ✅ Auto-refresh TVs when JSON version changes
+    function startVersionWatcher() {
+      setInterval(async () => {
+        try {
+          const res = await fetch(
+            JSON_URL + (JSON_URL.includes('?') ? '&' : '?') + 'v=' + Date.now(),
+            { cache: 'no-store' }
+          );
+          if (!res.ok) return;
+          const json = await res.json();
+          const newVersion = json.version || null;
+
+          if (dashboardData.version && newVersion && newVersion !== dashboardData.version) {
+            console.log('New JSON version detected:', newVersion);
+            location.reload(); // simplest + avoids leaks
+          }
+        } catch (e) {
+          console.warn('Version check failed', e);
+        }
+      }, 60000); // 60s
     }
 
     // Expose for onclick
