@@ -16,40 +16,40 @@
     "Monday": [
       {
         "time": "9:00 AM - 9:45 AM",
-        "event": "NEW CLASS OCT 20 Y-Cycle",
-        "location": "Cycle Studio",
-        "instructor": "Sarah"
+        "event": "Y-Cycle",
+        "location": "Studio",
+        "instructor": "Christina"
       },
       {
         "time": "9:00 AM - 9:45 AM",
         "event": "Aquafit",
         "location": "Pool",
-        "instructor": "Mike"
+        "instructor": ""
       },
       {
         "time": "10:00 AM - 10:45 AM",
-        "event": "NEW CLASS OCT 20 Tabata Blast",
-        "location": "Studio A",
-        "instructor": "Jessica"
+        "event": "Tabata Blast",
+        "location": "Gym",
+        "instructor": "Christina"
       },
       {
         "time": "12:10 PM - 12:50 PM",
         "event": "Y-Fit Circuit",
-        "location": "Gym Floor",
-        "instructor": "David"
+        "location": "Gym",
+        "instructor": "Rob"
       },
       {
         "time": "6:15 PM - 7:30 PM",
         "event": "Beginner Yoga",
-        "location": "Studio B",
-        "instructor": "Emma"
+        "location": "Studio",
+        "instructor": "Annette"
       }
     ],
     "Tuesday": [
       {
         "time": "8:00 AM - 8:45 AM",
-        "event": "Active Aging with Fred Dyck",
-        "location": "",
+        "event": "Active Aging",
+        "location": "Cardio Room",
         "instructor": "Fred Dyck"
       },
       {
@@ -61,14 +61,20 @@
       {
         "time": "12:10 PM - 12:50 PM",
         "event": "Step",
-        "location": "Studio A",
-        "instructor": ""
+        "location": "Gym",
+        "instructor": "Melissa"
       },
       {
         "time": "1:30 PM - 2:15 PM",
         "event": "Aquafit",
         "location": "Pool",
         "instructor": ""
+      },
+       {
+        "time": "6:00 PM - 7:00 PM",
+        "event": "Kickboxing",
+        "location": "Gym",
+        "instructor": "Peggy"
       }
     ],
     "Wednesday": [
@@ -76,71 +82,83 @@
         "time": "9:00 AM - 9:45 AM",
         "event": "Aquafit",
         "location": "Pool",
-        "instructor": "Null"
+        "instructor": ""
       },
       {
         "time": "12:10 PM - 12:50 PM",
         "event": "Y-Fit Full Body",
-        "location": "Gymnasium",
-        "instructor": "Kris Seto Davis"
+        "location": "Gym",
+        "instructor": "Kris"
+      },
+        {
+        "time": "5:30 PM - 6:00 PM",
+        "event": "Y-Cycle Express",
+        "location": "Studio",
+        "instructor": "Carey"
       }
     ],
     "Thursday": [
       {
         "time": "6:15 AM - 7:00 AM",
         "event": "Strength, Sweat & Stretch",
-        "location": "Studio A",
-        "instructor": "Tom"
+        "location": "Gym",
+        "instructor": "Margie"
       },
       {
         "time": "8:00 AM - 8:45 AM",
-        "event": "Active Aging with Fred Dyck",
-        "location": "Studio A",
+        "event": "Active Aging",
+        "location": "Cardio Room",
         "instructor": "Fred Dyck"
       },
       {
         "time": "9:00 AM - 9:45 AM",
         "event": "Aquafit",
         "location": "Pool",
-        "instructor": "Mike"
+        "instructor": ""
       },
       {
         "time": "12:10 PM - 12:50 PM",
         "event": "Bootcamp",
-        "location": "Outdoor/Studio A",
-        "instructor": "Jessica"
+        "location": "Gym",
+        "instructor": "Paul"
       },
       {
         "time": "1:30 PM - 2:15 PM",
         "event": "Aquafit",
         "location": "Pool",
-        "instructor": "Sarah"
+        "instructor": ""
+      },
+       {
+        "time": "7:10 PM - 8:00 PM",
+        "event": "Synergy 306",
+        "location": "Cardio Room",
+        "instructor": "Peggy"
       },
       {
         "time": "7:00 PM - 7:45 PM",
-        "event": "OCT 16 Aquastep",
+        "event": "Aquastep",
         "location": "Pool",
-        "instructor": "Lisa"
+        "instructor": "Dave"
       }
     ],
     "Friday": [
       {
         "time": "9:00 AM - 9:45 AM",
-        "event": "NEW CLASS OCT 24 Core & More",
-        "location": "Studio B",
-        "instructor": "Emma"
+        "event": "Core & More",
+        "location": "Gym",
+        "instructor": "Christina"
       },
       {
         "time": "9:00 AM - 9:45 AM",
         "event": "Aquafit",
         "location": "Pool",
-        "instructor": "Mike"
+        "instructor": ""
       },
       {
         "time": "10:00 AM - 10:45 AM",
-        "event": "NEW CLASS OCT 20 Tabata Blast",
-        "location": "Studio A",
-        "instructor": "Jessica"
+        "event": "Tabata Blast",
+        "location": "Gym",
+        "instructor": "Christina"
       },
       {
         "time": "12:10 PM - 12:50 PM",
@@ -151,22 +169,22 @@
       {
         "time": "12:00 PM - 1:30 PM",
         "event": "Pickleball",
-        "location": "Gymnasium",
+        "location": "Gymn",
         "instructor": "Fred"
       }
     ],
     "Saturday": [
       {
         "time": "8:00 AM - 8:45 AM",
-        "event": "NEW CLASS OCT 25 Y-Cycle",
+        "event": "Y-Cycle",
         "location": "Studio",
-        "instructor": ""
+        "instructor": "Christina"
       },
       {
         "time": "10:00 AM - 11:00 AM",
         "event": "Energizing Yoga",
         "location": "Studio",
-        "instructor": ""
+        "instructor": "Jeanny"
       },
       {
         "time": "1:30 PM - 2:15 PM",
