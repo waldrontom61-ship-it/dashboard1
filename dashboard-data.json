@@ -76,12 +76,12 @@
         "time": "9:00 AM - 9:45 AM",
         "event": "Aquafit",
         "location": "Pool",
-        "instructor": "Mike"
+        "instructor": "Null"
       },
       {
         "time": "12:10 PM - 12:50 PM",
         "event": "Y-Fit Full Body with Kris Seto Davis",
-        "location": "Gym Floor",
+        "location": "Gymnasium",
         "instructor": "Kris Seto Davis"
       }
     ],
