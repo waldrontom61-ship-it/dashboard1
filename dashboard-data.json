@@ -1,5 +1,5 @@
 {
-  "version": "20251015171754129",
+  "version": "20251015173729558",
   "settings": {
     "gymName": "YMCA of Saskatoon",
     "rotationSpeed": 4,
@@ -177,7 +177,16 @@
     ],
     "Sunday": []
   },
-  "classes": [],
+  "classes": [
+    {
+      "id": "1760549846679",
+      "name": "Tets",
+      "time": "8:00pm",
+      "location": "Pool",
+      "instructor": "CLive",
+      "cancelled": false
+    }
+  ],
   "announcements": [
     {
       "id": 1,
