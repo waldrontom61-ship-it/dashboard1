@@ -28,7 +28,6 @@
 
     .section-title { font-size:1rem; font-weight:bold; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.3); padding-bottom:0.25rem; text-align:center; }
     .info-card { background: rgba(255,255,255,0.2); border-radius:0.5rem; padding:0.5rem; margin-bottom:0.5rem; backdrop-filter: blur(10px); border:1px solid rgba(255,255,255,0.1); }
-
     .card-title { font-weight:600; margin-bottom:0.125rem; font-size:0.95rem; }
     .card-subtitle { font-size:0.85rem; opacity:0.9; }
     .card-meta { font-size:0.725rem; opacity:0.7; margin-top:0.125rem; }
@@ -131,7 +130,7 @@
     <!-- Sidebar Overlay (30%) -->
     <div class="sidebar-overlay">
       <div class="sidebar-header">
-        <!-- Leaving this block as-is (no design changes requested) -->
+        <!-- (unchanged, as requested) -->
         <img
           srcoon.org/wp-content/uploads/2022/06/Shine-On_Horiz_white_RGB_Saskatoon-scaled.png
         >
@@ -312,7 +311,7 @@
 
   <script>
     /******************************************************************
-     * Dashboard Script (cleaned, no layout changes)
+     * Dashboard Script (no layout/design changes)
      * - Keeps time strings & severity values as-is
      * - Fetches JSON with cache-busting (TV-friendly)
      * - Safer announcement rendering; robust YouTube embed
@@ -320,13 +319,14 @@
      * - Export JSON + GitHub publish
      * - ✅ FIX #1: Preserve JSON manual classes (merge instead of overwrite)
      * - ✅ FIX #2: Auto-refresh TVs when JSON version changes
+     * - ✅ Clear local overrides on publish + on version change
      ******************************************************************/
 
     // ---------- CONFIG ----------
     const JSON_URL = './dashboard-data.json';
 
     let dashboardData = {
-      version: null, // ✅ track JSON version for TV refresh
+      version: null, // track JSON version
       settings: { gymName: "YMCA of Saskatoon", rotationSpeed: 4, mediaRotationSpeed: 8 },
       media: [],
       weekly_schedule: {},
@@ -348,7 +348,17 @@
 
     async function initDashboard() {
       await loadJSONData();
-      loadLocalData();            // ✅ will merge schedule + JSON manual + local manual
+
+      // ✅ If JSON version changed since last load, clear any local temp overrides
+      const lastSeen = localStorage.getItem('lastSeenJsonVersion');
+      if (dashboardData.version && lastSeen && lastSeen !== dashboardData.version) {
+        localStorage.removeItem('ymcaDashboardData');
+      }
+      if (dashboardData.version) {
+        localStorage.setItem('lastSeenJsonVersion', dashboardData.version);
+      }
+
+      loadLocalData();            // merge schedule + JSON manual + local manual
       renderAll();
       startAnnouncementRotation();
       startMediaRotation();
@@ -357,7 +367,7 @@
       setInterval(updateDateTime, 1000);
       setInterval(updateWeather, 300_000); // 5 min
 
-      startVersionWatcher();      // ✅ TVs pick up new version automatically
+      startVersionWatcher();      // TVs pick up new version automatically
     }
 
     // ---------- JSON LOADING ----------
@@ -371,12 +381,12 @@
         if (!res.ok) throw new Error('Fetch failed: ' + res.status);
         const json = await res.json();
 
-        // ✅ Keep what came from JSON (including manual classes) + record version
+        // Keep what came from JSON (including manual classes) + record version
         dashboardData.version = json.version || null;
         dashboardData.settings = { ...dashboardData.settings, ...(json.settings || {}) };
         dashboardData.media = Array.isArray(json.media) ? json.media.slice() : [];
         dashboardData.weekly_schedule = json.weekly_schedule || {};
-        dashboardData.classes = Array.isArray(json.classes) ? json.classes.slice() : []; // keep manual classes from JSON
+        dashboardData.classes = Array.isArray(json.classes) ? json.classes.slice() : []; // manual classes from JSON
         dashboardData.announcements = Array.isArray(json.announcements) ? json.announcements.slice() : [];
 
         const gymDisplay = document.getElementById('gymNameDisplay');
@@ -410,10 +420,10 @@
         }
       }
 
-      // ✅ Merge order: schedule → JSON manual → local manual
+      // Merge order: schedule → JSON manual → local manual
       const merged = [...fromSchedule, ...fromJsonManual, ...fromLocalManual];
 
-      // Optional: dedupe by id (last one wins)
+      // Dedupe by id, last wins
       const byId = new Map();
       for (const c of merged) byId.set(c.id, c);
       dashboardData.classes = Array.from(byId.values());
@@ -851,7 +861,6 @@
       URL.revokeObjectURL(a.href);
       showSuccess();
     }
-
     window.exportDashboardJson = exportDashboardJson;
 
     // ==============================
@@ -991,6 +1000,11 @@
         const result = await ghPutFile({ ...cfg, message, contentB64, sha });
 
         console.log('Published:', result);
+
+        // ✅ Clear local temp data so stale items cannot override the new JSON
+        localStorage.removeItem('ymcaDashboardData');
+        localStorage.setItem('lastPublishedVersion', payload.version);
+
         alert('Published successfully! TVs will refresh within ~1 minute.');
       } catch (e) {
         console.error(e);
