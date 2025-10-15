@@ -1,5 +1,5 @@
 {
-  "version": "20251015174231105",
+  "version": "20251015205345979",
   "settings": {
     "gymName": "YMCA of Saskatoon",
     "rotationSpeed": 4,
@@ -70,7 +70,7 @@
         "location": "Pool",
         "instructor": ""
       },
-       {
+      {
         "time": "6:00 PM - 7:00 PM",
         "event": "Kickboxing",
         "location": "Gym",
@@ -90,7 +90,7 @@
         "location": "Gym",
         "instructor": "Kris"
       },
-        {
+      {
         "time": "5:30 PM - 6:00 PM",
         "event": "Y-Cycle Express",
         "location": "Studio",
@@ -128,7 +128,7 @@
         "location": "Pool",
         "instructor": ""
       },
-       {
+      {
         "time": "7:10 PM - 8:00 PM",
         "event": "Synergy 306",
         "location": "Cardio Room",
@@ -204,6 +204,14 @@
       "details": "Ask the front desk for more information",
       "severity": "good",
       "permanent": true
+    },
+    {
+      "id": 1760561620989,
+      "title": "First Payment Free",
+      "message": "Starting October 16th Join the YMCA and get your first payment for FREE",
+      "details": "",
+      "severity": "good",
+      "permanent": false
     }
   ]
 }
