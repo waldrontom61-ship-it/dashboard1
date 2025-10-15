@@ -1,5 +1,5 @@
 {
-  "version": "20251015171220277",
+  "version": "20251015171754129",
   "settings": {
     "gymName": "YMCA of Saskatoon",
     "rotationSpeed": 4,
@@ -177,24 +177,7 @@
     ],
     "Sunday": []
   },
-  "classes": [
-    {
-      "id": "1760540525655",
-      "name": "Test",
-      "time": "6:00 pm",
-      "location": "GYM",
-      "instructor": "TEST",
-      "cancelled": false
-    },
-    {
-      "id": "1760548304165",
-      "name": "test",
-      "time": "7:00pm",
-      "location": "GYM",
-      "instructor": "Tom",
-      "cancelled": false
-    }
-  ],
+  "classes": [],
   "announcements": [
     {
       "id": 1,
