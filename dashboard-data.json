@@ -1,5 +1,5 @@
 {
-  "version": "20251015205345979",
+  "version": "20251015220006687",
   "settings": {
     "gymName": "YMCA of Saskatoon",
     "rotationSpeed": 4,
@@ -211,6 +211,14 @@
       "message": "Starting October 16th Join the YMCA and get your first payment for FREE",
       "details": "",
       "severity": "good",
+      "permanent": false
+    },
+    {
+      "id": 1760565604468,
+      "title": "Childcare Waitlist Opening - Downtown",
+      "message": "We have 3 spots available for toddlers aged 18 to 25 months",
+      "details": "For more information please visit our website",
+      "severity": "urgent",
       "permanent": false
     }
   ]
