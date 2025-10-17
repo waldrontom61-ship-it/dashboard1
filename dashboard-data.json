@@ -6,6 +6,11 @@
     "mediaRotationSpeed": 8
   },
   "media": [
+      {
+      "type": "image",
+      "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/FlexPass.png",
+      "duration": 15
+    },
     {
       "type": "youtube",
       "src": "https://www.youtube.com/embed/IVvYR7_wKAo",
