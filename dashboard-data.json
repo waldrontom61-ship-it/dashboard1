@@ -11,11 +11,11 @@
   "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/FlexPass-1.png",
   "duration": 15
 },
-    {
-      "type": "youtube",
-      "src": "https://www.youtube.com/embed/IVvYR7_wKAo",
-      "duration": 0
-    }
+     {
+  "type": "image",
+  "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/FlexPass-2.png",
+  "duration": 15
+}
   ],
   "weekly_schedule": {
     "Monday": [
