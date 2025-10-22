@@ -123,6 +123,7 @@
     width: 100%;
     height: 400px; /* Adjust as needed */
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .transition-fade .slide {
@@ -132,20 +133,15 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scale(0.95);
     opacity: 0;
-    transition: all 1s ease-in-out;
+    transform: scale(0.95);
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    z-index: 0;
 }
 
 .transition-fade .slide.active {
-    transform: scale(1);
     opacity: 1;
-    z-index: 2;
-}
-
-.transition-fade .slide.fade-out {
-    opacity: 0;
-    transform: scale(1.05);
+    transform: scale(1);
     z-index: 1;
 }
 </style>
@@ -1078,9 +1074,9 @@
     window.publishJson = publishJson;
   </script>
 <div class='transition-fade'>
-    <img src='image1.jpg' class='slide active' alt='Slide 1'>
-    <img src='image2.jpg' class='slide' alt='Slide 2'>
-    <img src='image3.jpg' class='slide' alt='Slide 3'>
+    <img src='https://via.placeholder.com/800x400?text=Slide+1' class='slide active' alt='Slide 1'>
+    <img src='https://via.placeholder.com/800x400?text=Slide+2' class='slide' alt='Slide 2'>
+    <img src='https://via.placeholder.com/800x400?text=Slide+3' class='slide' alt='Slide 3'>
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -1089,14 +1085,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function goToSlide(slideIndex) {
         slides[currentSlide].classList.remove('active');
-        slides[currentSlide].classList.add('fade-out');
-
         currentSlide = slideIndex;
-
-        setTimeout(() => {
-            slides.forEach(slide => slide.classList.remove('fade-out'));
-            slides[currentSlide].classList.add('active');
-        }, 50);
+        slides[currentSlide].classList.add('active');
     }
 
     setInterval(() => {
@@ -1108,4 +1098,3 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 </html>
 ``
-
