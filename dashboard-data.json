@@ -9,13 +9,28 @@
   {
   "type": "image",
   "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/FlexPass-1.png",
-  "duration": 15
+  "duration": 20
 },
      {
   "type": "image",
   "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/FlexPass-2.png",
-  "duration": 15
-}
+  "duration": 20
+},
+     {
+  "type": "image",
+  "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/First-Payment-Free.png",
+  "duration": 20
+},
+    {
+  "type": "image",
+  "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/Seniors-Free.png",
+  "duration": 20
+},
+    {
+  "type": "image",
+  "src": "https://ymcasaskatoon.org/wp-content/uploads/2025/10/YTHRIVE.png",
+  "duration": 20
+},
   ],
   "weekly_schedule": {
     "Monday": [
