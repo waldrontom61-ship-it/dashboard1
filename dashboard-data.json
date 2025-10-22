@@ -3,7 +3,7 @@
   "settings": {
     "gymName": "YMCA of Saskatoon",
     "rotationSpeed": 4,
-    "mediaRotationSpeed": 8
+    "mediaRotationSpeed": 20
   },
   "media": [
     {
